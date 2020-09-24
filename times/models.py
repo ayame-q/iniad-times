@@ -14,7 +14,10 @@ class Staff(models.Model):
     comment = models.TextField(null=True, blank=True, verbose_name="コメント")
 
     def __str__(self):
-        return self.name + (" (" + self.user.name + ")" if self.user else "")
+        if not self.user:
+            return self.name
+        return self.name + " (" + self.user.name + ")"
+
 
 
 class User(AbstractUser):
@@ -58,6 +61,7 @@ class Image(models.Model):
         return self.image.url
 
     def __str__(self):
+
         return self.title if self.title else "Image(No." + str(self.pk) + " uploaded by " + self.staff.name + ")"
 
 class Post(models.Model):
