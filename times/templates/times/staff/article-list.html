@@ -1,0 +1,33 @@
+{% extends "times/staff/base.html" %}
+
+{% load static %}
+
+{% block title %}記事編集 - {{ block.super }}{% endblock title %}
+
+{% block main %}
+	<section>
+		<h2>記事編集</h2>
+		{% for article in articles %}
+			<article>
+				<a href="{% url "edit_admin" article.pk %}">
+					<p class="eyecatch"><img src="{{ article.eyecatch.url }}" alt="eyecatch"></p>
+					<div class="meta-wrap">
+						<ul class="meta">
+							<li class="category">{{ article.category }}</li>
+							<div>
+								{% for writer in article.article_writers.all %}
+									<li class="list-writer">{{ writer.name }}</li>
+								{% endfor %}
+							</div>
+						</ul>
+						<h3>{{ article.title }}</h3>
+						<ul class="meta">
+							<li class="time">{{ article.time }}</li>
+							{% if article.is_new %}<li class="new">New!</li>{% endif %}
+						</ul>
+					</div>
+				</a>
+			</article>
+		{% endfor %}
+	</section>
+{% endblock %}

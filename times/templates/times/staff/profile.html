@@ -1,0 +1,18 @@
+{% extends "times/staff/base.html" %}
+
+{% load static %}
+
+{% block title %}プロフィール設定 - {{ block.super }}{% endblock title %}
+
+{% block main %}
+	<section>
+		<h2>プロフィールを変更</h2>
+		<form action="{% if next %}?next={{ next }}{% endif %}" method="post"{% if form_id %} id="{{ form_id }}"{% endif %}{% if page_name %} data-page_id="{{ page_name }}{% if page_id %}_{{ page_id }}{% endif %}"{% endif %}>
+			{% csrf_token %}
+			<ul>
+				{{ form.as_ul }}
+			</ul>
+			<p><input type="submit" value="{% if form_submit_value %}{{ form_submit_value }}{% else %}送信{% endif %}"></p>
+		</form>
+	</section>
+{% endblock %}

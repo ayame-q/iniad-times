@@ -1,0 +1,85 @@
+{% extends "times/base.html" %}
+
+{% load static %}
+{% load mytags %}
+
+{% block title %}記事一覧 - {{ block.super }}{% endblock title %}
+
+{% block description %}INIAD Times 記事一覧{% endblock %}
+{% block og_description %}INIAD Times 記事一覧{% endblock %}
+
+{% block main %}
+	<section id="list-page">
+		<h2>記事一覧</h2>
+		{% for article in articles %}
+			<article>
+				<a href="{% url "article" article.pk %}">
+					<p class="eyecatch"><img src="{{ article.eyecatch.url }}" alt="eyecatch"></p>
+					<div class="meta-wrap">
+						<ul class="meta">
+							<li class="category">{{ article.category }}</li>
+							<div>
+								{% for writer in article.article_writers.all %}
+									<li class="list-writer">{{ writer.name }}</li>
+								{% endfor %}
+							</div>
+						</ul>
+						<h3>{{ article.title }}</h3>
+						<ul class="meta">
+							<li class="time">{{ article.time }}</li>
+							{% if article.is_new %}<li class="new">New!</li>{% endif %}
+						</ul>
+					</div>
+				</a>
+			</article>
+		{% empty %}
+			<p>記事が見つかりませんでした</p>
+		{% endfor %}
+
+		{% if is_paginated %}
+			<nav class="pagination">
+				<ul>
+					<li>
+						{% if page_obj.has_previous %}
+							<a href="?page={{ page_obj.previous_page_number }}">
+								&lt;
+							</a>
+						{% else %}
+							<span class="disable">
+							        &lt;
+						        </span>
+						{% endif %}
+					</li>
+
+					{% for page_num in paginator.page_range %}
+						{% if page_obj.number == page_num %}
+							<li class="active">
+								<span>{{ page_num }}</span>
+							</li>
+						{% elif page_obj.number == page_num|add:1 %}
+							<li class="before-active">
+								<a href="?page={{ page_num }}">{{ page_num }}</a>
+							</li>
+						{% else %}
+							<li>
+								<a href="?page={{ page_num }}">{{ page_num }}</a>
+							</li>
+						{% endif %}
+					{% endfor %}
+
+					<li>
+						{% if page_obj.has_next %}
+							<a href="?page={{ page_obj.next_page_number }}">
+								&gt;
+							</a>
+						{% else %}
+							<span class="disable">
+							        &gt;
+						        </span>
+						{% endif %}
+					</li>
+				</ul>
+			</nav>
+		{% endif %}
+	</section>
+{% endblock main %}

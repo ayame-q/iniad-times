@@ -1,0 +1,25 @@
+{% extends "times/staff/base.html" %}
+
+{% load static %}
+
+{% block option_head %}
+	<link rel="stylesheet" href="https://unpkg.com/easymde/dist/easymde.min.css">
+	<script src="https://unpkg.com/easymde/dist/easymde.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/js-cookie@rc/dist/js.cookie.min.js"></script>
+	<script src="{% static "js/textarea.js" %}"></script>
+{% endblock %}
+
+{% block title %}{% if is_new_form %}新規記事投稿{% else %}「{{ article.title }}」を編集{% endif %} - {{ block.super }}{% endblock title %}
+
+{% block main %}
+	<section>
+		<h2>{% if is_new_form %}新規記事投稿{% else %}「{{ article.title }}」を編集{% endif %}</h2>
+		<form action="{% if next %}?next={{ next }}{% endif %}" method="post"{% if form_id %} id="{{ form_id }}"{% endif %}{% if page_name %} data-page_id="{{ page_name }}{% if page_id %}_{{ page_id }}{% endif %}"{% endif %}>
+			{% csrf_token %}
+			<ul>
+				{{ form.as_ul }}
+			</ul>
+			<p><input type="submit" value="{% if form_submit_value %}{{ form_submit_value }}{% else %}送信{% endif %}"></p>
+		</form>
+	</section>
+{% endblock %}

@@ -1,0 +1,20 @@
+{% extends "times/staff/base.html" %}
+
+{% load static %}
+
+{% block main %}
+	<section>
+		<h2>スタッフメニュー</h2>
+		<nav>
+			<ul>
+				<!--
+				<li><a href="writer">投稿者メニュー</a></li>
+				<li><a href="editor">編集者メニュー</a></li>
+				-->
+				<li><a href="{% url "new_admin" %}">記事投稿</a></li>
+				<li><a href="{% url "list_admin" %}">記事編集</a></li>
+				<li><a href="{% url "profile" %}">プロフィール設定</a></li>
+			</ul>
+		</nav>
+	</section>
+{% endblock main %}

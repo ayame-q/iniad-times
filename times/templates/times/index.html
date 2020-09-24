@@ -1,0 +1,122 @@
+{% extends "times/base.html" %}
+
+{% load static %}
+
+{% block og_type %}website{% endblock og_type %}
+
+{% block main %}
+	<section id="top-page">
+		<h2 style="display: none">新着記事</h2>
+		<div id="marquee-wrap">
+			<div class="search-wrap">
+				<p class="search-button" onclick="document.getElementsByClassName('search-wrap')[1].classList.toggle('searchbox-open')">
+					<a href="#"><img src="{% static "img/search.svg" %}" alt="検索ボックス" style="width: 2em"></a>
+				</p>
+				<div class="search-box">
+					<form action="{% url "search" %}">
+						<p>
+							<input type="search" placeholder="サイト内検索" name="q">
+							<input type="submit" value="検索">
+						</p>
+					</form>
+				</div>
+			</div>
+			<div id="top-marquee">
+				{% for article in new_articles %}
+				<article>
+					<a href="{% url "article" article.pk %}">
+						<ul>
+							<li>{{ article.category }}</li>
+						</ul>
+						<h3>{{ article.title }}</h3>
+						<ul>
+							<li>{{ article.time }}</li>
+							{% if article.is_new %}<li>New!</li>{% endif %}
+						</ul>
+					</a>
+				</article>
+				{% endfor %}
+			</div>
+		</div>
+		<div id="main-list">
+			<div id="top-wrap">
+				{% for article in top_articles|slice:"0:1" %}
+				<article>
+					<a href="{% url "article" article.pk %}">
+						<p class="eyecatch"><img src="{{ article.eyecatch.url }}" alt="eyecatch"></p>
+						<div class="meta-wrap">
+							<ul class="meta">
+								<li class="category">{{ article.category }}</li>
+								<div>
+									{% for writer in article.article_writers.all %}
+										<li class="list-writer">{{ writer.name }}</li>
+									{% endfor %}
+								</div>
+							</ul>
+							<h3>{{ article.title }}</h3>
+							<ul class="meta">
+								<li class="time">{{ article.time }}</li>
+								{% if article.is_new %}<li class="new">New!</li>{% endif %}
+							</ul>
+						</div>
+					</a>
+				</article>
+				{% endfor %}
+				<div id="top-right-wrap">
+					{% for article in top_articles|slice:"1:3" %}
+						<article>
+							<a href="{% url "article" article.pk %}">
+								<p class="eyecatch"><img src="{{ article.eyecatch.url }}" alt="eyecatch"></p>
+								<div class="meta-wrap">
+									<ul class="meta">
+										<li class="category">{{ article.category }}</li>
+										<div>
+											{% for writer in article.article_writers.all %}
+												<li class="list-writer">{{ writer.name }}</li>
+											{% endfor %}
+										</div>
+									</ul>
+									<h3>{{ article.title }}</h3>
+									<ul class="meta">
+										<li class="time">{{ article.time }}</li>
+										{% if article.is_new %}<li class="new">New!</li>{% endif %}
+									</ul>
+								</div>
+							</a>
+						</article>
+					{% endfor %}
+				</div>
+			</div>
+			<div id="pr-wrap">
+				<a href="https://about.iniad-wm.com/">
+					<p class="pr-icon">PR</p>
+					<p class="pr-img"><img src="{% static "img/invitation.svg" %}" alt="Webメディア研究会に入りませんか？"></p>
+				</a>
+			</div>
+			<div id="bottom-wrap">
+				{% for article in top_articles|slice:"4:" %}
+					<article>
+						<a href="{% url "article" article.pk %}">
+							<p class="eyecatch"><img src="{{ article.eyecatch.url }}" alt="eyecatch"></p>
+							<div class="meta-wrap">
+								<ul class="meta">
+									<li class="category">{{ article.category }}</li>
+									<div>
+										{% for writer in article.article_writers.all %}
+											<li class="list-writer">{{ writer.name }}</li>
+										{% endfor %}
+									</div>
+								</ul>
+								<h3>{{ article.title }}</h3>
+								<ul class="meta">
+									<li class="time">{{ article.time }}</li>
+									{% if article.is_new %}<li class="new">New!</li>{% endif %}
+								</ul>
+							</div>
+						</a>
+					</article>
+				{% endfor %}
+			</div>
+		</div>
+	</section>
+{% endblock main %}
