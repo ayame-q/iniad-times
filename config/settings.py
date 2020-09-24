@@ -160,3 +160,6 @@ SOCIALACCOUNT_PROVIDERS = {
 # 画像パス設定
 IMAGE_ROOT = os.path.join(BASE_DIR, 'upload_images')
 IMAGE_URL = '/upload_images/'
+
+
+from .settings_secret import *
