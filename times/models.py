@@ -14,9 +14,7 @@ class Staff(models.Model):
     comment = models.TextField(null=True, blank=True, verbose_name="コメント")
 
     def __str__(self):
-        if not self.user:
-            return self.name
-        return self.name + " (" + self.user.name + ")"
+        return self.name
 
 
 
