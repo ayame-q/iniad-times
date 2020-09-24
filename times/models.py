@@ -69,7 +69,7 @@ class Post(models.Model):
     article_editors = models.ManyToManyField(Staff, related_name="edited_%(class)s", blank=True, verbose_name="編集者")
     category = models.ForeignKey(Category, related_name="%(class)s", null=True, on_delete=models.SET_NULL ,verbose_name="カテゴリー")
     tags = models.ManyToManyField(Tag, related_name="%(class)s", blank=True, verbose_name="タグ")
-    eyecatch = models.ForeignKey(Image, related_name="used_%(class)s", null=True, on_delete=models.SET_NULL ,verbose_name="アイキャッチ画像")
+    eyecatch = models.ForeignKey(Image, related_name="used_%(class)s", null=True, blank=True, on_delete=models.SET_NULL ,verbose_name="アイキャッチ画像")
     created_at = models.DateTimeField(default=timezone.localtime, verbose_name="作成日")
 
     class Meta:
