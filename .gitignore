@@ -257,3 +257,5 @@ Network Trash Folder
 Temporary Items
 .apdisk
 
+config/settings_secret.py
+upload_images/
