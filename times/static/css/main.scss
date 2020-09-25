@@ -247,7 +247,7 @@ header{
 
 	@include media(small){
 		#header-right-wrap{
-			display: none;
+			display: none !important;
 		}
 	}
 	nav{
@@ -510,14 +510,16 @@ main{
 	}
 
 	section#list-page{
-		width: $main-width;
+		max-width: $main-width;
+		width: 95vw;
 		margin: auto;
 		article a{
 			color: #333333;
 			display: flex;
 			align-items: center;
 			p.eyecatch{
-				width: 200px;
+				flex-basis: 30%;
+				flex-shrink: 0;
 				margin-right: 15px;
 				img{
 					max-width: 100%;
