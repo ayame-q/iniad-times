@@ -345,12 +345,12 @@ main .list article a {
   align-items: center;
 }
 main .list article a p.eyecatch {
-  flex-basis: 30%;
-  flex-shrink: 0;
+  width: 200px;
   margin-right: 15px;
 }
 main .list article a p.eyecatch img {
-  width: 100%;
+  max-width: 100%;
+  width: 200px;
 }
 
 /*# sourceMappingURL=staff.css.map */
