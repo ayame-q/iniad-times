@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404, resolve_url
 from django.views.generic import UpdateView, DetailView, CreateView, ListView, TemplateView
+from django.contrib.auth.views import SuccessURLAllowedHostsMixin
 from django.http import Http404
 from django.conf import settings
 from django.utils import timezone
@@ -15,6 +16,23 @@ import os, re
 
 
 # Create your views here.
+
+class NextUrlMixin(SuccessURLAllowedHostsMixin):
+    def get_redirect_url(self):
+        redirect_field_name = "next"
+        redirect_to = self.request.POST.get(
+            redirect_field_name,
+            self.request.GET.get(redirect_field_name, '')
+        )
+        url_is_safe = is_safe_url(
+            url=redirect_to,
+            allowed_hosts=self.get_success_url_allowed_hosts(),
+            require_https=self.request.is_secure(),
+        )
+        return redirect_to if url_is_safe else ''
+
+
+
 def index(request):
     new_articles = Article.objects.order_by("-updated_at").filter(is_posted=True)[:5]
     top_articles = Article.objects.order_by("-updated_at").filter(is_posted=True)[:10]
@@ -29,7 +47,7 @@ def index(request):
 def article(request, pk):
     article = get_object_or_404(Article, pk=pk)
     if (not article.is_public) and (not request.user.is_authenticated):
-        return redirect("/auth/google/login")
+        return redirect("/auth/google/login?next=" + request.path)
 
     if (not article.is_posted) and (not request.user.staff):
         raise Http404
