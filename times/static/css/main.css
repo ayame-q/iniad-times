@@ -546,6 +546,7 @@ main article#article-page img {
 
 footer {
   width: 100%;
+  box-sizing: border-box;
   background-color: #ff8b3c;
   color: #fff;
   padding: 10px;
