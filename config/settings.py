@@ -137,6 +137,7 @@ AUTH_USER_MODEL = 'times.User'
 
 #Allauth
 SITE_ID = 1
+LOGIN_REDIRECT_URL = "/"
 
 AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',
