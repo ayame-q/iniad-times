@@ -478,8 +478,7 @@ main section#list-page article a p.eyecatch {
   margin-right: 15px;
 }
 main section#list-page article a p.eyecatch img {
-  max-width: 100%;
-  width: 200px;
+  width: 100%;
 }
 main article#article-page {
   margin: 0 20px;
