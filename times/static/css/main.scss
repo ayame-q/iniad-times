@@ -244,6 +244,12 @@ header{
 		}
 	}
 
+
+	@include media(small){
+		#header-right-wrap{
+			display: none;
+		}
+	}
 	nav{
 		ul{
 			display: flex;
@@ -311,7 +317,8 @@ header{
 
 	&#top-header:not(.scrolled){
 		h1{
-			width: $main-width;
+			max-width: $main-width;
+			width: 95vw;
 			display: flex;
 			margin: 0 auto;
 			img{
@@ -429,31 +436,45 @@ main{
 					}
 				}
 			}
-			#top-wrap{
-				display: flex;
-				width: 100%;
-				justify-content: space-between;
-				> article{
-					flex-basis: 45%;
-				}
-				#top-right-wrap{
-					flex-basis: 45%;
-					article a{
-						display: flex;
-						align-items: center;
-						p.eyecatch{
-							width: 40%;
-							margin-right: 15px;
-						}
+			@include media(small){
+				article a{
+					display: flex;
+					align-items: center;
+					p.eyecatch{
+						flex-basis: 30%;
+						flex-shrink: 0;
+						margin-right: 15px;
 					}
 				}
 			}
-			#bottom-wrap{
-				display: flex;
-				justify-content: space-between;
-				flex-wrap: wrap;
-				article{
-					flex-basis: 30%;
+			@include media(large, medium){
+				#top-wrap{
+					display: flex;
+					width: 100%;
+					justify-content: space-between;
+					> article{
+						flex-basis: 45%;
+					}
+					#top-right-wrap{
+						flex-basis: 45%;
+						article a{
+							display: flex;
+							align-items: center;
+							p.eyecatch{
+								flex-basis: 40%;
+								flex-shrink: 0;
+								margin-right: 15px;
+							}
+						}
+					}
+				}
+				#bottom-wrap{
+					display: flex;
+					justify-content: space-between;
+					flex-wrap: wrap;
+					article{
+						flex-basis: 30%;
+					}
 				}
 			}
 			#pr-wrap{
@@ -511,13 +532,44 @@ main{
 		position: relative;
 		//top: 110px;
 		#content-wrap{
-			margin-right: 300px;
+			@include media(large){
+				margin-right: 300px;
+			}
+			@include media(medium){
+				margin-right: 20vw;
+			}
 		}
 		#toc{
-			text-align: right;
-			position: fixed;
-			top: 110px;
-			right: 10px;
+			@include media(large, medium){
+				text-align: right;
+				position: fixed;
+				top: 110px;
+				right: 10px;
+			}
+			@include media(small){
+				&::before{
+					content: "目次";
+					display: block;
+					margin: 10px 0;
+				}
+			}
+			@include media(large){
+				max-width: 300px;
+			}
+			@include media(medium){
+				max-width: 20vw;
+			}
+			ul{
+				padding: 0;
+				list-style: none;
+				font-size: 16px;
+				&:first-child{
+					font-size: 18px;
+				}
+				li{
+					font-size: 0.8em;
+				}
+			}
 			a{
 				color: #999999;
 			}
@@ -543,9 +595,14 @@ footer{
 	nav{
 		display: flex;
 		padding: 10px 30px;
+		@include media(small){
+			flex-direction: column;
+		}
 		h2{
 			height: 100%;
-			align-self: center;
+			@include media(large, medium){
+				align-self: center;
+			}
 			margin-right: 50px;
 			img{
 				height: 40px;

@@ -10,7 +10,6 @@
 
 {% block main %}
 	<article id="article-page">
-		<div id="toc"></div>
 		<div id="content-wrap">
 			<div class="meta-wrap">
 				<ul class="meta">
@@ -32,6 +31,7 @@
 					</div>
 				</ul>
 			</div>
+			<div id="toc"></div>
 			<div id="text">
 				{{ article.text | markdown2html | linebreaksbr }}
 			</div>
@@ -43,7 +43,7 @@
 			var div = document.createElement('div'); // 作成する目次のコンテナ要素
 
 			// .entry-content配下のh2、h3要素を全て取得する
-			var matches = document.querySelectorAll('article#article-page h2, article#article-page h3');
+			var matches = document.querySelectorAll('article#article-page h2, article#article-page h3, article#article-page h4');
 
 			// 取得した見出しタグ要素の数だけ以下の操作を繰り返す
 			matches.forEach(function (value, i) {
@@ -54,8 +54,8 @@
 					value.id = id;
 				}
 
-				// 要素がh2タグの場合
-				if(value.tagName === 'H2') {
+				// 要素がh3タグの場合
+				if(value.tagName === 'H3' || value.tagName === 'H2') {
 					var ul = document.createElement('ul');
 					var li = document.createElement('li');
 					var a = document.createElement('a');
@@ -70,8 +70,8 @@
 					div.appendChild(ul);
 				}
 
-				// 要素がh3タグの場合
-				if(value.tagName === 'H3') {
+				// 要素がh4タグの場合
+				if(value.tagName === 'H4') {
 					var ul = document.createElement('ul');
 					var li = document.createElement('li');
 					var a = document.createElement('a');

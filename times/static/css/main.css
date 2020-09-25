@@ -191,6 +191,11 @@ header h1 a img {
   height: 60px;
   max-width: 90vw;
 }
+@media (max-width: 480px) {
+  header #header-right-wrap {
+    display: none;
+  }
+}
 header nav ul {
   display: flex;
   list-style: none;
@@ -247,7 +252,8 @@ header#top-header.scrolled h1 img {
   margin: 20px 5px;
 }
 header#top-header:not(.scrolled) h1 {
-  width: 1200px;
+  max-width: 1200px;
+  width: 95vw;
   display: flex;
   margin: 0 auto;
 }
@@ -356,32 +362,76 @@ main section#top-page #main-list article p.eyecatch img {
   min-width: 0;
   max-width: 100%;
 }
-main section#top-page #main-list #top-wrap {
-  display: flex;
-  width: 100%;
-  justify-content: space-between;
+@media (max-width: 480px) {
+  main section#top-page #main-list article a {
+    display: flex;
+    align-items: center;
+  }
+  main section#top-page #main-list article a p.eyecatch {
+    flex-basis: 30%;
+    flex-shrink: 0;
+    margin-right: 15px;
+  }
 }
-main section#top-page #main-list #top-wrap > article {
-  flex-basis: 45%;
+@media (min-width: 481px) {
+  main section#top-page #main-list #top-wrap {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+  }
+  main section#top-page #main-list #top-wrap > article {
+    flex-basis: 45%;
+  }
+  main section#top-page #main-list #top-wrap #top-right-wrap {
+    flex-basis: 45%;
+  }
+  main section#top-page #main-list #top-wrap #top-right-wrap article a {
+    display: flex;
+    align-items: center;
+  }
+  main section#top-page #main-list #top-wrap #top-right-wrap article a p.eyecatch {
+    flex-basis: 40%;
+    flex-shrink: 0;
+    margin-right: 15px;
+  }
+  main section#top-page #main-list #bottom-wrap {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+  }
+  main section#top-page #main-list #bottom-wrap article {
+    flex-basis: 30%;
+  }
 }
-main section#top-page #main-list #top-wrap #top-right-wrap {
-  flex-basis: 45%;
-}
-main section#top-page #main-list #top-wrap #top-right-wrap article a {
-  display: flex;
-  align-items: center;
-}
-main section#top-page #main-list #top-wrap #top-right-wrap article a p.eyecatch {
-  width: 40%;
-  margin-right: 15px;
-}
-main section#top-page #main-list #bottom-wrap {
-  display: flex;
-  justify-content: space-between;
-  flex-wrap: wrap;
-}
-main section#top-page #main-list #bottom-wrap article {
-  flex-basis: 30%;
+@media (min-width: 481px) and (max-width: 800px) {
+  main section#top-page #main-list #top-wrap {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+  }
+  main section#top-page #main-list #top-wrap > article {
+    flex-basis: 45%;
+  }
+  main section#top-page #main-list #top-wrap #top-right-wrap {
+    flex-basis: 45%;
+  }
+  main section#top-page #main-list #top-wrap #top-right-wrap article a {
+    display: flex;
+    align-items: center;
+  }
+  main section#top-page #main-list #top-wrap #top-right-wrap article a p.eyecatch {
+    flex-basis: 40%;
+    flex-shrink: 0;
+    margin-right: 15px;
+  }
+  main section#top-page #main-list #bottom-wrap {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+  }
+  main section#top-page #main-list #bottom-wrap article {
+    flex-basis: 30%;
+  }
 }
 main section#top-page #main-list #pr-wrap {
   width: 100%;
@@ -433,14 +483,59 @@ main article#article-page {
   margin: 0 20px;
   position: relative;
 }
-main article#article-page #content-wrap {
-  margin-right: 300px;
+@media (min-width: 481px) {
+  main article#article-page #content-wrap {
+    margin-right: 300px;
+  }
 }
-main article#article-page #toc {
-  text-align: right;
-  position: fixed;
-  top: 110px;
-  right: 10px;
+@media (min-width: 481px) and (max-width: 800px) {
+  main article#article-page #content-wrap {
+    margin-right: 20vw;
+  }
+}
+@media (min-width: 481px) {
+  main article#article-page #toc {
+    text-align: right;
+    position: fixed;
+    top: 110px;
+    right: 10px;
+  }
+}
+@media (min-width: 481px) and (max-width: 800px) {
+  main article#article-page #toc {
+    text-align: right;
+    position: fixed;
+    top: 110px;
+    right: 10px;
+  }
+}
+@media (max-width: 480px) {
+  main article#article-page #toc::before {
+    content: "目次";
+    display: block;
+    margin: 10px 0;
+  }
+}
+@media (min-width: 481px) {
+  main article#article-page #toc {
+    max-width: 300px;
+  }
+}
+@media (min-width: 481px) and (max-width: 800px) {
+  main article#article-page #toc {
+    max-width: 20vw;
+  }
+}
+main article#article-page #toc ul {
+  padding: 0;
+  list-style: none;
+  font-size: 16px;
+}
+main article#article-page #toc ul:first-child {
+  font-size: 18px;
+}
+main article#article-page #toc ul li {
+  font-size: 0.8em;
 }
 main article#article-page #toc a {
   color: #999999;
@@ -465,10 +560,24 @@ footer nav {
   display: flex;
   padding: 10px 30px;
 }
+@media (max-width: 480px) {
+  footer nav {
+    flex-direction: column;
+  }
+}
 footer nav h2 {
   height: 100%;
-  align-self: center;
   margin-right: 50px;
+}
+@media (min-width: 481px) {
+  footer nav h2 {
+    align-self: center;
+  }
+}
+@media (min-width: 481px) and (max-width: 800px) {
+  footer nav h2 {
+    align-self: center;
+  }
 }
 footer nav h2 img {
   height: 40px;
