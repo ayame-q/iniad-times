@@ -7,6 +7,9 @@
 
 {% block description %}{{ article.text | slice:":50" }}{% if article.text|length > 50 %}…{% endif %}{% endblock %}
 {% block og_description %}{{ article.text | slice:":50" }}{% if article.text|length > 50 %}…{% endif %}{% endblock %}
+{% block eyecatch %}{{ article.eyecatch.url }}{% endblock %}
+
+{% block option_head %}<meta name="robots" content="noarchive">{% endblock option_head %}
 
 {% block main %}
 	<article id="article-page">

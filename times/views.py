@@ -32,6 +32,12 @@ class NextUrlMixin(SuccessURLAllowedHostsMixin):
         return redirect_to if url_is_safe else ''
 
 
+def is_crawler(request):
+    ua = request.META["HTTP_USER_AGENT"]
+    if "Googlebot" in ua or "msnbot" in ua or "bingbot" in ua or "Applebot" in ua or "Twitterbot" in ua or "Linespider" in ua or "facebookexternalhit" in ua:
+        return True
+    return False
+
 
 def index(request):
     new_articles = Article.objects.order_by("-updated_at").filter(is_posted=True)[:5]
@@ -46,7 +52,7 @@ def index(request):
 
 def article(request, pk):
     article = get_object_or_404(Article, pk=pk)
-    if (not article.is_public) and (not request.user.is_authenticated):
+    if (not article.is_public and not request.user.is_authenticated) and not is_crawler(request):
         return redirect("/auth/google/login?next=" + request.path)
 
     if (not article.is_posted) and (not request.user.staff):
