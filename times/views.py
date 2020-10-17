@@ -58,6 +58,7 @@ def article(request, pk):
     if (not article.is_posted) and (not request.user.staff):
         raise Http404
 
+    request.user.browsed_histories.create(article=article)
     data = {
         "article": article,
     }
