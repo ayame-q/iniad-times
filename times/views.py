@@ -43,9 +43,11 @@ def is_crawler(request):
 def index(request):
     new_articles = Article.objects.order_by("-updated_at").filter(is_posted=True)[:5]
     top_articles = Article.objects.order_by("-updated_at").filter(is_posted=True)[:10]
+    is_need_more = Article.objects.order_by("-updated_at").filter(is_posted=True).count() > 10
     data = {
         "new_articles": new_articles,
         "top_articles": top_articles,
+        "is_need_more": is_need_more,
         "is_index": True,
     }
     return render(request, "times/index.html", data)

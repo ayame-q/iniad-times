@@ -104,6 +104,79 @@ input, select, textarea{
 	align-items: center;
 }
 
+nav.pagination{
+	margin-left: -18px;
+	ul{
+		padding: 0;
+		display: flex;
+		justify-content: center;
+		list-style: none;
+		li{
+			display: none;
+			@include media(large, medium){
+				&:nth-child(-n+2){
+					display: block;
+				}
+				&:nth-last-child(-n+2){
+					display: block;
+				}
+				&.active, &.before-active{
+					display: block;
+				}
+				&.active+li{
+					display: block;
+					&+li{
+						display: block;
+						&+li{
+							display: block;
+							&+li{
+								display: block;
+							}
+						}
+					}
+				}
+			}
+			@include media(small){
+				&:nth-child(-n+2){
+					display: block;
+				}
+				&:nth-last-child(-n+2){
+					display: block;
+				}
+				&.active, &.before-active{
+					display: block;
+				}
+				&.active+li{
+					display: block;
+				}
+			}
+			&:last-child{
+				display: block;
+			}
+			&:not(:last-child){
+				margin-right: 5px;
+			}
+			a, span{
+				display: block;
+				padding: 10px;
+				border: solid 0.5px #ff8b3c;
+				border-radius: 5px;
+				color: #ff8b3c;
+			}
+			&.active span{
+				color: white;
+				background-color: #ff8b3c;
+			}
+			span{
+				&.disable{
+					color: #bbbbbb;
+					border-color: #bbbbbb;
+				}
+			}
+		}
+	}
+}
+
 
 $main-width: 1200px;
 
@@ -482,6 +555,7 @@ main{
 				height: fit-content;
 				border: solid 3px #ff8b3c;
 				position: relative;
+				box-sizing: border-box;
 				margin: 80px 0;
 				a{
 					display: block;
@@ -504,6 +578,20 @@ main{
 							display: block;
 						}
 					}
+				}
+			}
+
+			.more{
+				a{
+					display: block;
+					width: 100%;
+					text-align: center;
+					border: solid 0.5px #ff8b3c;
+					border-radius: 5px;
+					font-size: 1.2em;
+					padding: 0.8em 0;
+					color: #ff8b3c;
+					box-sizing: border-box;
 				}
 			}
 		}

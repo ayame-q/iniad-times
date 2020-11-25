@@ -117,6 +117,11 @@
 					</article>
 				{% endfor %}
 			</div>
+			{% if is_need_more %}
+				<div class="more">
+					<p><a href="{% url "list" %}">Older Posts...</a></p>
+				</div>
+			{% endif %}
 		</div>
 	</section>
 {% endblock main %}
