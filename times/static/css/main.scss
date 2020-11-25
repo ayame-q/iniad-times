@@ -233,6 +233,10 @@ $main-width: 1200px;
 		display: flex;
 		align-items: center;
 
+		> div{
+			display: flex;
+		}
+
 		li{
 			display: block;
 			width: fit-content;
@@ -278,7 +282,6 @@ $main-width: 1200px;
 			}
 
 			&.editor{
-				display: inline-block;
 				&:first-child::before{
 					content: "編集者:";
 					margin-right: 0.3em;

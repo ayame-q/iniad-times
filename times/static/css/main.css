@@ -224,6 +224,9 @@ nav.pagination ul li span.disable {
   display: flex;
   align-items: center;
 }
+.meta-wrap ul.meta > div {
+  display: flex;
+}
 .meta-wrap ul.meta li {
   display: block;
   width: fit-content;
@@ -255,9 +258,6 @@ nav.pagination ul li span.disable {
 }
 .meta-wrap ul.meta li.writer:not(:last-child)::after {
   content: ", ";
-}
-.meta-wrap ul.meta li.editor {
-  display: inline-block;
 }
 .meta-wrap ul.meta li.editor:first-child::before {
   content: "編集者:";
