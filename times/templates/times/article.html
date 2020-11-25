@@ -4,6 +4,7 @@
 {% load mytags %}
 
 {% block title %}{{ article.title }} - {{ block.super }}{% endblock title %}
+{% block og_title %}{{ article.title }} - {{ block.super }}{% endblock og_title %}
 
 {% block description %}{{ article.text | slice:":50" }}{% if article.text|length > 50 %}…{% endif %}{% endblock %}
 {% block og_description %}{{ article.text | slice:":50" }}{% if article.text|length > 50 %}…{% endif %}{% endblock %}
