@@ -278,7 +278,8 @@ $main-width: 1200px;
 			}
 
 			&.editor{
-				&::before{
+				display: inline-block;
+				&:first-child::before{
 					content: "編集者:";
 					margin-right: 0.3em;
 				}

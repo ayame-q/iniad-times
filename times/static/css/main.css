@@ -256,7 +256,10 @@ nav.pagination ul li span.disable {
 .meta-wrap ul.meta li.writer:not(:last-child)::after {
   content: ", ";
 }
-.meta-wrap ul.meta li.editor::before {
+.meta-wrap ul.meta li.editor {
+  display: inline-block;
+}
+.meta-wrap ul.meta li.editor:first-child::before {
   content: "編集者:";
   margin-right: 0.3em;
 }
