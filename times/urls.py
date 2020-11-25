@@ -12,4 +12,5 @@ urlpatterns = [
     path('staff/admin/list', views.AdminEditListPageView.as_view(), name="list_admin"),
     path('staff/admin/edit/<int:pk>', views.AdminEditArticleView.as_view(), name="edit_admin"),
     path('api/upload_image', views.ApiUploadImage.as_view(), name="post"),
+    path('api/parse_markdown', views.ApiParseMarkdown.as_view(), name="parse_markdown"),
 ]

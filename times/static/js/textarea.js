@@ -25,6 +25,58 @@ window.addEventListener("load", function() {
 			imageMaxSize: 1024*1024*10,
 			imageUploadEndpoint: "/api/upload_image",
 			imageCSRFToken: Cookies.get("csrftoken"),
+			imageUploadFunction: (image, resolve, reject) => {
+				const title = window.prompt("画像のタイトルを入力してください")
+				if (!title) {
+					reject("キャンセルされました。")
+					return
+				}
+				const formData = new FormData();
+				formData.append("image", image)
+				formData.append("title", title)
+				fetch("/api/upload_image", {
+					method: "POST",
+					headers: {
+						"X-CSRFToken": Cookies.get("csrftoken"),
+					},
+					body: formData,
+				})
+					.then((response) => {
+						return response.json()
+					})
+					.catch((error) => {
+						reject("Error: " + error)
+					})
+					.then((json) => {
+						if (json.error) {
+							reject(json.error)
+						}
+						resolve(json.data.filePath)
+					})
+			},
+			previewRender: (text) => {
+				const obj = {
+					text: text,
+				}
+				const body = Object.keys(obj).map((key)=>key+"="+encodeURIComponent(obj[key])).join("&");
+				fetch("/api/parse_markdown", {
+					method: "POST",
+					headers: {
+						'Content-Type': 'application/x-www-form-urlencoded',
+						"X-CSRFToken": Cookies.get("csrftoken"),
+					},
+					body: body,
+				})
+					.then((response) => {
+						return response.json()
+					})
+					.then((json) => {
+						const previewElements = document.getElementsByClassName("editor-preview")
+						for (const previewElement of previewElements) {
+							previewElement.innerHTML = json.text
+						}
+					})
+			}
 		});
 	}
 });

@@ -11,6 +11,7 @@ from django_boost.views.mixins import ViewUserKwargsMixin
 from uuid import uuid4
 from datetime import timedelta, date
 from .models import Article, Image, Staff, Category
+from .markdown import markdown
 from . import forms
 import os, re
 
@@ -170,20 +171,26 @@ class AdminEditListPageView(ListView):
         return context
 
 
-
-
 class ApiUploadImage(APIView):
     def post(self, request):
         image_file = request.FILES["image"]
+        title = request.POST.get("title")
         _, ext = os.path.splitext(image_file.name)
         if not re.fullmatch("\.(jpe?g|png)", ext):
             return Response({"error": "jpgかpngファイルをアップロードしてください"})
         if not request.user.staff:
             return Response({"error": "権限がありません"})
         image_file.name = str(uuid4()) + ext
-        image = Image(image=image_file, staff=request.user.staff)
+        image = Image(image=image_file, staff=request.user.staff, title=title)
         image.save()
         return Response({"data": {"filePath": image.image.url}})
+
+
+class ApiParseMarkdown(APIView):
+    def post(self, request):
+        text = request.POST.get("text")
+        result = markdown(text)
+        return Response({"text": result})
 
 
 def get_remote_ip(request):
