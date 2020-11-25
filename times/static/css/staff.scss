@@ -409,4 +409,21 @@ main{
 			}
 		}
 	}
+	.editor-preview{
+		.toc{
+			border: solid 0.5px #bbbbbb;
+			padding: 5px;
+			color: #bbbbbb;
+			background-color: white;
+			border-radius: 5px;
+			font-size: 0.8em;
+			&::before{
+				content: "目次";
+				display: block;
+			}
+			ul{
+				padding-left: 1.5em;
+			}
+		}
+	}
 }

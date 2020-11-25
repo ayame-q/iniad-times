@@ -63,7 +63,7 @@ def article(request, pk):
 
     if request.user.is_authenticated:
         request.user.browsed_histories.create(article=article)
-        
+
     data = {
         "article": article,
     }
@@ -193,7 +193,7 @@ class ApiUploadImage(APIView):
 class ApiParseMarkdown(APIView):
     def post(self, request):
         text = request.POST.get("text")
-        result = markdown(text)
+        result = markdown(text, with_toc=True)
         return Response({"text": result})
 
 
