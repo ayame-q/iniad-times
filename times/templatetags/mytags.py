@@ -1,14 +1,15 @@
 from django import template
 from django.template.defaultfilters import stringfilter
 from django.utils.safestring import mark_safe
-import markdown, re
+from ..markdown import markdown
+import re
 
 register = template.Library()
 
 @register.filter(is_safe=True)
 @stringfilter
 def markdown2html(value):
-    html = markdown.markdown(value)
+    html = markdown(value, with_toc=True)
     matches = re.finditer(r"(<h([0-6])>)", html)
     min_num = 10
     for match in matches:
@@ -19,7 +20,6 @@ def markdown2html(value):
     if min_num == 1:
         for match in matches:
             num = int(match.group(2) if match.group(2) else match.group(3))
-            print(num + 2)
             html = html[:match.end() - 2] + str(num + 2) + html[match.end() - 1:]
     if min_num == 2:
         for match in matches:

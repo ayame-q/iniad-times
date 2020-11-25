@@ -485,6 +485,16 @@ main article#article-page {
   position: relative;
 }
 @media (min-width: 481px) {
+  main article#article-page {
+    margin-left: 60px;
+  }
+}
+@media (min-width: 481px) and (max-width: 800px) {
+  main article#article-page {
+    margin-left: 60px;
+  }
+}
+@media (min-width: 481px) {
   main article#article-page #content-wrap {
     margin-right: 300px;
   }
@@ -495,7 +505,7 @@ main article#article-page {
   }
 }
 @media (min-width: 481px) {
-  main article#article-page #toc {
+  main article#article-page .toc {
     text-align: right;
     position: fixed;
     top: 110px;
@@ -503,7 +513,7 @@ main article#article-page {
   }
 }
 @media (min-width: 481px) and (max-width: 800px) {
-  main article#article-page #toc {
+  main article#article-page .toc {
     text-align: right;
     position: fixed;
     top: 110px;
@@ -511,34 +521,34 @@ main article#article-page {
   }
 }
 @media (max-width: 480px) {
-  main article#article-page #toc::before {
+  main article#article-page .toc::before {
     content: "目次";
     display: block;
     margin: 10px 0;
   }
 }
 @media (min-width: 481px) {
-  main article#article-page #toc {
+  main article#article-page .toc {
     max-width: 300px;
   }
 }
 @media (min-width: 481px) and (max-width: 800px) {
-  main article#article-page #toc {
+  main article#article-page .toc {
     max-width: 20vw;
   }
 }
-main article#article-page #toc ul {
+main article#article-page .toc ul {
   padding: 0;
   list-style: none;
   font-size: 16px;
 }
-main article#article-page #toc ul:first-child {
+main article#article-page .toc ul:first-child {
   font-size: 18px;
 }
-main article#article-page #toc ul li {
+main article#article-page .toc ul li {
   font-size: 0.8em;
 }
-main article#article-page #toc a {
+main article#article-page .toc a {
   color: #999999;
 }
 main article#article-page img {

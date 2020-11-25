@@ -530,6 +530,9 @@ main{
 
 	article#article-page{
 		margin: 0 20px;
+		@include media(large, medium){
+			margin-left: 60px;
+		}
 		position: relative;
 		//top: 110px;
 		#content-wrap{
@@ -540,7 +543,7 @@ main{
 				margin-right: 20vw;
 			}
 		}
-		#toc{
+		.toc{
 			@include media(large, medium){
 				text-align: right;
 				position: fixed;
