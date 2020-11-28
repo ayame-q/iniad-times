@@ -1,5 +1,14 @@
 from django.urls import path
+from django.contrib.sitemaps.views import sitemap
+from django.contrib.sitemaps.views import index as sitemap_index
 from . import views
+from .sitemaps import ArticleSitemap, CategorySitemap, StaticSitemap
+
+sitemaps = {
+    'statics': StaticSitemap,
+    'article': ArticleSitemap,
+    'categories': CategorySitemap,
+}
 
 urlpatterns = [
     path('', views.index, name="index"),
@@ -14,4 +23,6 @@ urlpatterns = [
     path('staff/admin/edit/<int:pk>', views.AdminEditArticleView.as_view(), name="edit_admin"),
     path('api/upload_image', views.ApiUploadImage.as_view(), name="post"),
     path('api/parse_markdown', views.ApiParseMarkdown.as_view(), name="parse_markdown"),
+    path('sitemap.xml', sitemap_index, {'sitemaps': sitemaps}),
+    path('sitemap-<section>.xml', sitemap, {'sitemaps': sitemaps}, name="django.contrib.sitemaps.views.sitemap")
 ]
