@@ -5,7 +5,7 @@
 {% block option_head %}
 	<link rel="stylesheet" href="https://unpkg.com/easymde/dist/easymde.min.css">
 	<script src="https://unpkg.com/easymde/dist/easymde.min.js"></script>
-	<script src="{% static "js/textarea.js" %}?1"></script>
+	<script src="{% static "js/textarea.js" %}"></script>
 {% endblock %}
 
 {% block title %}{% if is_new_form %}新規記事投稿{% else %}「{{ article.title }}」を編集{% endif %} - {{ block.super }}{% endblock title %}

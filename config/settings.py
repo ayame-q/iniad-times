@@ -167,4 +167,7 @@ INTERNAL_IPS = [
     "127.0.0.1"
 ]
 
+# キャッシュバスティング
+STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.ManifestStaticFilesStorage'
+
 from .settings_secret import *
