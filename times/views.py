@@ -41,9 +41,9 @@ def is_crawler(request):
 
 
 def index(request):
-    new_articles = Article.objects.order_by("-updated_at").filter(is_posted=True)[:5]
-    top_articles = Article.objects.order_by("-updated_at").filter(is_posted=True)[:10]
-    is_need_more = Article.objects.order_by("-updated_at").filter(is_posted=True).count() > 10
+    new_articles = Article.objects.filter(is_posted=True, published_at__lt=timezone.localtime()).order_by("-published_at")[:5]
+    top_articles = Article.objects.filter(is_posted=True, published_at__lt=timezone.localtime()).order_by("-published_at")[:10]
+    is_need_more = Article.objects.filter(is_posted=True, published_at__lt=timezone.localtime()).order_by("-published_at").count() > 10
     data = {
         "new_articles": new_articles,
         "top_articles": top_articles,
@@ -55,11 +55,12 @@ def index(request):
 
 def article(request, pk):
     article = get_object_or_404(Article, pk=pk)
+
+    if (not article.is_posted or article.published_at > timezone.localtime()) and (not request.user.is_authenticated or not request.user.staff):
+        raise Http404
+
     if (not article.is_public and not request.user.is_authenticated) and not is_crawler(request):
         return redirect("/auth/google/login?next=" + request.path)
-
-    if (not article.is_posted) and (not request.user.staff):
-        raise Http404
 
     if request.user.is_authenticated:
         request.user.browsed_histories.create(article=article)
