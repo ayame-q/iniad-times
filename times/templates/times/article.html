@@ -18,6 +18,7 @@
 			<div class="meta-wrap">
 				<ul class="meta">
 					<li class="category">{{ article.category }}</li>
+					{% if not article.is_public %}<li class="only-member">学内限定</li>{% endif %}
 				</ul>
 				<h2>{{ article.title }}</h2>
 				<ul class="meta">

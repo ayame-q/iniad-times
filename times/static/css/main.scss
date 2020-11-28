@@ -273,6 +273,15 @@ article.article-list{
 				font-size: 0.7em;
 			}
 
+			&.only-member{
+				display: block;
+				width: fit-content;
+				padding: 0.3em;
+				background-color: #ff7563;
+				color: #fff;
+				font-size: 0.7em;
+			}
+
 			&.list-writer{
 				&::before{
 					content: "by ";
