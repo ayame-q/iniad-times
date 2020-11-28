@@ -1,7 +1,7 @@
 @mixin media($a: false, $b: false, $c: false){
 	$value: large;
 	@if($a == $value or $b == $value or $c == $value){
-		@media (min-width: 481px) {
+		@media (min-width: 801px) {
 			@content;
 		}
 	}
@@ -327,11 +327,19 @@ header{
 			display: none !important;
 		}
 	}
+	@include media(medium){
+		#header-right-wrap{
+			ul{
+				display: none;
+			}
+		}
+	}
 	nav{
 		ul{
 			display: flex;
 			list-style: none;
 			justify-content: stretch;
+			padding: 0;
 			li{
 				width: 100%;
 			}
