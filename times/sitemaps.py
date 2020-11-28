@@ -1,11 +1,11 @@
 from django.contrib.sitemaps import Sitemap
 from django.shortcuts import resolve_url
 from django.utils import timezone
+from datetime import timedelta
 from .models import Article, Category
 
 
 class ArticleSitemap(Sitemap):
-    changefreq = "daily"
     priority = 0.8
     protocol = "https"
 
@@ -17,6 +17,15 @@ class ArticleSitemap(Sitemap):
 
     def lastmod(self, obj):
         return obj.time()
+
+    def changefreq(self, obj):
+        if obj.published_at > timezone.localtime() + timedelta(days=-7):
+            return "daily"
+        elif obj.published_at > timezone.localtime() + timedelta(days=-30):
+            return "weekly"
+        else:
+            return "monthly"
+
 
 
 class CategorySitemap(Sitemap):
