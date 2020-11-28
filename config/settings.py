@@ -162,5 +162,9 @@ SOCIALACCOUNT_PROVIDERS = {
 IMAGE_ROOT = os.path.join(BASE_DIR, 'upload_images')
 IMAGE_URL = '/upload_images/'
 
+# デバッグIP指定
+INTERNAL_IPS = [
+    "127.0.0.1"
+]
 
 from .settings_secret import *

@@ -3,15 +3,9 @@
 <html lang="ja">
 <head>
 	<meta charset="UTF-8">
+	{% include "times/includes/head.html" %}
 	<link rel="stylesheet" href="{% static "css/staff.css" %}">
 
-	<link rel="apple-touch-icon" sizes="180x180" href="{% static "img/icon/apple-touch-icon.png" %}">
-	<link rel="icon" type="image/png" sizes="32x32" href="{% static "img/icon/favicon-32x32.png" %}">
-	<link rel="icon" type="image/png" sizes="16x16" href="{% static "img/icon/favicon-16x16.png" %}">
-	<!--<link rel="manifest" href="{% static "img/icon/site.webmanifest" %}">
-	<link rel="mask-icon" href="{% static "img/icon/safari-pinned-tab.svg" %}" color="#ff8b3c">
-	<meta name="msapplication-TileColor" content="#ffffff">-->
-	<meta name="theme-color" content="#ff8b3c">
 	{% block option_head %}{% endblock option_head %}
 
 	<title>{% block title %}スタッフメニュー - INIAD Times{% endblock title %}</title>
