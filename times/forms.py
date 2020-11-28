@@ -24,7 +24,7 @@ class BaseForm(forms.ModelForm):
 class AdminArticleForm(FormUserKwargsMixin, BaseForm):
     class Meta:
         model = Article
-        fields = ("title", "text", "eyecatch", "article_writers", "article_editors", "category", "published_at", "is_posted", "is_public")
+        fields = ("title", "text", "eyecatch", "article_writers", "article_editors", "category", "publish_at", "is_posted", "is_public")
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

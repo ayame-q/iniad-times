@@ -71,6 +71,8 @@ class Post(models.Model):
     tags = models.ManyToManyField(Tag, related_name="%(class)s", blank=True, verbose_name="タグ")
     eyecatch = models.ForeignKey(Image, related_name="used_%(class)s", null=True, blank=True, on_delete=models.SET_NULL ,verbose_name="アイキャッチ画像")
     created_at = models.DateTimeField(default=timezone.localtime, verbose_name="作成日")
+    publish_at = models.DateTimeField(default=timezone.localtime, null=True, blank=True, verbose_name="公開日")
+    sns_publish_text = models.CharField(max_length=140, default="", verbose_name="SNS告知文")
 
     class Meta:
         abstract = True
@@ -109,14 +111,14 @@ class PreArticle(Post):
 class Article(Post):
     last_user = models.ForeignKey(Staff, on_delete=models.SET_NULL, null=True, verbose_name="最終更新者")
     updated_at = models.DateTimeField(default=timezone.localtime, verbose_name="更新日")
-    published_at = models.DateTimeField(default=timezone.localtime, verbose_name="公開日")
+    published_at = models.DateTimeField(default=timezone.localtime, verbose_name="公開された日")
     is_posted = models.BooleanField(default=False, verbose_name="公開")
     is_public = models.BooleanField(default=False, verbose_name="INIAD関係者以外の閲覧を許可する")
     lecture = models.ForeignKey(Lecture, on_delete=models.SET_NULL, null=True, blank=True, verbose_name="授業")
     parent = models.ForeignKey(PreArticle, related_name="articles", on_delete=models.SET_NULL, null=True, blank=True, verbose_name="元記事")
 
     def time(self):
-        return max(self.created_at, self.updated_at, self.published_at)
+        return max(self.created_at, self.updated_at, self.publish_at)
 
     def is_new(self):
         return self.time() > timezone.localtime() - timedelta(weeks=1)

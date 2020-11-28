@@ -10,7 +10,7 @@ class ArticleSitemap(Sitemap):
     protocol = "https"
 
     def items(self):
-        return Article.objects.filter(is_posted=True, published_at__lt=timezone.localtime()).order_by("-published_at")
+        return Article.objects.filter(is_posted=True, publish_at__lt=timezone.localtime()).order_by("-publish_at")
 
     def location(self, obj):
         return resolve_url('article', pk=obj.pk)
@@ -19,9 +19,9 @@ class ArticleSitemap(Sitemap):
         return obj.time()
 
     def changefreq(self, obj):
-        if obj.published_at > timezone.localtime() + timedelta(days=-7):
+        if obj.publish_at > timezone.localtime() + timedelta(days=-7):
             return "daily"
-        elif obj.published_at > timezone.localtime() + timedelta(days=-30):
+        elif obj.publish_at > timezone.localtime() + timedelta(days=-30):
             return "weekly"
         else:
             return "monthly"
@@ -40,7 +40,7 @@ class CategorySitemap(Sitemap):
         return resolve_url('category', category_pk=obj.pk)
 
     def lastmod(self, obj):
-        latest_post = Article.objects.filter(category=obj, is_posted=True, published_at__lt=timezone.localtime())[:1]
+        latest_post = Article.objects.filter(category=obj, is_posted=True, publish_at__lt=timezone.localtime())[:1]
         if len(latest_post) > 0:
             return latest_post[0].updated_at
 
@@ -56,7 +56,7 @@ class StaticSitemap(Sitemap):
 
     def lastmod(self, obj):
         if obj in ['index', 'list']:
-            latest_post = Article.objects.filter(is_posted=True, published_at__lt=timezone.localtime()).order_by("-published_at")[:1]
+            latest_post = Article.objects.filter(is_posted=True, publish_at__lt=timezone.localtime()).order_by("-publish_at")[:1]
             if len(latest_post) > 0:
                 return latest_post[0].updated_at
 
