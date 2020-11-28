@@ -1,0 +1,21 @@
+<article class="article-list">
+	<a href="{% url "article" article.pk %}">
+		<p class="eyecatch"><img src="{{ article.eyecatch.url }}" alt="eyecatch"></p>
+		<div class="meta-wrap">
+			<ul class="meta">
+				<li class="category">{{ article.category }}</li>
+				{% if not article.is_public %}<li class="only-member">学内限定</li>{% endif %}
+				<div>
+					{% for writer in article.article_writers.all %}
+						<li class="list-writer">{{ writer.name }}</li>
+					{% endfor %}
+				</div>
+			</ul>
+			<h3>{{ article.title }}</h3>
+			<ul class="meta">
+				<li class="time">{{ article.time }}</li>
+				{% if article.is_new %}<li class="new">New!</li>{% endif %}
+			</ul>
+		</div>
+	</a>
+</article>

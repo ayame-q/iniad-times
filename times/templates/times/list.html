@@ -12,26 +12,7 @@
 	<section id="list-page">
 		<h2>記事一覧</h2>
 		{% for article in articles %}
-			<article>
-				<a href="{% url "article" article.pk %}">
-					<p class="eyecatch"><img src="{{ article.eyecatch.url }}" alt="eyecatch"></p>
-					<div class="meta-wrap">
-						<ul class="meta">
-							<li class="category">{{ article.category }}</li>
-							<div>
-								{% for writer in article.article_writers.all %}
-									<li class="list-writer">{{ writer.name }}</li>
-								{% endfor %}
-							</div>
-						</ul>
-						<h3>{{ article.title }}</h3>
-						<ul class="meta">
-							<li class="time">{{ article.time }}</li>
-							{% if article.is_new %}<li class="new">New!</li>{% endif %}
-						</ul>
-					</div>
-				</a>
-			</article>
+			{% include "times/includes/article-list.html" with article=article %}
 		{% empty %}
 			<p>記事が見つかりませんでした</p>
 		{% endfor %}

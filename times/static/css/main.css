@@ -212,6 +212,24 @@ nav.pagination ul li span.disable {
   margin: 0;
 }
 
+article.article-list {
+  margin: 10px;
+  font-size: 16px;
+}
+article.article-list a {
+  color: #333333;
+  display: flex;
+  align-items: center;
+}
+article.article-list a p.eyecatch {
+  width: 200px;
+  margin-right: 15px;
+}
+article.article-list a p.eyecatch img {
+  max-width: 100%;
+  width: 200px;
+}
+
 .meta-wrap h3 {
   font-size: 1em;
   font-weight: normal;
@@ -240,6 +258,14 @@ nav.pagination ul li span.disable {
   width: fit-content;
   padding: 0.3em;
   background-color: #868686;
+  color: #fff;
+  font-size: 0.7em;
+}
+.meta-wrap ul.meta li.only-member {
+  display: block;
+  width: fit-content;
+  padding: 0.3em;
+  background-color: #ff7563;
   color: #fff;
   font-size: 0.7em;
 }
@@ -451,33 +477,6 @@ main section#top-page #marquee-wrap #top-marquee article h3 {
 main section#top-page #marquee-wrap #top-marquee article ul {
   display: none;
 }
-main section#top-page #main-list article {
-  margin: 10px;
-  font-size: 16px;
-}
-main section#top-page #main-list article a {
-  display: block;
-  color: #333333;
-}
-main section#top-page #main-list article p.eyecatch {
-  margin: 0;
-}
-main section#top-page #main-list article p.eyecatch img {
-  width: 100%;
-  min-width: 0;
-  max-width: 100%;
-}
-@media (max-width: 480px) {
-  main section#top-page #main-list article a {
-    display: flex;
-    align-items: center;
-  }
-  main section#top-page #main-list article a p.eyecatch {
-    flex-basis: 30%;
-    flex-shrink: 0;
-    margin-right: 15px;
-  }
-}
 @media (min-width: 951px) {
   main section#top-page #main-list #top-wrap {
     display: flex;
@@ -486,6 +485,18 @@ main section#top-page #main-list article p.eyecatch img {
   }
   main section#top-page #main-list #top-wrap > article {
     flex-basis: 45%;
+  }
+  main section#top-page #main-list #top-wrap > article a {
+    display: block;
+  }
+  main section#top-page #main-list #top-wrap > article a p.eyecatch {
+    margin: 0;
+    width: auto;
+  }
+  main section#top-page #main-list #top-wrap > article a p.eyecatch img {
+    width: 100%;
+    min-width: 0;
+    max-width: 100%;
   }
   main section#top-page #main-list #top-wrap #top-right-wrap {
     flex-basis: 45%;
@@ -506,6 +517,18 @@ main section#top-page #main-list article p.eyecatch img {
   }
   main section#top-page #main-list #bottom-wrap article {
     flex-basis: 30%;
+  }
+  main section#top-page #main-list #bottom-wrap article a {
+    display: block;
+  }
+  main section#top-page #main-list #bottom-wrap article a p.eyecatch {
+    margin: 0;
+    width: auto;
+  }
+  main section#top-page #main-list #bottom-wrap article a p.eyecatch img {
+    width: 100%;
+    min-width: 0;
+    max-width: 100%;
   }
 }
 @media (min-width: 481px) and (max-width: 950px) {
@@ -517,6 +540,18 @@ main section#top-page #main-list article p.eyecatch img {
   main section#top-page #main-list #top-wrap > article {
     flex-basis: 45%;
   }
+  main section#top-page #main-list #top-wrap > article a {
+    display: block;
+  }
+  main section#top-page #main-list #top-wrap > article a p.eyecatch {
+    margin: 0;
+    width: auto;
+  }
+  main section#top-page #main-list #top-wrap > article a p.eyecatch img {
+    width: 100%;
+    min-width: 0;
+    max-width: 100%;
+  }
   main section#top-page #main-list #top-wrap #top-right-wrap {
     flex-basis: 45%;
   }
@@ -536,6 +571,18 @@ main section#top-page #main-list article p.eyecatch img {
   }
   main section#top-page #main-list #bottom-wrap article {
     flex-basis: 30%;
+  }
+  main section#top-page #main-list #bottom-wrap article a {
+    display: block;
+  }
+  main section#top-page #main-list #bottom-wrap article a p.eyecatch {
+    margin: 0;
+    width: auto;
+  }
+  main section#top-page #main-list #bottom-wrap article a p.eyecatch img {
+    width: 100%;
+    min-width: 0;
+    max-width: 100%;
   }
 }
 main section#top-page #main-list #pr-wrap {

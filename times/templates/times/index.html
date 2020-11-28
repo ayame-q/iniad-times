@@ -41,49 +41,11 @@
 		<div id="main-list">
 			<div id="top-wrap">
 				{% for article in top_articles|slice:"0:1" %}
-				<article>
-					<a href="{% url "article" article.pk %}">
-						<p class="eyecatch"><img src="{{ article.eyecatch.url }}" alt="eyecatch"></p>
-						<div class="meta-wrap">
-							<ul class="meta">
-								<li class="category">{{ article.category }}</li>
-								<div>
-									{% for writer in article.article_writers.all %}
-										<li class="list-writer">{{ writer.name }}</li>
-									{% endfor %}
-								</div>
-							</ul>
-							<h3>{{ article.title }}</h3>
-							<ul class="meta">
-								<li class="time">{{ article.time }}</li>
-								{% if article.is_new %}<li class="new">New!</li>{% endif %}
-							</ul>
-						</div>
-					</a>
-				</article>
+					{% include "times/includes/article-list.html" with article=article %}
 				{% endfor %}
 				<div id="top-right-wrap">
 					{% for article in top_articles|slice:"1:4" %}
-						<article>
-							<a href="{% url "article" article.pk %}">
-								<p class="eyecatch"><img src="{{ article.eyecatch.url }}" alt="eyecatch"></p>
-								<div class="meta-wrap">
-									<ul class="meta">
-										<li class="category">{{ article.category }}</li>
-										<div>
-											{% for writer in article.article_writers.all %}
-												<li class="list-writer">{{ writer.name }}</li>
-											{% endfor %}
-										</div>
-									</ul>
-									<h3>{{ article.title }}</h3>
-									<ul class="meta">
-										<li class="time">{{ article.time }}</li>
-										{% if article.is_new %}<li class="new">New!</li>{% endif %}
-									</ul>
-								</div>
-							</a>
-						</article>
+						{% include "times/includes/article-list.html" with article=article %}
 					{% endfor %}
 				</div>
 			</div>
@@ -95,26 +57,7 @@
 			</div>
 			<div id="bottom-wrap">
 				{% for article in top_articles|slice:"4:" %}
-					<article>
-						<a href="{% url "article" article.pk %}">
-							<p class="eyecatch"><img src="{{ article.eyecatch.url }}" alt="eyecatch"></p>
-							<div class="meta-wrap">
-								<ul class="meta">
-									<li class="category">{{ article.category }}</li>
-									<div>
-										{% for writer in article.article_writers.all %}
-											<li class="list-writer">{{ writer.name }}</li>
-										{% endfor %}
-									</div>
-								</ul>
-								<h3>{{ article.title }}</h3>
-								<ul class="meta">
-									<li class="time">{{ article.time }}</li>
-									{% if article.is_new %}<li class="new">New!</li>{% endif %}
-								</ul>
-							</div>
-						</a>
-					</article>
+					{% include "times/includes/article-list.html" with article=article %}
 				{% endfor %}
 			</div>
 			{% if is_need_more %}
