@@ -1,7 +1,7 @@
 @mixin media($a: false, $b: false, $c: false){
 	$value: large;
 	@if($a == $value or $b == $value or $c == $value){
-		@media (min-width: 801px) {
+		@media (min-width: 951px) {
 			@content;
 		}
 	}
@@ -16,7 +16,7 @@
 
 	$value: medium;
 	@if($a == $value or $b == $value or $c == $value){
-		@media (min-width: 481px) and (max-width: 800px) {
+		@media (min-width: 481px) and (max-width: 950px) {
 			@content;
 		}
 	}
@@ -372,6 +372,8 @@ header{
 			white-space: nowrap;
 			nav{
 				width: 100%;
+				margin-left: 5vw;
+				box-sizing: border-box;
 				ul{
 					margin-left: auto;
 					margin-right: 0;
@@ -630,8 +632,11 @@ main{
 
 	article#article-page{
 		margin: 0 20px;
-		@include media(large, medium){
+		@include media(large){
 			margin-left: 60px;
+		}
+		@include media(medium){
+			margin-left: 30px;
 		}
 		position: relative;
 		//top: 110px;
