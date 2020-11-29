@@ -20,21 +20,6 @@ import os, re
 publish = Publish()
 
 
-class NextUrlMixin(SuccessURLAllowedHostsMixin):
-    def get_redirect_url(self):
-        redirect_field_name = "next"
-        redirect_to = self.request.POST.get(
-            redirect_field_name,
-            self.request.GET.get(redirect_field_name, '')
-        )
-        url_is_safe = is_safe_url(
-            url=redirect_to,
-            allowed_hosts=self.get_success_url_allowed_hosts(),
-            require_https=self.request.is_secure(),
-        )
-        return redirect_to if url_is_safe else ''
-
-
 def is_crawler(request):
     ua = request.META["HTTP_USER_AGENT"]
     if "Googlebot" in ua or "msnbot" in ua or "bingbot" in ua or "Applebot" in ua or "Twitterbot" in ua or "Linespider" in ua or "facebookexternalhit" in ua:
