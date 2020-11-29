@@ -1,7 +1,7 @@
 @mixin media($a: false, $b: false, $c: false){
 	$value: large;
 	@if($a == $value or $b == $value or $c == $value){
-		@media (min-width: 951px) {
+		@media (min-width: 851px) {
 			@content;
 		}
 	}
@@ -16,7 +16,7 @@
 
 	$value: medium;
 	@if($a == $value or $b == $value or $c == $value){
-		@media (min-width: 481px) and (max-width: 950px) {
+		@media (min-width: 481px) and (max-width: 850px) {
 			@content;
 		}
 	}
@@ -534,7 +534,7 @@ main{
 			}
 		}
 		#main-list{
-			@include media(large, medium){
+			@include media(large){
 				#top-wrap{
 					display: flex;
 					width: 100%;
