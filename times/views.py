@@ -13,10 +13,12 @@ from datetime import timedelta, date
 from .models import Article, Image, Staff, Category
 from .markdown import markdown
 from . import forms
+from .publish import Publish
 import os, re
 
 
-# Create your views here.
+publish = Publish()
+
 
 class NextUrlMixin(SuccessURLAllowedHostsMixin):
     def get_redirect_url(self):
@@ -87,7 +89,8 @@ class AdminNewArticleView(ViewUserKwargsMixin, CreateView):
         data.create_ip = get_remote_ip(self.request)
         data.status_ending_at = date.today() + timedelta(weeks=1)
         data.save()
-        #url = self.request.build_absolute_uri(resolve_url("detail", pk=data.id))
+        publish.publish(data)
+        #url = self.request.build_absolute_uri(resolve_url("article", pk=data.id))
         return redirect("staff")
 
 
@@ -102,7 +105,8 @@ class AdminEditArticleView(ViewUserKwargsMixin, UpdateView):
         data.create_ip = get_remote_ip(self.request)
         data.status_ending_at = date.today() + timedelta(weeks=1)
         data.save()
-        #url = self.request.build_absolute_uri(resolve_url("detail", pk=data.id))
+        publish.publish(data)
+        #url = self.request.build_absolute_uri(resolve_url("article", pk=data.id))
         return redirect("staff")
 
 
