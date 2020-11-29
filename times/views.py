@@ -41,9 +41,9 @@ def is_crawler(request):
 
 
 def index(request):
-    new_articles = Article.objects.filter(is_posted=True, publish_at__lt=timezone.localtime()).order_by("-publish_at")[:5]
-    top_articles = Article.objects.filter(is_posted=True, publish_at__lt=timezone.localtime()).order_by("-publish_at")[:10]
-    is_need_more = Article.objects.filter(is_posted=True, publish_at__lt=timezone.localtime()).order_by("-publish_at").count() > 10
+    new_articles = Article.objects.filter(is_publishable=True, publish_at__lt=timezone.localtime()).order_by("-publish_at")[:5]
+    top_articles = Article.objects.filter(is_publishable=True, publish_at__lt=timezone.localtime()).order_by("-publish_at")[:10]
+    is_need_more = Article.objects.filter(is_publishable=True, publish_at__lt=timezone.localtime()).order_by("-publish_at").count() > 10
     data = {
         "new_articles": new_articles,
         "top_articles": top_articles,
@@ -56,7 +56,7 @@ def index(request):
 def article(request, pk):
     article = get_object_or_404(Article, pk=pk)
 
-    if (not article.is_posted or article.publish_at > timezone.localtime()) and (not request.user.is_authenticated or not request.user.staff):
+    if (not article.is_publishable or article.publish_at > timezone.localtime()) and (not request.user.is_authenticated or not request.user.staff):
         raise Http404
 
     if (not article.is_public and not request.user.is_authenticated) and not is_crawler(request):
@@ -127,14 +127,14 @@ class ListPageView(ListView):
         key_word = self.request.GET.get("q")
         if category_pk:
             category = Category.objects.get(pk=category_pk)
-            result = Article.objects.order_by("-updated_at").filter(category=category).filter(is_posted=True)
+            result = Article.objects.order_by("-updated_at").filter(category=category).filter(is_publishable=True)
         elif key_word:
             search_result_list = Article.objects.filter(
                 Q(title__icontains=key_word) | Q(text__icontains=key_word)
             )
-            result = search_result_list.filter(is_posted=True)
+            result = search_result_list.filter(is_publishable=True)
         else:
-            result = Article.objects.order_by("-updated_at").filter(is_posted=True)
+            result = Article.objects.order_by("-updated_at").filter(is_publishable=True)
         return result
 
     def get_context_data(self, *args, **kwargs):
