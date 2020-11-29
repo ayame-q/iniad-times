@@ -506,6 +506,7 @@ main section#top-page #marquee-wrap #top-marquee article ul {
     align-items: center;
   }
   main section#top-page #main-list #top-wrap #top-right-wrap article a p.eyecatch {
+    margin: 0;
     flex-basis: 40%;
     flex-shrink: 0;
     margin-right: 15px;
@@ -560,6 +561,7 @@ main section#top-page #marquee-wrap #top-marquee article ul {
     align-items: center;
   }
   main section#top-page #main-list #top-wrap #top-right-wrap article a p.eyecatch {
+    margin: 0;
     flex-basis: 40%;
     flex-shrink: 0;
     margin-right: 15px;
