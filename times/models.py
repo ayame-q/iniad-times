@@ -105,13 +105,13 @@ class PreArticle(Post):
     user = models.ForeignKey(Staff, on_delete=models.SET_NULL, null=True, verbose_name="最終更新者")
     lecture = models.ForeignKey(Lecture, related_name="posts", on_delete=models.SET_NULL, null=True, blank=True, verbose_name="授業")
     parent = models.ForeignKey("self", related_name="children", on_delete=models.SET_NULL, null=True, blank=True, verbose_name="親記事")
-    is_editor = models.BooleanField(default=False, verbose_name="編集か")
+    is_revision = models.BooleanField(default=False, verbose_name="校閲か")
 
 
 class Article(Post):
     last_user = models.ForeignKey(Staff, on_delete=models.SET_NULL, null=True, verbose_name="最終更新者")
     updated_at = models.DateTimeField(default=timezone.localtime, verbose_name="更新日")
-    is_publishable = models.BooleanField(default=False, verbose_name="公開")
+    is_publishable = models.BooleanField(default=False, verbose_name="公開準備済")
     is_published = models.BooleanField(default=False, verbose_name="公開済み")
     is_public = models.BooleanField(default=False, verbose_name="INIAD関係者以外の閲覧を許可する")
     lecture = models.ForeignKey(Lecture, on_delete=models.SET_NULL, null=True, blank=True, verbose_name="授業")
