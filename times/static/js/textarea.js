@@ -16,10 +16,10 @@ window.addEventListener("load", function() {
 		}
 		const easyMDE = new EasyMDE({
 			element: textInputElement,
-			/*autosave: {
+			autosave: {
 				enabled: true,
-				uniqueId: "iniad-times_" + parentForm.dataset.page_id,
-			},*/
+				uniqueId: "iniad-times_" + parentForm.dataset.object_uuid,
+			},
 			forceSync: true,
 			spellChecker: false,
 			uploadImage: true,
