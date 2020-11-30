@@ -1,5 +1,0 @@
-<ul{% if widget.attrs.id %} id="{{ widget.attrs.id }}"{% endif %} class="image_choice{% if widget.attrs.class %} {{ widget.attrs.class }}{% endif %}">{% for group, options, index in widget.optgroups %}{% if group %}
-	<li>{{ group }}<ul{% if widget.attrs.id %} id="{{ widget.attrs.id }}_{{ index }}"{% endif %}>{% endif %}{% for widget in options %}
-	<li>{% include widget.template_name %}</li>{% endfor %}{% if group %}
-	</ul></li>{% endif %}{% endfor %}
-</ul>
