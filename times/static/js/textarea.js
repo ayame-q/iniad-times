@@ -1,3 +1,4 @@
+let isPreviewDiff = false;
 window.addEventListener("load", function() {
 	const textInputElements = document.getElementsByClassName("text-input");
 	for(const textInputElement of textInputElements){
@@ -22,9 +23,7 @@ window.addEventListener("load", function() {
 			forceSync: true,
 			spellChecker: false,
 			uploadImage: true,
-			imageMaxSize: 1024*1024*10,
-			imageUploadEndpoint: "/api/upload_image",
-			imageCSRFToken: Cookies.get("csrftoken"),
+			sideBySideFullscreen: false,
 			imageUploadFunction: (image, resolve, reject) => {
 				const title = window.prompt("画像のタイトルを入力してください")
 				if (!title) {
@@ -76,7 +75,56 @@ window.addEventListener("load", function() {
 							previewElement.innerHTML = json.text
 						}
 					})
-			}
+			},
+			toolbar: [
+				"bold", "italic",
+				"|",
+				"heading-1", "heading-2", "heading-3",
+				"|",
+				"quote", "unordered-list", "ordered-list",
+				"|",
+				"link", "image",
+				"|",
+				{
+					name: "preview",
+					action: (editor) => {
+						isPreviewDiff = false
+						const toolbar = editor.gui.toolbar
+						const previewElement = toolbar.getElementsByClassName("preview")[0]
+						previewElement.classList.add("active")
+						const diffElement = toolbar.getElementsByClassName("diff")[0]
+						diffElement.classList.remove("active")
+					},
+					className: "fa fa-eye",
+					title: "Preview"
+				},
+				{
+					name: "diff",
+					action: (editor) => {
+						isPreviewDiff = false
+						const toolbar = editor.gui.toolbar
+						const previewElement = toolbar.getElementsByClassName("preview")[0]
+						previewElement.classList.remove("active")
+						const diffElement = toolbar.getElementsByClassName("diff")[0]
+						diffElement.classList.add("active")
+					},
+					className: "fa fa-exchange",
+					title: "Diff"
+				},
+				{
+					name: "fullscreen",
+					action: (editor) => {
+						editor.toggleFullScreen()
+						editor.toggleSideBySide()
+					},
+					className: "fa fa-arrows-alt",
+					title: "FullScreen"
+				},
+			]
 		});
+		easyMDE.toggleSideBySide()
+		const toolbar = easyMDE.gui.toolbar
+		const previewElement = toolbar.getElementsByClassName("preview")[0]
+		previewElement.classList.add("active")
 	}
 });

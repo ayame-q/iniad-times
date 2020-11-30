@@ -6,13 +6,14 @@ from django.conf import settings
 from django.utils import timezone
 from django.db.models import Q
 from rest_framework.views import APIView
+from rest_framework.generics import ListAPIView
 from rest_framework.response import Response
 from django_boost.views.mixins import ViewUserKwargsMixin
 from uuid import uuid4
 from datetime import timedelta, date
-from .models import Article, Image, Staff, Category
+from .models import Article, PreArticle, Image, Staff, Category
 from .markdown import markdown
-from . import forms
+from . import forms, serializers
 from .publish import Publish
 import os, re
 
@@ -60,6 +61,23 @@ def article(request, pk):
 
 def staff(request):
     return render(request, "times/staff/index.html")
+
+
+class NewPreArticleView(ViewUserKwargsMixin, CreateView):
+    model = PreArticle
+    form_class = forms.PreArticleForm
+    template_name = "times/staff/article.html"
+    extra_context = {"is_new_form": True}
+
+    def form_valid(self, form):
+        data = form.save(commit=False)
+        data.user = self.request.user
+        data.create_ip = get_remote_ip(self.request)
+        data.status_ending_at = date.today() + timedelta(weeks=1)
+        data.save()
+        publish.publish(data)
+        #url = self.request.build_absolute_uri(resolve_url("article", pk=data.id))
+        return redirect("staff")
 
 
 class AdminNewArticleView(ViewUserKwargsMixin, CreateView):
@@ -165,6 +183,11 @@ class AdminEditListPageView(ListView):
         return context
 
 
+class ApiGetImageList(ListAPIView):
+    queryset = Image.objects.order_by("-id")
+    serializer_class = serializers.ImageSerializer
+
+
 class ApiUploadImage(APIView):
     def post(self, request):
         image_file = request.FILES["image"]
@@ -177,7 +200,7 @@ class ApiUploadImage(APIView):
         image_file.name = str(uuid4()) + ext
         image = Image(image=image_file, staff=request.user.staff, title=title)
         image.save()
-        return Response({"data": {"filePath": image.image.url}})
+        return Response({"data": {"id": image.id, "filePath": image.image.url}})
 
 
 class ApiParseMarkdown(APIView):

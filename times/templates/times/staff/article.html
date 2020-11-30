@@ -1,0 +1,157 @@
+{% extends "times/staff/base.html" %}
+
+{% load static %}
+{% load widget_tweaks %}
+
+{% block option_head %}
+	<link rel="stylesheet" href="https://unpkg.com/easymde/dist/easymde.min.css">
+	<script src="https://unpkg.com/easymde/dist/easymde.min.js"></script>
+	<script src="{% static "js/textarea.js" %}?1"></script>
+{% endblock %}
+
+<script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+
+{% block title %}{% if is_new_form %}新規記事執筆{% else %}「{{ article.title }}」を編集{% endif %} - {{ block.super }}{% endblock title %}
+
+{% block main %}
+	<section id="article-post">
+		<form action="{% if next %}?next={{ next }}{% endif %}" method="post"{% if form_id %} id="{{ form_id }}"{% endif %} data-page_id="{% if page_id %}{{ page_id }}{% endif %}">
+			<div id="form-main-wrap">
+				<p id="input-title">{{ form.title }}</p>
+				<p id="input-text">{{ form.text | add_class:"text-input" }}</p>
+			</div>
+			<div id="form-meta-wrap">
+				<div id="form-eyecatch-wrap">
+					<label for="{{ form.eyecatch.id_for_label }}">
+						{{ form.eyecatch.label }}
+						<button type="button" style="margin-left: 1em;" v-on:click="openUploadModal">アップロード</button>
+						<button type="button" style="margin-left: 1em;" v-on:click="getImageList">更新</button>
+					</label>
+					<ul id="{{ form.eyecatch.id_for_label }}" class="image_choice">
+						<li v-for="image in images">
+							<input type="radio" name="{{ form.eyecatch.name }}" v-bind:value="image.id" v-model="selectedEyeCatch" v-bind:id="'id_image_' + image.id" required>
+							<label v-bind:for="'id_image_' + image.id">
+								<img v-bind:src="image.image" v-bind:alt="image.title" v-bind:title="image.title">
+							</label>
+						</li>
+					</ul>
+				</div>
+				<div id="form-sns_publish-wrap">
+					<label for="{{ form.sns_publish_text.id_for_label }}">{{ form.sns_publish_text.label }}</label>
+					<p id="input-sns_publish_text">{{ form.sns_publish_text }}</p>
+				</div>
+				<div id="form-other_meta-wrap">
+					<label for="{{ form.category.id_for_label }}">{{ form.category.label }}</label>
+					<p id="input-category">{{ form.category }}</p>
+					<label for="{{ form.publish_at.id_for_label }}">{{ form.publish_at.label }}</label>
+					<p id="input-publish_at"><input type="text" name="{{ form.publish_at.name }}" v-model="publish_at" v-on:click="stopUpdateNow" value="{{ form.publish_at.value | date:"Y-m-d H:i:s" }}" placeholder="{{ form.publish_at.label }}" id="{{ form.publish_at.id_for_label }}"></p>
+					<p id="input-is_public" class="checkbox-wrap">
+						{{ form.is_public }}
+						<label for="{{ form.is_public.id_for_label }}">学外にも公開</label>
+					</p>
+					<p><input type="submit" value="{% if form_submit_value %}{{ form_submit_value }}{% else %}送信{% endif %}"></p>
+				</div>
+			</div>
+			{% csrf_token %}
+		</form>
+		<section id="modal" v-bind:class="{show: isOpenUploadModal}">
+			<div id="image-upload-wrap" v-bind:class="{show: isOpenUploadModal}">
+				<h3>画像をアップロード</h3>
+				<form onsubmit="return false;">
+					<p><label for="image-upload-file">ファイル</label><input type="file" id="image-upload-file" name="image" v-on:input="uploadInputFile"></p>
+					<p><label for="image-upload-title">タイトル</label><input type="text" name="title" id="image-upload-title" v-model="image_upload.title" placeholder="タイトル"></p>
+					<p><input type="submit" value="アップロード" v-on:click="uploadImage" accept="image/png, image/jpeg"></p>
+				</form>
+			</div>
+			<div id="overlay" v-bind:class="{show: isOpenUploadModal}" v-on:click="closeUploadModal"></div>
+		</section>
+	</section>
+
+
+	<script>
+		const app = new Vue({
+			el: "#article-post",
+			delimiters: ['[[', ']]'],
+			data: {
+				images: [],
+				selectedEyeCatch: null,
+				isOpenUploadModal: false,
+				publish_at: null,
+				changeNowIntervalId: null,
+				image_upload: {
+					file: null,
+					title: "",
+				},
+			},
+			methods: {
+				async getImageList() {
+					const response = await fetch("{% url "get_image_list" %}", {
+						headers: {
+							"X-CSRFToken": Cookies.get("csrftoken"),
+						},
+					})
+					this.images = await response.json()
+				},
+				uploadImage() {
+					console.log(this.image_upload.file)
+					console.log(this.image_upload.title)
+
+					const formData = new FormData();
+					formData.append("image", this.image_upload.file)
+					formData.append("title", this.image_upload.title)
+					fetch("/api/upload_image", {
+						method: "POST",
+						headers: {
+							"X-CSRFToken": Cookies.get("csrftoken"),
+						},
+						body: formData,
+					})
+						.then((response) => {
+							return response.json()
+						})
+						.then((json) => {
+							if (json.error) {
+								alert(json.error)
+							}
+							return json.data.id
+						})
+						.then((id) => {
+							this.getImageList()
+							.then(() => {
+								this.selectedEyeCatch = id
+								this.closeUploadModal()
+							})
+						})
+				},
+				uploadInputFile(e) {
+					this.image_upload.file = e.target.files[0]
+				},
+				uploadInputTitle(e) {
+					this.image_upload.title = e.target.value
+				},
+				openUploadModal() {
+					this.isOpenUploadModal = true
+				},
+				closeUploadModal() {
+					this.isOpenUploadModal = false
+				},
+				setUpdateNow() {
+					this.changeNowIntervalId = setInterval(() => {
+						if(dayjs(this.publish_at) > dayjs()) {
+							this.stopUpdateNow()
+						} else {
+							this.publish_at = dayjs().format("YYYY-MM-DD HH:mm:ss")
+						}
+					}, 1000)
+				},
+				stopUpdateNow() {
+					clearInterval(this.changeNowIntervalId)
+				}
+			},
+			created() {
+				this.getImageList()
+				this.setUpdateNow()
+			}
+		})
+	</script>
+{% endblock %}

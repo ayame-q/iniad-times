@@ -21,6 +21,26 @@ class BaseForm(forms.ModelForm):
             field.widget.attrs['placeholder'] = field.label
 
 
+class PreArticleForm(FormUserKwargsMixin, BaseForm):
+    class Meta:
+        model = Article
+        fields = ("title", "text", "eyecatch", "sns_publish_text", "category", "publish_at",
+                  "is_public", "parent")
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields["parent"].disabled = True
+        self.fields["parent"].label = ""
+        self.fields["parent"].widget = forms.HiddenInput()
+        self.fields["is_public"].label = "学外者の閲覧を許可する"
+
+    def clean_sns_publish_text(self):
+        data = self.cleaned_data["sns_publish_text"]
+        if 115 < len(data) + len(self.cleaned_data["title"]):
+            raise forms.ValidationError("長すぎます")
+        return data
+
+
 class AdminArticleForm(FormUserKwargsMixin, BaseForm):
     class Meta:
         model = Article
