@@ -63,6 +63,7 @@ class Image(models.Model):
         return self.title if self.title else "Image(No." + str(self.pk) + " uploaded by " + self.staff.name + ")"
 
 class Post(models.Model):
+    uuid = models.UUIDField(default=uuid4, unique=True, db_index=True, editable=False, verbose_name="UUID")
     title = models.CharField(max_length=50, verbose_name="タイトル")
     text = models.TextField(verbose_name="本文")
     article_writers = models.ManyToManyField(Staff, related_name="wrote_%(class)s", blank=True, verbose_name="執筆者")
@@ -105,6 +106,7 @@ class PreArticle(Post):
     user = models.ForeignKey(Staff, on_delete=models.SET_NULL, null=True, verbose_name="最終更新者")
     lecture = models.ForeignKey(Lecture, related_name="posts", on_delete=models.SET_NULL, null=True, blank=True, verbose_name="授業")
     parent = models.ForeignKey("self", related_name="children", on_delete=models.SET_NULL, null=True, blank=True, verbose_name="親記事")
+    is_draft = models.BooleanField(default=True, verbose_name="下書きか")
     is_revision = models.BooleanField(default=False, verbose_name="校閲か")
 
 
