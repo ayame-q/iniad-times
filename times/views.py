@@ -67,7 +67,7 @@ def staff(request):
 class BasePreArticleView(ViewUserKwargsMixin, UpdateView):
     model = PreArticle
     form_class = forms.PreArticleForm
-    template_name = "times/staff/article.html"
+    template_name = "times/staff/article-form.html"
     is_edit = False
     is_revision = False
 
