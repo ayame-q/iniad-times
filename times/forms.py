@@ -21,7 +21,7 @@ class BaseForm(forms.ModelForm):
             field.widget.attrs['placeholder'] = field.label
 
 
-class PreArticleForm(FormUserKwargsMixin, BaseForm):
+class PreArticleForm(BaseForm):
     class Meta:
         model = PreArticle
         fields = ("title", "text", "eyecatch", "sns_publish_text", "category", "publish_at",
@@ -41,7 +41,7 @@ class PreArticleForm(FormUserKwargsMixin, BaseForm):
         return data
 
 
-class AdminArticleForm(FormUserKwargsMixin, BaseForm):
+class AdminArticleForm(BaseForm):
     class Meta:
         model = Article
         fields = ("title", "text", "eyecatch", "sns_publish_text", "article_writers", "article_editors", "category", "publish_at",
@@ -60,7 +60,7 @@ class AdminArticleForm(FormUserKwargsMixin, BaseForm):
         return data
 
 
-class StaffProfileForm(FormUserKwargsMixin, BaseForm):
+class StaffProfileForm(BaseForm):
     class Meta:
         model = Staff
         fields = ("name", "comment")

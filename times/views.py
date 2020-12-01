@@ -64,7 +64,7 @@ def staff(request):
     return render(request, "times/staff/index.html")
 
 
-class BasePreArticleView(ViewUserKwargsMixin, UpdateView):
+class BasePreArticleMixin:
     model = PreArticle
     form_class = forms.PreArticleForm
     template_name = "times/staff/article-form.html"
@@ -98,24 +98,24 @@ class BasePreArticleView(ViewUserKwargsMixin, UpdateView):
         return redirect("staff")
 
 
-class NewPreArticleView(BasePreArticleView):
+class NewPreArticleView(BasePreArticleMixin, CreateView):
     is_edit = False
     is_revision = False
     extra_context = {"is_new_form": True}
 
 
-class EditPreArticleView(BasePreArticleView):
+class EditPreArticleView(BasePreArticleMixin, UpdateView):
     is_edit = True
     is_revision = False
 
 
-class RevisePreArticleView(BasePreArticleView):
+class RevisePreArticleView(BasePreArticleMixin, UpdateView):
     is_edit = True
     is_revision = True
     extra_context = {"is_revision_form": True}
 
 
-class AdminNewArticleView(ViewUserKwargsMixin, CreateView):
+class AdminNewArticleView(CreateView):
     model = Article
     form_class = forms.AdminArticleForm
     template_name = "times/staff/admin-article.html"
@@ -132,7 +132,7 @@ class AdminNewArticleView(ViewUserKwargsMixin, CreateView):
         return redirect("staff")
 
 
-class AdminEditArticleView(ViewUserKwargsMixin, UpdateView):
+class AdminEditArticleView(UpdateView):
     model = Article
     form_class = forms.AdminArticleForm
     template_name = "times/staff/admin-article.html"
@@ -148,7 +148,7 @@ class AdminEditArticleView(ViewUserKwargsMixin, UpdateView):
         return redirect("staff")
 
 
-class EditStaffProfileView(ViewUserKwargsMixin, UpdateView):
+class EditStaffProfileView(UpdateView):
     model = Staff
     form_class = forms.StaffProfileForm
     template_name = "times/staff/profile.html"
