@@ -66,14 +66,17 @@ class Post(models.Model):
     uuid = models.UUIDField(default=uuid4, unique=True, db_index=True, editable=False, verbose_name="UUID")
     title = models.CharField(max_length=50, verbose_name="タイトル")
     text = models.TextField(verbose_name="本文")
+    last_staff = models.ForeignKey(Staff, on_delete=models.SET_NULL, null=True, verbose_name="最終更新者")
     article_writers = models.ManyToManyField(Staff, related_name="wrote_%(class)s", blank=True, verbose_name="執筆者")
     article_editors = models.ManyToManyField(Staff, related_name="edited_%(class)s", blank=True, verbose_name="編集者")
     category = models.ForeignKey(Category, related_name="%(class)s", null=True, on_delete=models.SET_NULL ,verbose_name="カテゴリー")
     tags = models.ManyToManyField(Tag, related_name="%(class)s", blank=True, verbose_name="タグ")
+    lecture = models.ForeignKey("Lecture", related_name="%(class)s", on_delete=models.SET_NULL, null=True, blank=True, verbose_name="授業")
     eyecatch = models.ForeignKey(Image, related_name="used_%(class)s", null=True, blank=True, on_delete=models.SET_NULL ,verbose_name="アイキャッチ画像")
     created_at = models.DateTimeField(default=timezone.localtime, verbose_name="作成日")
     publish_at = models.DateTimeField(default=timezone.localtime, null=True, blank=True, verbose_name="公開日")
     sns_publish_text = models.TextField(default="", null=True, blank=True, verbose_name="SNS告知文")
+    is_public = models.BooleanField(default=False, verbose_name="INIAD関係者以外の閲覧を許可する")
 
     class Meta:
         abstract = True
@@ -103,20 +106,15 @@ class Lecture(models.Model):
 
 
 class PreArticle(Post):
-    user = models.ForeignKey(Staff, on_delete=models.SET_NULL, null=True, verbose_name="最終更新者")
-    lecture = models.ForeignKey(Lecture, related_name="posts", on_delete=models.SET_NULL, null=True, blank=True, verbose_name="授業")
     parent = models.ForeignKey("self", related_name="children", on_delete=models.SET_NULL, null=True, blank=True, verbose_name="親記事")
     is_draft = models.BooleanField(default=True, verbose_name="下書きか")
     is_revision = models.BooleanField(default=False, verbose_name="校閲か")
 
 
 class Article(Post):
-    last_user = models.ForeignKey(Staff, on_delete=models.SET_NULL, null=True, verbose_name="最終更新者")
     updated_at = models.DateTimeField(default=timezone.localtime, verbose_name="更新日")
     is_publishable = models.BooleanField(default=False, verbose_name="公開準備済")
     is_published = models.BooleanField(default=False, verbose_name="公開済み")
-    is_public = models.BooleanField(default=False, verbose_name="INIAD関係者以外の閲覧を許可する")
-    lecture = models.ForeignKey(Lecture, on_delete=models.SET_NULL, null=True, blank=True, verbose_name="授業")
     parent = models.ForeignKey(PreArticle, related_name="articles", on_delete=models.SET_NULL, null=True, blank=True, verbose_name="元記事")
 
     def time(self):
