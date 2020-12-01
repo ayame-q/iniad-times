@@ -14,6 +14,9 @@ window.addEventListener("load", function() {
 				parentForm = formElement;
 			}
 		}
+		if (parentForm.dataset.is_revision_form === "true") {
+			isPreviewDiff = true;
+		}
 		const easyMDE = new EasyMDE({
 			element: textInputElement,
 			autosave: {
@@ -56,9 +59,14 @@ window.addEventListener("load", function() {
 			previewRender: (text) => {
 				const obj = {
 					text: text,
+					uuid: parentForm.dataset.object_uuid,
 				}
 				const body = Object.keys(obj).map((key)=>key+"="+encodeURIComponent(obj[key])).join("&");
-				fetch("/api/parse_markdown", {
+				let url = "/api/parse_markdown"
+				if (isPreviewDiff) {
+					url = "/api/get_diff"
+				}
+				fetch(url, {
 					method: "POST",
 					headers: {
 						'Content-Type': 'application/x-www-form-urlencoded',
@@ -90,10 +98,8 @@ window.addEventListener("load", function() {
 					action: (editor) => {
 						isPreviewDiff = false
 						const toolbar = editor.gui.toolbar
-						const previewElement = toolbar.getElementsByClassName("preview")[0]
-						previewElement.classList.add("active")
-						const diffElement = toolbar.getElementsByClassName("diff")[0]
-						diffElement.classList.remove("active")
+						easyMDE.toggleSideBySide()
+						easyMDE.toggleSideBySide()
 					},
 					className: "fa fa-eye",
 					title: "Preview"
@@ -101,12 +107,10 @@ window.addEventListener("load", function() {
 				{
 					name: "diff",
 					action: (editor) => {
-						isPreviewDiff = false
+						isPreviewDiff = true
 						const toolbar = editor.gui.toolbar
-						const previewElement = toolbar.getElementsByClassName("preview")[0]
-						previewElement.classList.remove("active")
-						const diffElement = toolbar.getElementsByClassName("diff")[0]
-						diffElement.classList.add("active")
+						easyMDE.toggleSideBySide()
+						easyMDE.toggleSideBySide()
 					},
 					className: "fa fa-exchange",
 					title: "Diff"
@@ -123,8 +127,5 @@ window.addEventListener("load", function() {
 			]
 		});
 		easyMDE.toggleSideBySide()
-		const toolbar = easyMDE.gui.toolbar
-		const previewElement = toolbar.getElementsByClassName("preview")[0]
-		previewElement.classList.add("active")
 	}
 });

@@ -3,7 +3,7 @@ from django.utils.safestring import mark_safe
 from django.utils import timezone
 from django.template.defaultfilters import safe
 from datetime import timedelta
-from .models import User, Article, Staff
+from .models import User, Article, PreArticle, Staff
 from django_boost.forms.mixins import FormUserKwargsMixin
 from allauth.socialaccount.models import SocialAccount
 
@@ -23,7 +23,7 @@ class BaseForm(forms.ModelForm):
 
 class PreArticleForm(FormUserKwargsMixin, BaseForm):
     class Meta:
-        model = Article
+        model = PreArticle
         fields = ("title", "text", "eyecatch", "sns_publish_text", "category", "publish_at",
                   "is_public", "parent")
 

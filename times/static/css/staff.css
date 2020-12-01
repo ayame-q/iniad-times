@@ -527,5 +527,16 @@ main .editor-preview .toc::before {
 main .editor-preview .toc ul {
   padding-left: 1.5em;
 }
+main .editor-preview pre.diff-line {
+  font-family: monospace;
+  padding-left: 0.1em;
+  margin: 0;
+}
+main .editor-preview pre.diff-line.added-line {
+  background-color: #bbbbff;
+}
+main .editor-preview pre.diff-line.deleted-line {
+  background-color: #ffbbbb;
+}
 
 /*# sourceMappingURL=staff.css.map */

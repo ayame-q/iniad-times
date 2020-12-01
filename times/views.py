@@ -5,6 +5,7 @@ from django.http import Http404
 from django.conf import settings
 from django.utils import timezone
 from django.db.models import Q
+from django.core.exceptions import ValidationError
 from rest_framework.views import APIView
 from rest_framework.generics import ListAPIView
 from rest_framework.response import Response
@@ -15,7 +16,7 @@ from .models import Article, PreArticle, Image, Staff, Category
 from .markdown import markdown
 from . import forms, serializers
 from .publish import Publish
-import os, re
+import os, re, difflib
 
 
 publish = Publish()
@@ -63,21 +64,55 @@ def staff(request):
     return render(request, "times/staff/index.html")
 
 
-class NewPreArticleView(ViewUserKwargsMixin, CreateView):
+class BasePreArticleView(ViewUserKwargsMixin, UpdateView):
     model = PreArticle
     form_class = forms.PreArticleForm
     template_name = "times/staff/article.html"
-    extra_context = {"is_new_form": True}
+    is_edit = False
+    is_revision = False
 
     def form_valid(self, form):
         data = form.save(commit=False)
-        data.user = self.request.user
+        if self.is_revision:
+            data.is_revision = True
+        if self.is_edit:
+            writers = data.article_writers.all()
+            editors = data.article_editors.all()
+            data.parent_id = data.id
+            data.id = None
+            data.uuid = uuid4()
+        data.last_staff = self.request.user.staff
         data.create_ip = get_remote_ip(self.request)
         data.status_ending_at = date.today() + timedelta(weeks=1)
         data.save()
-        publish.publish(data)
+        if self.is_edit:
+            for writer in writers:
+                data.article_writers.add(writer)
+            for editor in editors:
+                data.article_editors.add(editor)
+        if self.is_revision:
+            data.article_editors.add(self.request.user.staff)
+        else:
+            data.article_writers.add(self.request.user.staff)
         #url = self.request.build_absolute_uri(resolve_url("article", pk=data.id))
         return redirect("staff")
+
+
+class NewPreArticleView(BasePreArticleView):
+    is_edit = False
+    is_revision = False
+    extra_context = {"is_new_form": True}
+
+
+class EditPreArticleView(BasePreArticleView):
+    is_edit = True
+    is_revision = False
+
+
+class RevisePreArticleView(BasePreArticleView):
+    is_edit = True
+    is_revision = True
+    extra_context = {"is_revision_form": True}
 
 
 class AdminNewArticleView(ViewUserKwargsMixin, CreateView):
@@ -207,6 +242,37 @@ class ApiParseMarkdown(APIView):
     def post(self, request):
         text = request.POST.get("text")
         result = markdown(text, with_toc=True)
+        return Response({"text": result})
+
+
+class ApiGetDiff(APIView):
+    def post(self, request):
+        text = request.POST.get("text").replace("\r\n", "\n").split("\n")
+        uuid = request.POST.get("uuid")
+        object = None
+        object_text = [""]
+        try:
+            if PreArticle.objects.get(uuid=uuid):
+                object = PreArticle.objects.get(uuid=uuid)
+                object_text = object.text.replace("\r\n", "\n").split("\n")
+            elif Article.objects.get(uuid=uuid):
+                object = Article.objects.get(uuid=uuid)
+                object_text = object.text.replace("\r\n", "\n").split("\n")
+        except ValidationError:
+            pass
+        print(object_text)
+        print(text)
+        result = ""
+        for line in difflib.ndiff(object_text, text):
+            if line[0] == "+":
+                line = f"<pre class='diff-line added-line'>{line}</pre>"
+            elif line[0] == "-":
+                line = f"<pre class='diff-line deleted-line'>{line}</pre>"
+            elif line[0] == "?":
+                continue
+            else:
+                line = f"<pre class='diff-line'>{line}</pre>"
+            result += line + "\n"
         return Response({"text": result})
 
 

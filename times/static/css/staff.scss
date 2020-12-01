@@ -604,5 +604,16 @@ main{
 				padding-left: 1.5em;
 			}
 		}
+		pre.diff-line{
+			font-family: monospace;
+			padding-left: 0.1em;
+			margin: 0;
+			&.added-line{
+				background-color: #bbbbff;
+			}
+			&.deleted-line{
+				background-color: #ffbbbb;
+			}
+		}
 	}
 }

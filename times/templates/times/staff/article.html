@@ -11,11 +11,11 @@
 
 <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
 
-{% block title %}{% if is_new_form %}新規記事執筆{% else %}「{{ object.title }}」を編集{% endif %} - {{ block.super }}{% endblock title %}
+{% block title %}{% if is_new_form %}新規記事執筆{% else %}「{{ object.title }}」を{% if is_revision_form %}校閲{% else %}編集{% endif %}{% endif %} - {{ block.super }}{% endblock title %}
 
 {% block main %}
 	<section id="article-post">
-		<form action="{% if next %}?next={{ next }}{% endif %}" method="post"{% if form_id %} id="{{ form_id }}"{% endif %} data-object_uuid="{% if object.uuid %}{{ object.uuid }}{% else %}new{% endif %}">
+		<form action="{% if next %}?next={{ next }}{% endif %}" method="post"{% if form_id %} id="{{ form_id }}"{% endif %} data-is_revision_form="{% if is_revision_form %}true{% else %}false{% endif %}" data-object_uuid="{% if object.uuid %}{{ object.uuid }}{% endif %}">
 			<div id="form-main-wrap">
 				<p id="input-title">{{ form.title }}</p>
 				<p id="input-text">{{ form.text | add_class:"text-input" }}</p>
@@ -84,18 +84,18 @@
 				},
 			},
 			methods: {
-				async getImageList() {
+				async getImageList(isInitialize=false) {
 					const response = await fetch("{% url "get_image_list" %}", {
 						headers: {
 							"X-CSRFToken": Cookies.get("csrftoken"),
 						},
 					})
 					this.images = await response.json()
+					if(isInitialize) {
+						this.selectedEyeCatch = {% if object.eyecatch %}{{ object.eyecatch.id }}{% else %}null{% endif %}
+					}
 				},
 				uploadImage() {
-					console.log(this.image_upload.file)
-					console.log(this.image_upload.title)
-
 					const formData = new FormData();
 					formData.append("image", this.image_upload.file)
 					formData.append("title", this.image_upload.title)
@@ -149,7 +149,7 @@
 				}
 			},
 			created() {
-				this.getImageList()
+				this.getImageList(true)
 				this.setUpdateNow()
 			}
 		})

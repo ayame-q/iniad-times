@@ -18,6 +18,8 @@ urlpatterns = [
     path('search', views.ListPageView.as_view(), name="search"),
     path('staff/', views.staff, name="staff"),
     path('staff/new', views.NewPreArticleView.as_view(), name="new"),
+    path('staff/edit/<int:pk>', views.EditPreArticleView.as_view(), name="edit"),
+    path('staff/revise/<int:pk>', views.RevisePreArticleView.as_view(), name="revise"),
     path('staff/profile', views.EditStaffProfileView.as_view(), name="profile"),
     path('staff/admin/new', views.AdminNewArticleView.as_view(), name="new_admin"),
     path('staff/admin/list', views.AdminEditListPageView.as_view(), name="list_admin"),
@@ -25,6 +27,7 @@ urlpatterns = [
     path('api/get_image_list', views.ApiGetImageList.as_view(), name="get_image_list"),
     path('api/upload_image', views.ApiUploadImage.as_view(), name="upload_image"),
     path('api/parse_markdown', views.ApiParseMarkdown.as_view(), name="parse_markdown"),
+    path('api/get_diff', views.ApiGetDiff.as_view(), name="get_diff"),
     path('sitemap.xml', sitemap_index, {'sitemaps': sitemaps}),
     path('sitemap-<section>.xml', sitemap, {'sitemaps': sitemaps}, name="django.contrib.sitemaps.views.sitemap")
 ]
