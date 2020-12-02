@@ -519,7 +519,7 @@ main section#top-page #marquee-wrap #top-marquee article ul {
     display: block;
   }
   main section#top-page #main-list #top-wrap > article a p.eyecatch {
-    margin: 0;
+    margin: 10px 0;
     width: auto;
   }
   main section#top-page #main-list #top-wrap > article a p.eyecatch img {
