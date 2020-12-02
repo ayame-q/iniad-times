@@ -305,20 +305,18 @@ ul.image_choice li input[type=radio]:not(:checked) + label {
   margin: 2px;
 }
 
-form input[type=submit], form input[type=button] {
-  display: block;
-  font-family: inherit;
-  margin-top: 5px;
-  font-size: 1.05em;
-  padding: 6px 12px;
-  -moz-box-sizing: border-box;
-  -webkit-box-sizing: border-box;
-  box-sizing: border-box;
-  -webkit-appearance: none;
-  border: 2px solid #ff8b3c;
-  background-color: white;
-  border-radius: 5px;
+pre.diff-line {
+  font-family: monospace;
+  padding-left: 0.1em;
+  margin: 0 !important;
 }
+pre.diff-line.added-line {
+  background-color: #bbbbff;
+}
+pre.diff-line.deleted-line {
+  background-color: #ffbbbb;
+}
+
 form p, form > ul li {
   display: flex;
   flex-wrap: wrap;
@@ -393,7 +391,23 @@ form .text-input-wrap .cm-s-easymde .cm-strikethrough {
 form .text-input-wrap .cm-s-easymde .cm-em {
   font-style: normal;
 }
-form input, form select, form textarea {
+
+input[type=submit], input[type=button] {
+  display: block;
+  font-family: inherit;
+  margin-top: 5px;
+  font-size: 1.05em;
+  padding: 6px 12px;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  -webkit-appearance: none;
+  border: 2px solid #ff8b3c;
+  background-color: white;
+  border-radius: 5px;
+}
+
+input, select, textarea {
   font-family: inherit;
   margin-top: 5px;
   font-size: 1.1em;
@@ -404,7 +418,7 @@ form input, form select, form textarea {
   -webkit-appearance: none;
   background-color: white;
 }
-form input[type=checkbox], form select[type=checkbox], form textarea[type=checkbox] {
+input[type=checkbox], select[type=checkbox], textarea[type=checkbox] {
   order: -1;
   width: 2em;
   height: 2em;
@@ -412,7 +426,7 @@ form input[type=checkbox], form select[type=checkbox], form textarea[type=checkb
   margin: 0;
   margin-right: 0.1em;
 }
-form input[type=checkbox]::before, form select[type=checkbox]::before, form textarea[type=checkbox]::before {
+input[type=checkbox]::before, select[type=checkbox]::before, textarea[type=checkbox]::before {
   content: "";
   display: block;
   margin-top: 0;
@@ -424,7 +438,7 @@ form input[type=checkbox]::before, form select[type=checkbox]::before, form text
   border: 1px solid #bbb;
   transition: all 0.12s, border-color 0.08s, border-width 0.08s;
 }
-form input[type=checkbox]:checked::before, form select[type=checkbox]:checked::before, form textarea[type=checkbox]:checked::before {
+input[type=checkbox]:checked::before, select[type=checkbox]:checked::before, textarea[type=checkbox]:checked::before {
   width: 0.6em;
   margin: 0.4em;
   margin-top: -0.2em;
@@ -439,7 +453,7 @@ form input[type=checkbox]:checked::before, form select[type=checkbox]:checked::b
   -webkit-transform: rotate(45deg);
   transform: rotate(45deg);
 }
-form input:not([type=checkbox]), form select:not([type=checkbox]), form textarea:not([type=checkbox]) {
+input:not([type=checkbox]), select:not([type=checkbox]), textarea:not([type=checkbox]) {
   border: 1px solid #bbb;
   border-radius: 5px;
   width: calc(100% - 80px);
@@ -447,16 +461,17 @@ form input:not([type=checkbox]), form select:not([type=checkbox]), form textarea
   margin-right: 30px;
 }
 @media (max-width: 480px) {
-  form input:not([type=checkbox]), form select:not([type=checkbox]), form textarea:not([type=checkbox]) {
+  input:not([type=checkbox]), select:not([type=checkbox]), textarea:not([type=checkbox]) {
     width: calc(100% - 30px);
     margin-left: 10px;
     margin-right: 20px;
   }
 }
-form input[type=submit], form select[type=submit], form textarea[type=submit] {
+input[type=submit], select[type=submit], textarea[type=submit] {
   border: 2px solid #ff8b3c;
 }
-form select {
+
+select {
   padding-right: 38px;
   background: url('data:image/svg+xml;charset=UTF-8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 30"><defs><style>.cls-1{fill:none;stroke:#ff8b3c;stroke-miterlimit:10;}</style></defs><polygon class="cls-1" points="8 8 24 8 16 22 8 8"/></svg>') no-repeat right;
 }
@@ -695,16 +710,45 @@ main section#article-post .editor-preview .toc::before {
 main section#article-post .editor-preview .toc ul {
   padding-left: 1.5em;
 }
-main section#article-post .editor-preview pre.diff-line {
-  font-family: monospace;
-  padding-left: 0.1em;
+main section#article-check {
+  width: 100%;
+  height: 100%;
   margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-rows: 1fr auto;
+  grid-template-columns: 2fr 1fr 1fr;
+  grid-template-areas: "markdown diff diff" "message message submit";
 }
-main section#article-post .editor-preview pre.diff-line.added-line {
-  background-color: #bbbbff;
+main section#article-check #markdown-wrap {
+  grid-area: markdown;
+  height: 0;
+  padding-left: 20px;
+  padding-right: 10px;
+  box-sizing: border-box;
+  overflow: scroll;
 }
-main section#article-post .editor-preview pre.diff-line.deleted-line {
-  background-color: #ffbbbb;
+main section#article-check #diff-wrap {
+  grid-area: diff;
+  padding-left: 10px;
+  padding-right: 20px;
+  border-left: solid 1px #dddddd;
+  box-sizing: border-box;
+  overflow: scroll;
+}
+main section#article-check #message-wrap {
+  border-top: solid 2px #ff8b3c;
+  grid-area: message;
+}
+main section#article-check #message-wrap textarea {
+  margin: 20px;
+  width: 100%;
+  box-sizing: border-box;
+  height: 10em;
+}
+main section#article-check #submit-wrap {
+  border-top: solid 2px #ff8b3c;
+  grid-area: submit;
 }
 
 /*# sourceMappingURL=staff.css.map */

@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404, resolve_url
 from django.views.generic import UpdateView, DetailView, CreateView, ListView, TemplateView
+from django.views.generic.detail import SingleObjectMixin
 from django.contrib.auth.views import SuccessURLAllowedHostsMixin
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import Http404
@@ -44,8 +45,12 @@ def index(request):
     return render(request, "times/index.html", data)
 
 
-def article(request, pk):
-    article = get_object_or_404(Article, pk=pk)
+def article(request, pk=None, uuid=None):
+    article = None
+    if pk:
+        article = get_object_or_404(Article, pk=pk)
+    elif uuid:
+        article = get_object_or_404(Article, uuid=uuid)
 
     if (not article.is_publishable or article.publish_at > timezone.localtime()) and (not request.user.is_authenticated or not request.user.staff):
         raise Http404
@@ -64,6 +69,39 @@ def article(request, pk):
 
 def staff(request):
     return render(request, "times/staff/index.html")
+
+
+class StaffOnlyMixin(LoginRequiredMixin):
+    def dispatch(self, request, *args, **kwargs):
+        result = super().dispatch(request, *args, **kwargs)
+        if not request.user.staff:
+            raise PermissionError
+        return result
+
+
+class GetSingleObjectMixin(SingleObjectMixin):
+    def get_object(self, queryset=None):
+        try:
+            object = super(GetSingleObjectMixin, self).get_object(queryset=queryset)
+        except AttributeError:
+            uuid = self.kwargs.get("uuid")
+            if uuid:
+                object = get_object_or_404(self.model, uuid=uuid)
+            else:
+                raise AttributeError
+        return object
+
+
+class GetArticleAndPreArticleObjectMixin(SingleObjectMixin):
+    model = Article # 優先出力モデル
+    def get_object(self, queryset=None):
+        uuid = self.kwargs.get("uuid")
+        pk = self.kwargs.get("pk")
+        if uuid:
+            object = self.model.objects.get(uuid=uuid)
+        else:
+            raise AttributeError
+        return object
 
 
 class BaseStaffListPageView(ListView):
@@ -107,15 +145,17 @@ class BaseStaffListPageView(ListView):
         return context
 
 
-class EditPreArticleListView(BaseStaffListPageView):
+class EditPreArticleListView(StaffOnlyMixin, BaseStaffListPageView):
+    extra_context = {"edit_list": True}
     def get_queryset(self):
         result = super(EditPreArticleListView, self).get_queryset()
         return result.filter(is_draft=True)
 
 
-class RevisePreArticleListView(BaseStaffListPageView):
+class RevisePreArticleListView(StaffOnlyMixin, BaseStaffListPageView):
     default_scope = "all"
     link_page = "revise"
+    extra_context = {"revise_list": True}
 
     def get_queryset(self):
         result = super(RevisePreArticleListView, self).get_queryset()
@@ -159,18 +199,18 @@ class BasePreArticleMixin:
         return redirect("staff")
 
 
-class NewPreArticleView(LoginRequiredMixin, BasePreArticleMixin, CreateView):
+class NewPreArticleView(StaffOnlyMixin, BasePreArticleMixin, CreateView):
     is_edit = False
     is_revision = False
     extra_context = {"is_new_form": True}
 
 
-class EditPreArticleView(LoginRequiredMixin, BasePreArticleMixin, UpdateView):
+class EditPreArticleView(StaffOnlyMixin, BasePreArticleMixin, GetSingleObjectMixin, UpdateView):
     is_edit = True
     is_revision = False
 
 
-class RevisePreArticleView(LoginRequiredMixin, BasePreArticleMixin, UpdateView):
+class RevisePreArticleView(StaffOnlyMixin, BasePreArticleMixin, GetSingleObjectMixin, UpdateView):
     is_edit = True
     is_revision = True
     extra_context = {"is_revision_form": True}
@@ -178,7 +218,7 @@ class RevisePreArticleView(LoginRequiredMixin, BasePreArticleMixin, UpdateView):
 
 
 
-class EditStaffProfileView(UpdateView):
+class EditStaffProfileView(StaffOnlyMixin, UpdateView):
     model = Staff
     form_class = forms.StaffProfileForm
     template_name = "times/staff/profile.html"

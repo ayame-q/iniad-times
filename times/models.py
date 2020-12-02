@@ -119,6 +119,9 @@ class PreArticle(Post):
     is_revision = models.BooleanField(default=False, verbose_name="校閲か")
     revise_count = models.IntegerField(default=0, verbose_name="校閲完了数")
 
+    def time(self):
+        return self.created_at
+
     def is_writer_check_completed(self):
         for writer_relation in self.writer_relations:
             if not writer_relation.is_writer_checked:

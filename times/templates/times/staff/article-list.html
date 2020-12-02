@@ -2,13 +2,15 @@
 
 {% load static %}
 
-{% block title %}記事編集 - {{ block.super }}{% endblock title %}
+{% block title %}{% if edit_list %}記事編集{% elif revise_list %}記事推敲・校閲{% elif check_revise_list %}推敲・校閲チェック{% else %}記事一覧{% endif %} - {{ block.super }}{% endblock title %}
 
 {% block main %}
 	<section id="article-list">
-		<h2>記事編集</h2>
+		<h2>{% if edit_list %}記事編集{% elif revise_list %}記事推敲・校閲{% elif check_revise_list %}推敲・校閲チェック{% else %}記事一覧{% endif %}</h2>
 		{% for article in articles %}
 			{% include "times/includes/article-list.html" with article=article link_page=link_page %}
+		{% empty %}
+			{% if revise_list %}推敲・校閲待ちの{% elif check_revise_list %}推敲・校閲チェック待ちの{% endif %}記事はありません
 		{% endfor %}
 	</section>
 {% endblock %}

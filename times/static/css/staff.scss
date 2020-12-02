@@ -64,23 +64,19 @@ ul.image_choice{
 }
 
 
-
+pre.diff-line{
+	font-family: monospace;
+	padding-left: 0.1em;
+	margin: 0 !important;
+	&.added-line{
+		background-color: #bbbbff;
+	}
+	&.deleted-line{
+		background-color: #ffbbbb;
+	}
+}
 
 form{
-	input[type=submit], input[type=button]{
-		display: block;
-		font-family: inherit;
-		margin-top: 5px;
-		font-size: 1.05em;
-		padding: 6px 12px;
-		-moz-box-sizing: border-box;
-		-webkit-box-sizing: border-box;
-		box-sizing: border-box;
-		-webkit-appearance: none;
-		border: 2px solid #ff8b3c;
-		background-color: white;
-		border-radius: 5px;
-	}
 	p, > ul li{
 		display: flex;
 		flex-wrap: wrap;
@@ -155,75 +151,87 @@ form{
 		}
 		// End EasyMDE Edit
 	}
-	input, select, textarea{
-		font-family: inherit;
-		margin-top: 5px;
-		font-size: 1.1em;
-		padding: 0.2em 0.5em;
-		-moz-box-sizing: border-box;
-		-webkit-box-sizing: border-box;
-		box-sizing: border-box;
-		-webkit-appearance: none;
-		background-color: white;
-		&[type=checkbox]{
-			order: -1;
-			width: 2em;//50px;
-			height: 2em;//50px;
-			padding: 0.16em;//4px;
-			margin: 0;
-			margin-right: 0.1em;
-			&::before{
-				content: "";
-				display: block;
-				margin-top: 0;
-				margin-bottom: 0.2em;//5px;
-				margin-right: 0.28em;//7px;
-				padding: 0;
-				width: 1.44em;//36px;
-				height: 1.44em;//36px;
-				border: 1px solid #bbb;
-				transition: all .12s, border-color .08s, border-width .08s;
-			}
-			&:checked::before{
-				width: 0.6em;//15px;
-				margin: 0.4em;//10px;
-				margin-top: -0.2em;//-5px;
-				margin-right: 0.6em;//15px;
-				padding-left: 0.04em;//1px;
-				border-radius: 0;
-				opacity: 1;
-				border-top-color: transparent;
-				border-left-color: transparent;
-				border-bottom: 1.8px solid #333333;
-				border-right: 1.8px solid #333333;
-				-webkit-transform: rotate(45deg);
-				transform: rotate(45deg);
-			}
-		}
-		&:not([type=checkbox]){
-			border: 1px solid #bbb;
-			border-radius: 5px;
-			width: calc(100% - 80px);
-			margin-left: 50px;
-			margin-right: 30px;
-			@include media(small){
-				width: calc(100% - 30px);
-				margin-left: 10px;
-				margin-right: 20px;
-			}
-		}
-		&[type=submit]{
-			border: 2px solid #ff8b3c;
-		}
-	}
-	select{
-		padding-right: 38px;
-		background: url('data:image/svg+xml;charset=UTF-8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 30"><defs><style>.cls-1{fill:none;stroke:#ff8b3c;stroke-miterlimit:10;}</style></defs><polygon class="cls-1" points="8 8 24 8 16 22 8 8"/></svg>') no-repeat right;
-	}
-
-
 }
 
+input[type=submit], input[type=button]{
+	display: block;
+	font-family: inherit;
+	margin-top: 5px;
+	font-size: 1.05em;
+	padding: 6px 12px;
+	-moz-box-sizing: border-box;
+	-webkit-box-sizing: border-box;
+	box-sizing: border-box;
+	-webkit-appearance: none;
+	border: 2px solid #ff8b3c;
+	background-color: white;
+	border-radius: 5px;
+}
+input, select, textarea{
+	font-family: inherit;
+	margin-top: 5px;
+	font-size: 1.1em;
+	padding: 0.2em 0.5em;
+	-moz-box-sizing: border-box;
+	-webkit-box-sizing: border-box;
+	box-sizing: border-box;
+	-webkit-appearance: none;
+	background-color: white;
+	&[type=checkbox]{
+		order: -1;
+		width: 2em;//50px;
+		height: 2em;//50px;
+		padding: 0.16em;//4px;
+		margin: 0;
+		margin-right: 0.1em;
+		&::before{
+			content: "";
+			display: block;
+			margin-top: 0;
+			margin-bottom: 0.2em;//5px;
+			margin-right: 0.28em;//7px;
+			padding: 0;
+			width: 1.44em;//36px;
+			height: 1.44em;//36px;
+			border: 1px solid #bbb;
+			transition: all .12s, border-color .08s, border-width .08s;
+		}
+		&:checked::before{
+			width: 0.6em;//15px;
+			margin: 0.4em;//10px;
+			margin-top: -0.2em;//-5px;
+			margin-right: 0.6em;//15px;
+			padding-left: 0.04em;//1px;
+			border-radius: 0;
+			opacity: 1;
+			border-top-color: transparent;
+			border-left-color: transparent;
+			border-bottom: 1.8px solid #333333;
+			border-right: 1.8px solid #333333;
+			-webkit-transform: rotate(45deg);
+			transform: rotate(45deg);
+		}
+	}
+	&:not([type=checkbox]){
+		border: 1px solid #bbb;
+		border-radius: 5px;
+		width: calc(100% - 80px);
+		margin-left: 50px;
+		margin-right: 30px;
+		@include media(small){
+			width: calc(100% - 30px);
+			margin-left: 10px;
+			margin-right: 20px;
+		}
+	}
+	&[type=submit]{
+		border: 2px solid #ff8b3c;
+	}
+}
+select{
+	padding-right: 38px;
+	background: url('data:image/svg+xml;charset=UTF-8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 30"><defs><style>.cls-1{fill:none;stroke:#ff8b3c;stroke-miterlimit:10;}</style></defs><polygon class="cls-1" points="8 8 24 8 16 22 8 8"/></svg>') no-repeat right;
+}
 
 $main-width: 1200px;
 
@@ -483,17 +491,48 @@ main{
 					padding-left: 1.5em;
 				}
 			}
-			pre.diff-line{
-				font-family: monospace;
-				padding-left: 0.1em;
-				margin: 0;
-				&.added-line{
-					background-color: #bbbbff;
-				}
-				&.deleted-line{
-					background-color: #ffbbbb;
-				}
+		}
+	}
+	section#article-check{
+		width: 100%;
+		height: 100%;
+		margin: 0;
+		padding: 0;
+		display: grid;
+		grid-template-rows: 1fr auto;
+		grid-template-columns: 2fr 1fr 1fr;
+		grid-template-areas:
+			"markdown diff diff"
+			"message message submit";
+		#markdown-wrap{
+			grid-area: markdown;
+			height: 0;
+			padding-left: 20px;
+			padding-right: 10px;
+			box-sizing: border-box;
+			overflow: scroll;
+		}
+		#diff-wrap{
+			grid-area: diff;
+			padding-left: 10px;
+			padding-right: 20px;
+			border-left: solid 1px #dddddd;
+			box-sizing: border-box;
+			overflow: scroll;
+		}
+		#message-wrap{
+			border-top: solid 2px #ff8b3c;
+			grid-area: message;
+			textarea{
+				margin: 20px;
+				width: 100%;
+				box-sizing: border-box;
+				height: 10em;
 			}
+		}
+		#submit-wrap{
+			border-top: solid 2px #ff8b3c;
+			grid-area: submit;
 		}
 	}
 }

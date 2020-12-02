@@ -15,6 +15,7 @@
 			<ul class="meta">
 				<li class="time">{{ article.time }}</li>
 				{% if article.is_new %}<li class="new">New!</li>{% endif %}
+				{% if revise_list %}<li>校閲回数: {{ article.revise_count }}</li>{% endif %}
 			</ul>
 		</div>
 	</a>
