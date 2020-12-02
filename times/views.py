@@ -175,37 +175,6 @@ class RevisePreArticleView(LoginRequiredMixin, BasePreArticleMixin, UpdateView):
     extra_context = {"is_revision_form": True}
 
 
-class AdminNewArticleView(CreateView):
-    model = Article
-    form_class = forms.AdminArticleForm
-    template_name = "times/staff/admin-article.html"
-    extra_context = {"is_new_form": True}
-
-    def form_valid(self, form):
-        data = form.save(commit=False)
-        data.user = self.request.user
-        data.create_ip = get_remote_ip(self.request)
-        data.status_ending_at = date.today() + timedelta(weeks=1)
-        data.save()
-        publish.publish(data)
-        #url = self.request.build_absolute_uri(resolve_url("article", pk=data.id))
-        return redirect("staff")
-
-
-class AdminEditArticleView(UpdateView):
-    model = Article
-    form_class = forms.AdminArticleForm
-    template_name = "times/staff/admin-article.html"
-
-    def form_valid(self, form):
-        data = form.save(commit=False)
-        data.user = self.request.user
-        data.create_ip = get_remote_ip(self.request)
-        data.status_ending_at = date.today() + timedelta(weeks=1)
-        data.save()
-        publish.publish(data)
-        #url = self.request.build_absolute_uri(resolve_url("article", pk=data.id))
-        return redirect("staff")
 
 
 class EditStaffProfileView(UpdateView):
@@ -237,36 +206,6 @@ class ListPageView(ListView):
             result = search_result_list.filter(is_publishable=True)
         else:
             result = Article.objects.order_by("-updated_at").filter(is_publishable=True)
-        return result
-
-    def get_context_data(self, *args, **kwargs):
-        context = super().get_context_data(*args, **kwargs)
-        category_pk = self.kwargs.get("category_pk")
-        if category_pk:
-            category = Category.objects.get(pk=category_pk)
-            context["category"] = category
-        return context
-
-
-class AdminEditListPageView(ListView):
-    model = Article
-    context_object_name = "articles"
-    template_name = "times/staff/article-list.html"
-    paginate_by = 20
-
-    def get_queryset(self):
-        category_pk = self.kwargs.get("category_pk")
-        key_word = self.request.GET.get("q")
-        if category_pk:
-            category = Category.objects.get(pk=category_pk)
-            result = Article.objects.order_by("-updated_at").filter(category=category)
-        elif key_word:
-            search_result_list = Article.objects.filter(
-                Q(title__icontains=key_word) | Q(text__icontains=key_word)
-            )
-            result = search_result_list
-        else:
-            result = Article.objects.order_by("-updated_at")
         return result
 
     def get_context_data(self, *args, **kwargs):
