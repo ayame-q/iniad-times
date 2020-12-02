@@ -25,7 +25,7 @@ class PreArticleForm(BaseForm):
     class Meta:
         model = PreArticle
         fields = ("title", "text", "eyecatch", "sns_publish_text", "category", "publish_at",
-                  "is_public", "parent")
+                  "is_public", "parent", "is_draft")
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404, resolve_url
 from django.views.generic import UpdateView, DetailView, CreateView, ListView, TemplateView
 from django.contrib.auth.views import SuccessURLAllowedHostsMixin
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import Http404
 from django.conf import settings
 from django.utils import timezone
@@ -98,18 +99,18 @@ class BasePreArticleMixin:
         return redirect("staff")
 
 
-class NewPreArticleView(BasePreArticleMixin, CreateView):
+class NewPreArticleView(LoginRequiredMixin, BasePreArticleMixin, CreateView):
     is_edit = False
     is_revision = False
     extra_context = {"is_new_form": True}
 
 
-class EditPreArticleView(BasePreArticleMixin, UpdateView):
+class EditPreArticleView(LoginRequiredMixin, BasePreArticleMixin, UpdateView):
     is_edit = True
     is_revision = False
 
 
-class RevisePreArticleView(BasePreArticleMixin, UpdateView):
+class RevisePreArticleView(LoginRequiredMixin, BasePreArticleMixin, UpdateView):
     is_edit = True
     is_revision = True
     extra_context = {"is_revision_form": True}

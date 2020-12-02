@@ -6,6 +6,8 @@
 {% block option_head %}
 	<link rel="stylesheet" href="https://unpkg.com/easymde/dist/easymde.min.css">
 	<script src="https://unpkg.com/easymde/dist/easymde.min.js"></script>
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/izitoast@1.4.0/dist/css/iziToast.min.css">
+	<script src="https://cdn.jsdelivr.net/npm/izitoast@1.4.0/dist/js/iziToast.min.js"></script>
 	<script src="{% static "js/textarea.js" %}?1"></script>
 {% endblock %}
 
@@ -15,7 +17,7 @@
 
 {% block main %}
 	<section id="article-post">
-		<form action="{% if next %}?next={{ next }}{% endif %}" method="post"{% if form_id %} id="{{ form_id }}"{% endif %} data-is_revision_form="{% if is_revision_form %}true{% else %}false{% endif %}" data-object_uuid="{% if object.uuid %}{{ object.uuid }}{% endif %}">
+		<form action="{% if next %}?next={{ next }}{% endif %}" @submit.prevent="submitMainForm" method="post" name="mainForm" data-is_revision_form="{% if is_revision_form %}true{% else %}false{% endif %}" data-object_uuid="{% if object.uuid %}{{ object.uuid }}{% endif %}">
 			<div id="form-main-wrap">
 				<p id="input-title">{{ form.title }}</p>
 				<p id="input-text">{{ form.text | add_class:"text-input" }}</p>
@@ -29,9 +31,9 @@
 					</label>
 					<ul id="{{ form.eyecatch.id_for_label }}" class="image_choice">
 						<li v-for="image in images">
-							<input type="radio" name="{{ form.eyecatch.name }}" v-bind:value="image.id" v-model="selectedEyeCatch" v-bind:id="'id_image_' + image.id" required>
-							<label v-bind:for="'id_image_' + image.id">
-								<img v-bind:src="image.image" v-bind:alt="image.title" v-bind:title="image.title">
+							<input type="radio" name="{{ form.eyecatch.name }}" v-bind:value="image.id" v-model="selectedEyeCatch" v-bind:id="'id_image_' + image.id">
+							<label v-bind:for="'id_image_' + image.id" v-bind:title="image.title">
+								<div class="eyecatch-image" v-bind:style="{ backgroundImage: 'url(' + image.image + ')' }"></div>
 							</label>
 						</li>
 					</ul>
@@ -49,9 +51,13 @@
 						{{ form.is_public }}
 						<label for="{{ form.is_public.id_for_label }}">学外にも公開</label>
 					</p>
-					<p><input type="submit" value="{% if form_submit_value %}{{ form_submit_value }}{% else %}送信{% endif %}"></p>
+				</div>
+				<div id="form-submit-wrap">
+					<p class="draft"><input type="submit" value="下書き保存" v-on:click="draftSave"></p>
+					<p class="submit"><input type="submit" value="完成(校閲開始)"></p>
 				</div>
 			</div>
+			<input type="hidden" name="is_draft" v-model="isDraft">
 			{% csrf_token %}
 		</form>
 		<section id="modal" v-bind:class="{show: isOpenUploadModal}">
@@ -78,6 +84,7 @@
 				isOpenUploadModal: false,
 				publish_at: null,
 				changeNowIntervalId: null,
+				isDraft: false,
 				image_upload: {
 					file: null,
 					title: "",
@@ -146,11 +153,33 @@
 				},
 				stopUpdateNow() {
 					clearInterval(this.changeNowIntervalId)
+				},
+				draftSave() {
+					this.isDraft = true
+				},
+				submitMainForm() {
+					if (!this.selectedEyeCatch){
+						iziToast.error({message: "アイキャッチ画像を選択してください。", position: "topRight"})
+						return
+					}
+					Vue.nextTick(() => {
+						document.mainForm.submit()
+					})
 				}
 			},
 			created() {
 				this.getImageList(true)
 				this.setUpdateNow()
+				{% if form.errors %}
+					iziToast.error({
+						message: [
+							{% for error in form.errors %}
+								"{{ error }}",
+							{% endfor %}
+						],
+						position: "topRight"
+					})
+				{% endif %}
 			}
 		})
 	</script>
