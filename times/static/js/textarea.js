@@ -1,4 +1,5 @@
 let isPreviewDiff = false;
+let easyMDE;
 window.addEventListener("load", function() {
 	const textInputElements = document.getElementsByClassName("text-input");
 	for(const textInputElement of textInputElements){
@@ -17,7 +18,7 @@ window.addEventListener("load", function() {
 		if (parentForm.dataset.is_revision_form === "true") {
 			isPreviewDiff = true;
 		}
-		const easyMDE = new EasyMDE({
+		easyMDE = new EasyMDE({
 			element: textInputElement,
 			autosave: {
 				enabled: true,

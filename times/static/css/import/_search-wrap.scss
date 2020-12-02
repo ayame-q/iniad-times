@@ -1,0 +1,36 @@
+.search-wrap{
+	display: flex;
+	align-items: center;
+	position: relative;
+	.search-button{
+		padding: 0 10px;
+		margin: 0;
+		height: 100%;
+		display: flex;
+		align-items: center;
+		img{
+			display: block;
+		}
+	}
+	&.searchbox-open{
+		.search-box{
+			visibility: visible;
+		}
+	}
+	.search-box{
+		visibility: hidden;
+		display: flex;
+		position: absolute;
+		top: 0;
+		left: 60px;
+		height: 100%;
+		width: 280px;
+		z-index: 2;
+		padding-right: 10px;
+		align-items: center;
+		background-color: #fff;
+		p{
+			margin: 0;
+		}
+	}
+}

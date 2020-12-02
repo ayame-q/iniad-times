@@ -1,4 +1,252 @@
 @charset "UTF-8";
+article.article-list {
+  margin: 0 10px;
+  padding: 10px 0;
+  font-size: 16px;
+}
+article.article-list a {
+  color: #333333;
+  display: flex;
+  align-items: center;
+}
+article.article-list a div.eyecatch-wrap {
+  padding: 5px 0;
+}
+article.article-list a .meta-wrap {
+  flex-shrink: 1;
+  flex-basis: 300px;
+}
+article.article-list a p.eyecatch {
+  width: 200px;
+  box-sizing: border-box;
+  margin: 10px 0;
+  margin-right: 15px;
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
+  flex-shrink: 1;
+  flex-basis: 200px;
+}
+article.article-list a p.eyecatch::before {
+  content: "";
+  display: block;
+  padding-top: 67%;
+}
+article.article-list a p.eyecatch img {
+  max-width: 100%;
+  width: 200px;
+  max-height: 100%;
+}
+@media (max-width: 480px) {
+  article.article-list:not(:last-child) {
+    border-bottom: solid 1px #dddddd;
+  }
+}
+
+nav.pagination {
+  margin-left: -18px;
+}
+nav.pagination ul {
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  list-style: none;
+}
+nav.pagination ul li {
+  display: none;
+}
+@media (min-width: 851px) {
+  nav.pagination ul li:nth-child(-n+2) {
+    display: block;
+  }
+  nav.pagination ul li:nth-last-child(-n+2) {
+    display: block;
+  }
+  nav.pagination ul li.active, nav.pagination ul li.before-active {
+    display: block;
+  }
+  nav.pagination ul li.active + li {
+    display: block;
+  }
+  nav.pagination ul li.active + li + li {
+    display: block;
+  }
+  nav.pagination ul li.active + li + li + li {
+    display: block;
+  }
+  nav.pagination ul li.active + li + li + li + li {
+    display: block;
+  }
+}
+@media (min-width: 481px) and (max-width: 850px) {
+  nav.pagination ul li:nth-child(-n+2) {
+    display: block;
+  }
+  nav.pagination ul li:nth-last-child(-n+2) {
+    display: block;
+  }
+  nav.pagination ul li.active, nav.pagination ul li.before-active {
+    display: block;
+  }
+  nav.pagination ul li.active + li {
+    display: block;
+  }
+  nav.pagination ul li.active + li + li {
+    display: block;
+  }
+  nav.pagination ul li.active + li + li + li {
+    display: block;
+  }
+  nav.pagination ul li.active + li + li + li + li {
+    display: block;
+  }
+}
+@media (max-width: 480px) {
+  nav.pagination ul li:nth-child(-n+2) {
+    display: block;
+  }
+  nav.pagination ul li:nth-last-child(-n+2) {
+    display: block;
+  }
+  nav.pagination ul li.active, nav.pagination ul li.before-active {
+    display: block;
+  }
+  nav.pagination ul li.active + li {
+    display: block;
+  }
+}
+nav.pagination ul li:last-child {
+  display: block;
+}
+nav.pagination ul li:not(:last-child) {
+  margin-right: 5px;
+}
+nav.pagination ul li a, nav.pagination ul li span {
+  display: block;
+  padding: 10px;
+  border: solid 0.5px #ff8b3c;
+  border-radius: 5px;
+  color: #ff8b3c;
+}
+nav.pagination ul li.active span {
+  color: white;
+  background-color: #ff8b3c;
+}
+nav.pagination ul li span.disable {
+  color: #bbbbbb;
+  border-color: #bbbbbb;
+}
+
+.meta-wrap h3 {
+  font-size: 1em;
+  font-weight: normal;
+  margin: 0.5em 0;
+}
+.meta-wrap ul.meta {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  align-items: center;
+}
+.meta-wrap ul.meta > div {
+  display: flex;
+}
+.meta-wrap ul.meta li {
+  display: block;
+  width: fit-content;
+  font-size: 0.8em;
+}
+.meta-wrap ul.meta li:not(:last-child) {
+  margin-right: 0.5em;
+}
+.meta-wrap ul.meta li.category {
+  display: block;
+  width: fit-content;
+  padding: 0.3em;
+  background-color: #868686;
+  color: #fff;
+  font-size: 0.7em;
+  flex-shrink: 0;
+}
+.meta-wrap ul.meta li.only-member {
+  display: block;
+  width: fit-content;
+  padding: 0.3em;
+  background-color: #ff7563;
+  color: #fff;
+  font-size: 0.7em;
+  flex-shrink: 0;
+}
+.meta-wrap ul.meta li.list-writer::before {
+  content: "by ";
+}
+.meta-wrap ul.meta li.list-writer:not(:last-child)::after {
+  content: ", ";
+}
+.meta-wrap ul.meta li.writer::before {
+  content: "執筆者:";
+  margin-right: 0.3em;
+}
+.meta-wrap ul.meta li.writer:last-child {
+  margin-right: 0.5em;
+}
+.meta-wrap ul.meta li.writer:not(:last-child)::after {
+  content: ", ";
+}
+.meta-wrap ul.meta li.editor:first-child::before {
+  content: "編集者:";
+  margin-right: 0.3em;
+}
+.meta-wrap ul.meta li.editor:last-child {
+  margin-right: 0.5em;
+}
+.meta-wrap ul.meta li.editor:not(:last-child)::after {
+  content: ", ";
+}
+.meta-wrap ul.meta li.new {
+  background-color: #ff8b3c;
+  color: white;
+  font-size: 0.5em;
+  padding: 0.3em 0.8em;
+  flex-shrink: 0;
+}
+
+.search-wrap {
+  display: flex;
+  align-items: center;
+  position: relative;
+}
+.search-wrap .search-button {
+  padding: 0 10px;
+  margin: 0;
+  height: 100%;
+  display: flex;
+  align-items: center;
+}
+.search-wrap .search-button img {
+  display: block;
+}
+.search-wrap.searchbox-open .search-box {
+  visibility: visible;
+}
+.search-wrap .search-box {
+  visibility: hidden;
+  display: flex;
+  position: absolute;
+  top: 0;
+  left: 60px;
+  height: 100%;
+  width: 280px;
+  z-index: 2;
+  padding-right: 10px;
+  align-items: center;
+  background-color: #fff;
+}
+.search-wrap .search-box p {
+  margin: 0;
+}
+
 html, body {
   margin: 0;
   padding: 0;
@@ -213,41 +461,6 @@ form select {
   background: url('data:image/svg+xml;charset=UTF-8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 30"><defs><style>.cls-1{fill:none;stroke:#ff8b3c;stroke-miterlimit:10;}</style></defs><polygon class="cls-1" points="8 8 24 8 16 22 8 8"/></svg>') no-repeat right;
 }
 
-#search-wrap {
-  display: flex;
-  align-items: center;
-  position: relative;
-}
-#search-wrap .search-button {
-  padding: 0 10px;
-  margin: 0;
-  height: 100%;
-  display: flex;
-  align-items: center;
-}
-#search-wrap .search-button img {
-  display: block;
-}
-#search-wrap.searchbox-open .search-box {
-  visibility: visible;
-}
-#search-wrap .search-box {
-  visibility: hidden;
-  display: flex;
-  position: absolute;
-  top: 0;
-  left: 60px;
-  height: 100%;
-  width: 280px;
-  z-index: 2;
-  padding-right: 10px;
-  align-items: center;
-  background-color: #fff;
-}
-#search-wrap .search-box p {
-  margin: 0;
-}
-
 header {
   text-align: center;
   background-color: #ff8b3c;
@@ -304,67 +517,6 @@ header a {
   color: #ffffff;
 }
 
-.meta-wrap h3 {
-  font-size: 1em;
-  font-weight: normal;
-  margin: 0.5em 0;
-}
-.meta-wrap ul.meta {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-  display: flex;
-  align-items: center;
-}
-.meta-wrap ul.meta li {
-  display: block;
-  width: fit-content;
-  font-size: 0.8em;
-}
-.meta-wrap ul.meta li:not(:last-child) {
-  margin-right: 0.5em;
-}
-.meta-wrap ul.meta li.category {
-  display: block;
-  width: fit-content;
-  padding: 0.3em;
-  background-color: #868686;
-  color: #fff;
-  font-size: 0.7em;
-}
-.meta-wrap ul.meta li.list-writer::before {
-  content: "by ";
-}
-.meta-wrap ul.meta li.list-writer:not(:last-child)::after {
-  content: ", ";
-}
-.meta-wrap ul.meta li.writer::before {
-  content: "執筆者:";
-  margin-right: 0.3em;
-}
-.meta-wrap ul.meta li.writer:last-child {
-  margin-right: 0.5em;
-}
-.meta-wrap ul.meta li.writer:not(:last-child)::after {
-  content: ", ";
-}
-.meta-wrap ul.meta li.editor::before {
-  content: "編集者:";
-  margin-right: 0.3em;
-}
-.meta-wrap ul.meta li.editor:last-child {
-  margin-right: 0.5em;
-}
-.meta-wrap ul.meta li.editor:not(:last-child)::after {
-  content: ", ";
-}
-.meta-wrap ul.meta li.new {
-  background-color: #ff8b3c;
-  color: white;
-  font-size: 0.5em;
-  padding: 0.3em 0.8em;
-}
-
 main {
   width: 100%;
   height: 100%;
@@ -372,61 +524,55 @@ main {
   flex-shrink: 1;
   flex-grow: 0;
 }
-main .list article a {
-  color: #333333;
-  display: flex;
-  align-items: center;
+main > section, main article {
+  width: 1200px;
+  margin: auto;
+  padding: 0 20px;
 }
-main .list article a p.eyecatch {
-  width: 200px;
-  margin-right: 15px;
-}
-main .list article a p.eyecatch img {
-  max-width: 100%;
-  width: 200px;
-}
-main #article-post {
+main section#article-post {
   width: 100%;
   height: 100%;
+  margin: 0;
+  padding: 0;
 }
-main #article-post form {
+main section#article-post form {
   display: flex;
   flex-direction: column;
   height: 100%;
   justify-content: space-between;
   max-height: 100%;
 }
-main #article-post form input:not([type=checkbox]), main #article-post form textarea, main #article-post form select {
+main section#article-post form input:not([type=checkbox]), main section#article-post form textarea, main section#article-post form select {
   width: 100%;
   margin: 0;
 }
-main #article-post form #input-sns_publish_text textarea {
+main section#article-post form #input-sns_publish_text textarea {
   height: 5em;
 }
-main #article-post form #form-main-wrap {
+main section#article-post form #form-main-wrap {
   display: flex;
   flex-direction: column;
   height: 100%;
 }
-main #article-post form #form-main-wrap p {
+main section#article-post form #form-main-wrap p {
   margin: 0;
 }
-main #article-post form #form-main-wrap p#input-title {
+main section#article-post form #form-main-wrap p#input-title {
   height: fit-content;
   flex-grow: 0;
 }
-main #article-post form #form-main-wrap p#input-title input {
+main section#article-post form #form-main-wrap p#input-title input {
   border-radius: 0;
   border: none;
   padding-top: 0.5em;
 }
-main #article-post form #form-main-wrap p#input-text {
+main section#article-post form #form-main-wrap p#input-text {
   height: 100%;
 }
-main #article-post form #form-main-wrap p#input-text .text-input-wrap {
+main section#article-post form #form-main-wrap p#input-text .text-input-wrap {
   height: 100%;
 }
-main #article-post form #form-main-wrap p#input-text .text-input-wrap .EasyMDEContainer {
+main section#article-post form #form-main-wrap p#input-text .text-input-wrap .EasyMDEContainer {
   height: 100%;
   max-height: calc(100vh - 300px);
   display: grid;
@@ -434,26 +580,26 @@ main #article-post form #form-main-wrap p#input-text .text-input-wrap .EasyMDECo
   grid-template-columns: 1fr 1fr;
   grid-template-areas: "header header" "code preview" "footer footer";
 }
-main #article-post form #form-main-wrap p#input-text .text-input-wrap .editor-toolbar {
+main section#article-post form #form-main-wrap p#input-text .text-input-wrap .editor-toolbar {
   grid-area: header;
   width: 100%;
   box-sizing: border-box;
 }
-main #article-post form #form-main-wrap p#input-text .text-input-wrap .CodeMirror.sided--no-fullscreen {
+main section#article-post form #form-main-wrap p#input-text .text-input-wrap .CodeMirror.sided--no-fullscreen {
   grid-area: code;
   width: 100% !important;
   max-height: none;
 }
-main #article-post form #form-main-wrap p#input-text .text-input-wrap .editor-preview-side.sided--no-fullscreen {
+main section#article-post form #form-main-wrap p#input-text .text-input-wrap .editor-preview-side.sided--no-fullscreen {
   grid-area: preview;
   width: 100% !important;
 }
-main #article-post form #form-main-wrap p#input-text .text-input-wrap .editor-statusbar {
+main section#article-post form #form-main-wrap p#input-text .text-input-wrap .editor-statusbar {
   grid-area: footer;
   width: 100%;
   box-sizing: border-box;
 }
-main #article-post form #form-meta-wrap {
+main section#article-post form #form-meta-wrap {
   display: grid;
   grid-template-rows: auto auto;
   grid-template-columns: 6fr 4fr 13em;
@@ -463,39 +609,40 @@ main #article-post form #form-meta-wrap {
   border-top: 2px solid #ff8b3c;
   padding: 0.5em;
 }
-main #article-post form #form-meta-wrap #form-eyecatch-wrap {
+main section#article-post form #form-meta-wrap #form-eyecatch-wrap {
   grid-area: eyecatch;
   flex-basis: 60%;
   margin-right: 5px;
 }
-main #article-post form #form-meta-wrap #form-eyecatch-wrap #id_eyecatch {
+main section#article-post form #form-meta-wrap #form-eyecatch-wrap #id_eyecatch {
   height: 170px;
   overflow: scroll;
 }
-main #article-post form #form-meta-wrap #form-sns_publish-wrap {
+main section#article-post form #form-meta-wrap #form-sns_publish-wrap {
   grid-area: sns_publish;
   flex-basis: 40%;
   margin-right: 5px;
 }
-main #article-post form #form-meta-wrap #form-other_meta-wrap {
+main section#article-post form #form-meta-wrap #form-other_meta-wrap {
   grid-area: other_meta;
   width: 13em;
   flex-shrink: 0;
 }
-main #article-post form #form-meta-wrap #form-submit-wrap {
+main section#article-post form #form-meta-wrap #form-submit-wrap {
   grid-area: submit;
   display: flex;
+  justify-content: flex-end;
 }
-main #article-post form #form-meta-wrap #form-submit-wrap p:not(:last-child) {
+main section#article-post form #form-meta-wrap #form-submit-wrap p:not(:last-child) {
   margin-right: 0.5em;
 }
-main #article-post form #form-meta-wrap #form-submit-wrap .draft {
+main section#article-post form #form-meta-wrap #form-submit-wrap .draft {
   flex-basis: 20%;
 }
-main #article-post form #form-meta-wrap #form-submit-wrap .submit {
+main section#article-post form #form-meta-wrap #form-submit-wrap .submit {
   flex-basis: 80%;
 }
-main #article-post #modal {
+main section#article-post #modal {
   display: none;
   position: fixed;
   width: 100%;
@@ -503,7 +650,7 @@ main #article-post #modal {
   top: 0;
   left: 0;
 }
-main #article-post #modal #overlay {
+main section#article-post #modal #overlay {
   display: none;
   position: fixed;
   width: 100%;
@@ -511,29 +658,29 @@ main #article-post #modal #overlay {
   top: 0;
   left: 0;
 }
-main #article-post #modal #overlay.show {
+main section#article-post #modal #overlay.show {
   display: block;
   z-index: 998;
   background-color: rgba(0, 0, 0, 0.6);
 }
-main #article-post #modal.show {
+main section#article-post #modal.show {
   display: flex;
   justify-content: center;
   align-items: center;
   z-index: 997;
 }
-main #article-post #modal #image-upload-wrap {
+main section#article-post #modal #image-upload-wrap {
   display: none;
   background-color: white;
   border-radius: 10px;
   border: solid 2px #ff8b3c;
   padding: 20px;
 }
-main #article-post #modal #image-upload-wrap.show {
+main section#article-post #modal #image-upload-wrap.show {
   display: block;
   z-index: 999;
 }
-main .editor-preview .toc {
+main section#article-post .editor-preview .toc {
   border: solid 0.5px #bbbbbb;
   padding: 5px;
   color: #bbbbbb;
@@ -541,22 +688,22 @@ main .editor-preview .toc {
   border-radius: 5px;
   font-size: 0.8em;
 }
-main .editor-preview .toc::before {
+main section#article-post .editor-preview .toc::before {
   content: "目次";
   display: block;
 }
-main .editor-preview .toc ul {
+main section#article-post .editor-preview .toc ul {
   padding-left: 1.5em;
 }
-main .editor-preview pre.diff-line {
+main section#article-post .editor-preview pre.diff-line {
   font-family: monospace;
   padding-left: 0.1em;
   margin: 0;
 }
-main .editor-preview pre.diff-line.added-line {
+main section#article-post .editor-preview pre.diff-line.added-line {
   background-color: #bbbbff;
 }
-main .editor-preview pre.diff-line.deleted-line {
+main section#article-post .editor-preview pre.diff-line.deleted-line {
   background-color: #ffbbbb;
 }
 

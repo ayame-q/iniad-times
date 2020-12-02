@@ -41,11 +41,11 @@
 		<div id="main-list">
 			<div id="top-wrap">
 				{% for article in top_articles|slice:"0:1" %}
-					{% include "times/includes/article-list.html" with article=article %}
+					{% include "times/includes/article-list.html" with article=article link_page="article" %}
 				{% endfor %}
 				<div id="top-right-wrap">
 					{% for article in top_articles|slice:"1:4" %}
-						{% include "times/includes/article-list.html" with article=article %}
+						{% include "times/includes/article-list.html" with article=article link_page="article" %}
 					{% endfor %}
 				</div>
 			</div>
@@ -57,7 +57,7 @@
 			</div>
 			<div id="bottom-wrap">
 				{% for article in top_articles|slice:"4:" %}
-					{% include "times/includes/article-list.html" with article=article %}
+					{% include "times/includes/article-list.html" with article=article link_page="article" %}
 				{% endfor %}
 			</div>
 			{% if is_need_more %}

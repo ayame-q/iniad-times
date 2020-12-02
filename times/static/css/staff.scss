@@ -1,26 +1,7 @@
-@mixin media($a: false, $b: false, $c: false){
-	$value: large;
-	@if($a == $value or $b == $value or $c == $value){
-		@media (min-width: 481px) {
-			@content;
-		}
-	}
-
-	$value: small;
-	@if($a == $value or $b == $value or $c == $value){
-		@media (max-width: 480px) {
-			@content;
-		}
-	}
-
-
-	$value: medium;
-	@if($a == $value or $b == $value or $c == $value){
-		@media (min-width: 481px) and (max-width: 800px) {
-			@content;
-		}
-	}
-}
+@import "import/media";
+@import "import/article-list";
+@import "import/meta-wrap";
+@import "import/search-wrap";
 
 html, body{
 	margin: 0;
@@ -43,7 +24,6 @@ a{
 		opacity: 0.8;
 	}
 }
-
 
 ul.image_choice{
 	list-style: none;
@@ -248,43 +228,6 @@ form{
 $main-width: 1200px;
 
 
-#search-wrap{
-	display: flex;
-	align-items: center;
-	position: relative;
-	.search-button{
-		padding: 0 10px;
-		margin: 0;
-		height: 100%;
-		display: flex;
-		align-items: center;
-		img{
-			display: block;
-		}
-	}
-	&.searchbox-open{
-		.search-box{
-			visibility: visible;
-		}
-	}
-	.search-box{
-		visibility: hidden;
-		display: flex;
-		position: absolute;
-		top: 0;
-		left: 60px;
-		height: 100%;
-		width: 280px;
-		z-index: 2;
-		padding-right: 10px;
-		align-items: center;
-		background-color: #fff;
-		p{
-			margin: 0;
-		}
-	}
-}
-
 header{
 	text-align: center;
 	background-color: #ff8b3c;
@@ -348,114 +291,28 @@ header{
 }
 
 
-.meta-wrap{
-	h3{
-		font-size: 1em;
-		font-weight: normal;
-		margin: 0.5em 0;
-	}
-
-	ul.meta{
-		list-style: none;
-		padding: 0;
-		margin: 0;
-		display: flex;
-		align-items: center;
-
-		li{
-			display: block;
-			width: fit-content;
-			font-size: 0.8em;
-
-			&:not(:last-child){
-				margin-right: 0.5em;
-			}
-
-			&.category{
-				display: block;
-				width: fit-content;
-				padding: 0.3em;
-				background-color: #868686;
-				color: #fff;
-				font-size: 0.7em;
-			}
-
-			&.list-writer{
-				&::before{
-					content: "by ";
-				}
-				&:not(:last-child){
-					&::after{
-						content: ", ";
-					}
-				}
-			}
-
-			&.writer{
-				&::before{
-					content: "執筆者:";
-					margin-right: 0.3em;
-				}
-				&:last-child{
-					margin-right: 0.5em;
-				}
-				&:not(:last-child){
-					&::after{
-						content: ", ";
-					}
-				}
-			}
-
-			&.editor{
-				&::before{
-					content: "編集者:";
-					margin-right: 0.3em;
-				}
-				&:last-child{
-					margin-right: 0.5em;
-				}
-				&:not(:last-child){
-					&::after{
-						content: ", ";
-					}
-				}
-			}
-
-			&.new{
-				background-color: #ff8b3c;
-				color: white;
-				font-size: 0.5em;
-				padding: 0.3em 0.8em;
-			}
-		}
-	}
-}
-
-
 main{
 	width: 100%;
 	height: 100%;
 	flex-basis: 100%;
 	flex-shrink: 1;
 	flex-grow: 0;
-	.list{
-		article a{
-			color: #333333;
-			display: flex;
-			align-items: center;
-			p.eyecatch{
-				width: 200px;
-				margin-right: 15px;
-				img{
-					max-width: 100%;
-					width: 200px;
-				}
-			}
-		}
+
+	> section, article{
+		width: $main-width;
+		margin: auto;
+		padding: 0 20px;
 	}
-	#article-post{
+
+	section#article-list{
+
+	}
+
+	section#article-post{
 		width: 100%;
 		height: 100%;
+		margin: 0;
+		padding: 0;
 		form{
 			display: flex;
 			flex-direction: column;
@@ -557,6 +414,7 @@ main{
 				#form-submit-wrap{
 					grid-area: submit;
 					display: flex;
+					justify-content: flex-end;
 					p:not(:last-child){
 						margin-right: 0.5em;
 					}
@@ -609,33 +467,32 @@ main{
 				}
 			}
 		}
-
-	}
-	.editor-preview{
-		.toc{
-			border: solid 0.5px #bbbbbb;
-			padding: 5px;
-			color: #bbbbbb;
-			background-color: white;
-			border-radius: 5px;
-			font-size: 0.8em;
-			&::before{
-				content: "目次";
-				display: block;
+		.editor-preview{
+			.toc{
+				border: solid 0.5px #bbbbbb;
+				padding: 5px;
+				color: #bbbbbb;
+				background-color: white;
+				border-radius: 5px;
+				font-size: 0.8em;
+				&::before{
+					content: "目次";
+					display: block;
+				}
+				ul{
+					padding-left: 1.5em;
+				}
 			}
-			ul{
-				padding-left: 1.5em;
-			}
-		}
-		pre.diff-line{
-			font-family: monospace;
-			padding-left: 0.1em;
-			margin: 0;
-			&.added-line{
-				background-color: #bbbbff;
-			}
-			&.deleted-line{
-				background-color: #ffbbbb;
+			pre.diff-line{
+				font-family: monospace;
+				padding-left: 0.1em;
+				margin: 0;
+				&.added-line{
+					background-color: #bbbbff;
+				}
+				&.deleted-line{
+					background-color: #ffbbbb;
+				}
 			}
 		}
 	}

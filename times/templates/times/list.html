@@ -12,55 +12,11 @@
 	<section id="list-page">
 		<h2>記事一覧</h2>
 		{% for article in articles %}
-			{% include "times/includes/article-list.html" with article=article %}
+			{% include "times/includes/article-list.html" with article=article link_page="article" %}
 		{% empty %}
 			<p>記事が見つかりませんでした</p>
 		{% endfor %}
 
-		{% if is_paginated %}
-			<nav class="pagination">
-				<ul>
-					<li>
-						{% if page_obj.has_previous %}
-							<a href="?page={{ page_obj.previous_page_number }}">
-								&lt;
-							</a>
-						{% else %}
-							<span class="disable">
-							        &lt;
-						        </span>
-						{% endif %}
-					</li>
-
-					{% for page_num in paginator.page_range %}
-						{% if page_obj.number == page_num %}
-							<li class="active">
-								<span>{{ page_num }}</span>
-							</li>
-						{% elif page_obj.number == page_num|add:1 %}
-							<li class="before-active">
-								<a href="?page={{ page_num }}">{{ page_num }}</a>
-							</li>
-						{% else %}
-							<li>
-								<a href="?page={{ page_num }}">{{ page_num }}</a>
-							</li>
-						{% endif %}
-					{% endfor %}
-
-					<li>
-						{% if page_obj.has_next %}
-							<a href="?page={{ page_obj.next_page_number }}">
-								&gt;
-							</a>
-						{% else %}
-							<span class="disable">
-							        &gt;
-						        </span>
-						{% endif %}
-					</li>
-				</ul>
-			</nav>
-		{% endif %}
+		{% include "times/includes/pagination.html" %}
 	</section>
 {% endblock main %}

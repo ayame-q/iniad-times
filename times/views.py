@@ -5,7 +5,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import Http404
 from django.conf import settings
 from django.utils import timezone
-from django.db.models import Q
+from django.db.models import Q, Count
 from django.core.exceptions import ValidationError
 from rest_framework.views import APIView
 from rest_framework.generics import ListAPIView
@@ -63,6 +63,65 @@ def article(request, pk):
 
 def staff(request):
     return render(request, "times/staff/index.html")
+
+
+class BaseStaffListPageView(ListView):
+    model = PreArticle
+    context_object_name = "articles"
+    template_name = "times/staff/article-list.html"
+    paginate_by = 20
+    default_scope = "mine"
+    link_page = "edit"
+
+    def get_queryset(self):
+        key_word = self.request.GET.get("q")
+        scope = self.request.GET.get("scope")
+        old = self.request.GET.get("old")
+        result = self.model.objects.order_by("-created_at")
+        if key_word:
+            result = result.filter(
+                Q(title__icontains=key_word) | Q(text__icontains=key_word)
+            )
+
+        if scope == None:
+            scope = self.default_scope
+
+        if scope == "all":
+            pass
+        elif scope == "my-related":
+            result = result.filter(
+                Q(article_writers=self.request.user.staff) | Q(article_editors=self.request.user.staff)
+            )
+        elif scope == "mine":
+            result = result.filter(last_staff=self.request.user.staff)
+
+        if not old:
+            result = result.filter(children=None)
+
+        return result
+
+    def get_context_data(self, *args, **kwargs):
+        context = super().get_context_data(*args, **kwargs)
+        context["link_page"] = self.link_page
+        return context
+
+
+class EditPreArticleListView(BaseStaffListPageView):
+    def get_queryset(self):
+        result = super(EditPreArticleListView, self).get_queryset()
+        return result.filter(is_draft=True)
+
+
+class RevisePreArticleListView(BaseStaffListPageView):
+    default_scope = "all"
+    link_page = "revise"
+
+    def get_queryset(self):
+        result = super(RevisePreArticleListView, self).get_queryset()
+        result = result.filter(is_draft=False, articles=None).exclude(article_writers=self.request.user.staff)
+        count_0 = [object for object in result.filter(revise_count=0)]
+        count_1 = [object for object in result.filter(revise_count=1).exclude(parent__last_staff=self.request.user.staff, parent__revise_count=1) if object.is_writer_check_completed()]
+        return count_0 + count_1
 
 
 class BasePreArticleMixin:

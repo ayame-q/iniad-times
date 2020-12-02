@@ -1,86 +1,46 @@
 @charset "UTF-8";
-html, body {
-  margin: 0;
-  padding: 0;
+article.article-list {
+  margin: 0 10px;
+  padding: 10px 0;
+  font-size: 16px;
 }
-
-body {
-  font-family: "Yu Gothic", "游ゴシック", YuGothic, "游ゴシック体", "ヒラギノ角ゴ Pro W3", "Hiragino Kaku Gothic Pro W3", "メイリオ", sans-serif;
+article.article-list a {
   color: #333333;
-}
-
-a {
-  text-decoration: none;
-}
-a:hover {
-  opacity: 0.8;
-}
-
-input[type=submit], input[type=button] {
-  cursor: pointer;
-}
-
-textarea {
-  resize: none;
-}
-
-input, select, textarea {
-  font-family: inherit;
-  margin-top: 5px;
-  font-size: 1.1em;
-  padding: 0.2em 0.5em;
-  box-sizing: border-box;
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  appearance: none;
-}
-input:not([type=checkbox]), select:not([type=checkbox]), textarea:not([type=checkbox]) {
-  border: 2px solid #ff8b3c;
-  background-color: white;
-}
-input[type=checkbox], select[type=checkbox], textarea[type=checkbox] {
-  width: 50px;
-  height: 50px;
-  padding: 4px;
-  margin: 0;
-}
-input[type=checkbox]::before, select[type=checkbox]::before, textarea[type=checkbox]::before {
-  content: "";
-  display: block;
-  margin-top: 0;
-  margin-bottom: 5px;
-  margin-right: 7px;
-  padding: 0;
-  width: 36px;
-  height: 36px;
-  border: 2px solid #ff8b3c;
-  transition: all 0.12s, border-color 0.08s;
-}
-input[type=checkbox]:checked::before, select[type=checkbox]:checked::before, textarea[type=checkbox]:checked::before {
-  width: 15px;
-  margin: 10px;
-  margin-top: -5px;
-  margin-right: 15px;
-  padding-left: 1px;
-  border-radius: 0;
-  opacity: 1;
-  border-top-color: transparent;
-  border-left-color: transparent;
-  -webkit-transform: rotate(45deg);
-  transform: rotate(45deg);
-}
-input:disabled, select:disabled, textarea:disabled {
-  background-color: lightgray;
-}
-@media (max-width: 480px) {
-  input, select, textarea {
-    width: 100%;
-  }
-}
-
-.checkbox {
   display: flex;
   align-items: center;
+}
+article.article-list a div.eyecatch-wrap {
+  padding: 5px 0;
+}
+article.article-list a .meta-wrap {
+  flex-shrink: 1;
+  flex-basis: 300px;
+}
+article.article-list a p.eyecatch {
+  width: 200px;
+  box-sizing: border-box;
+  margin: 10px 0;
+  margin-right: 15px;
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
+  flex-shrink: 1;
+  flex-basis: 200px;
+}
+article.article-list a p.eyecatch::before {
+  content: "";
+  display: block;
+  padding-top: 67%;
+}
+article.article-list a p.eyecatch img {
+  max-width: 100%;
+  width: 200px;
+  max-height: 100%;
+}
+@media (max-width: 480px) {
+  article.article-list:not(:last-child) {
+    border-bottom: solid 1px #dddddd;
+  }
 }
 
 nav.pagination {
@@ -177,85 +137,6 @@ nav.pagination ul li span.disable {
   border-color: #bbbbbb;
 }
 
-.search-wrap {
-  display: flex;
-  align-items: center;
-  position: relative;
-}
-.search-wrap .search-button {
-  padding: 0 10px;
-  margin: 0;
-  height: 100%;
-  display: flex;
-  align-items: center;
-}
-.search-wrap .search-button img {
-  display: block;
-}
-.search-wrap.searchbox-open .search-box {
-  visibility: visible;
-}
-.search-wrap .search-box {
-  visibility: hidden;
-  display: flex;
-  position: absolute;
-  top: 0;
-  left: 60px;
-  height: 100%;
-  width: 280px;
-  z-index: 2;
-  padding-right: 10px;
-  align-items: center;
-  background-color: #fff;
-}
-.search-wrap .search-box p {
-  margin: 0;
-}
-
-article.article-list {
-  margin: 0 10px;
-  padding: 10px 0;
-  font-size: 16px;
-}
-article.article-list a {
-  color: #333333;
-  display: flex;
-  align-items: center;
-}
-article.article-list a div.eyecatch-wrap {
-  padding: 5px 0;
-}
-article.article-list a .meta-wrap {
-  flex-shrink: 1;
-  flex-basis: 300px;
-}
-article.article-list a p.eyecatch {
-  width: 200px;
-  box-sizing: border-box;
-  margin: 10px 0;
-  margin-right: 15px;
-  background-size: contain;
-  background-position: center;
-  background-repeat: no-repeat;
-  flex-shrink: 1;
-  flex-basis: 200px;
-}
-article.article-list a p.eyecatch::before {
-  content: "";
-  display: block;
-  padding-top: 67%;
-}
-article.article-list a p.eyecatch img {
-  max-width: 100%;
-  width: 200px;
-  max-height: 100%;
-}
-@media (max-width: 480px) {
-  article.article-list:not(:last-child) {
-    border-bottom: solid 1px #dddddd;
-  }
-}
-
 .meta-wrap h3 {
   font-size: 1em;
   font-weight: normal;
@@ -329,6 +210,125 @@ article.article-list a p.eyecatch img {
   font-size: 0.5em;
   padding: 0.3em 0.8em;
   flex-shrink: 0;
+}
+
+.search-wrap {
+  display: flex;
+  align-items: center;
+  position: relative;
+}
+.search-wrap .search-button {
+  padding: 0 10px;
+  margin: 0;
+  height: 100%;
+  display: flex;
+  align-items: center;
+}
+.search-wrap .search-button img {
+  display: block;
+}
+.search-wrap.searchbox-open .search-box {
+  visibility: visible;
+}
+.search-wrap .search-box {
+  visibility: hidden;
+  display: flex;
+  position: absolute;
+  top: 0;
+  left: 60px;
+  height: 100%;
+  width: 280px;
+  z-index: 2;
+  padding-right: 10px;
+  align-items: center;
+  background-color: #fff;
+}
+.search-wrap .search-box p {
+  margin: 0;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: "Yu Gothic", "游ゴシック", YuGothic, "游ゴシック体", "ヒラギノ角ゴ Pro W3", "Hiragino Kaku Gothic Pro W3", "メイリオ", sans-serif;
+  color: #333333;
+}
+
+a {
+  text-decoration: none;
+}
+a:hover {
+  opacity: 0.8;
+}
+
+input[type=submit], input[type=button] {
+  cursor: pointer;
+}
+
+textarea {
+  resize: none;
+}
+
+input, select, textarea {
+  font-family: inherit;
+  margin-top: 5px;
+  font-size: 1.1em;
+  padding: 0.2em 0.5em;
+  box-sizing: border-box;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+}
+input:not([type=checkbox]), select:not([type=checkbox]), textarea:not([type=checkbox]) {
+  border: 2px solid #ff8b3c;
+  background-color: white;
+}
+input[type=checkbox], select[type=checkbox], textarea[type=checkbox] {
+  width: 50px;
+  height: 50px;
+  padding: 4px;
+  margin: 0;
+}
+input[type=checkbox]::before, select[type=checkbox]::before, textarea[type=checkbox]::before {
+  content: "";
+  display: block;
+  margin-top: 0;
+  margin-bottom: 5px;
+  margin-right: 7px;
+  padding: 0;
+  width: 36px;
+  height: 36px;
+  border: 2px solid #ff8b3c;
+  transition: all 0.12s, border-color 0.08s;
+}
+input[type=checkbox]:checked::before, select[type=checkbox]:checked::before, textarea[type=checkbox]:checked::before {
+  width: 15px;
+  margin: 10px;
+  margin-top: -5px;
+  margin-right: 15px;
+  padding-left: 1px;
+  border-radius: 0;
+  opacity: 1;
+  border-top-color: transparent;
+  border-left-color: transparent;
+  -webkit-transform: rotate(45deg);
+  transform: rotate(45deg);
+}
+input:disabled, select:disabled, textarea:disabled {
+  background-color: lightgray;
+}
+@media (max-width: 480px) {
+  input, select, textarea {
+    width: 100%;
+  }
+}
+
+.checkbox {
+  display: flex;
+  align-items: center;
 }
 
 header {

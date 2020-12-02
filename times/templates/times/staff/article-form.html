@@ -53,8 +53,8 @@
 					</p>
 				</div>
 				<div id="form-submit-wrap">
-					<p class="draft"><input type="submit" value="下書き保存" v-on:click="draftSave"></p>
-					<p class="submit"><input type="submit" value="完成(校閲開始)"></p>
+					{% if not is_revision_form %}<p class="draft"><input type="submit" value="下書き保存" v-on:click="draftSave"></p>{% endif %}
+					<p class="submit"><input type="submit" value="{% if not is_revision_form %}完成(校閲開始){% else %}校閲完了{% endif %}" v-on:click="finalSave"></p>
 				</div>
 			</div>
 			<input type="hidden" name="is_draft" v-model="isDraft">
@@ -157,11 +157,15 @@
 				draftSave() {
 					this.isDraft = true
 				},
+				finalSave() {
+					this.isDraft = false
+				},
 				submitMainForm() {
 					if (!this.selectedEyeCatch){
 						iziToast.error({message: "アイキャッチ画像を選択してください。", position: "topRight"})
 						return
 					}
+					easyMDE.clearAutosavedValue()
 					Vue.nextTick(() => {
 						document.mainForm.submit()
 					})
