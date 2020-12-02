@@ -3,6 +3,7 @@ from django.utils import timezone
 from django.contrib.auth.models import AbstractUser
 from datetime import timedelta
 from uuid import uuid4
+from .get_diff import get_diff
 
 # Create your models here.
 
@@ -123,6 +124,9 @@ class PreArticle(Post):
             if not writer_relation.is_writer_checked:
                 return False
         return True
+
+    def get_diff_for_parent(self):
+        return get_diff(self.parent.text, self.text)
 
 
 class Article(Post):

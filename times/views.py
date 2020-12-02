@@ -17,7 +17,8 @@ from .models import Article, PreArticle, Image, Staff, Category
 from .markdown import markdown
 from . import forms, serializers
 from .publish import Publish
-import os, re, difflib
+from .get_diff import get_diff
+import os, re
 
 
 publish = Publish()
@@ -246,32 +247,19 @@ class ApiParseMarkdown(APIView):
 
 class ApiGetDiff(APIView):
     def post(self, request):
-        text = request.POST.get("text").replace("\r\n", "\n").split("\n")
+        text = request.POST.get("text")
         uuid = request.POST.get("uuid")
-        object = None
-        object_text = [""]
+        object_text = ""
         try:
             if PreArticle.objects.get(uuid=uuid):
                 object = PreArticle.objects.get(uuid=uuid)
-                object_text = object.text.replace("\r\n", "\n").split("\n")
+                object_text = object.text
             elif Article.objects.get(uuid=uuid):
                 object = Article.objects.get(uuid=uuid)
-                object_text = object.text.replace("\r\n", "\n").split("\n")
+                object_text = object.text
         except ValidationError:
             pass
-        print(object_text)
-        print(text)
-        result = ""
-        for line in difflib.ndiff(object_text, text):
-            if line[0] == "+":
-                line = f"<pre class='diff-line added-line'>{line}</pre>"
-            elif line[0] == "-":
-                line = f"<pre class='diff-line deleted-line'>{line}</pre>"
-            elif line[0] == "?":
-                continue
-            else:
-                line = f"<pre class='diff-line'>{line}</pre>"
-            result += line + "\n"
+        result = get_diff(object_text, text)
         return Response({"text": result})
 
 
