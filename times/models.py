@@ -105,10 +105,24 @@ class Lecture(models.Model):
     school_year = models.IntegerField(verbose_name="学年")
 
 
+class PreArticleWriterRelation(models.Model):
+    staff = models.ForeignKey(Staff, related_name="wrote_prearticle_relations", on_delete=models.CASCADE)
+    prearticle = models.ForeignKey("PreArticle", related_name="writer_relations", on_delete=models.CASCADE)
+    is_writer_checked = models.BooleanField(default=False, verbose_name="筆者確認済み")
+
+
 class PreArticle(Post):
     parent = models.ForeignKey("self", related_name="children", on_delete=models.SET_NULL, null=True, blank=True, verbose_name="親記事")
+    article_writers = models.ManyToManyField(Staff, related_name="wrote_%(class)s", blank=True, through=PreArticleWriterRelation, verbose_name="執筆者")
     is_draft = models.BooleanField(default=True, verbose_name="下書きか")
     is_revision = models.BooleanField(default=False, verbose_name="校閲か")
+    revise_count = models.IntegerField(default=0, verbose_name="校閲完了数")
+
+    def is_writer_check_completed(self):
+        for writer_relation in self.writer_relations:
+            if not writer_relation.is_writer_checked:
+                return False
+        return True
 
 
 class Article(Post):
