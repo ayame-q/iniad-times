@@ -72,7 +72,7 @@ class Post(models.Model):
     category = models.ForeignKey(Category, related_name="%(class)s", null=True, on_delete=models.SET_NULL ,verbose_name="カテゴリー")
     tags = models.ManyToManyField(Tag, related_name="%(class)s", blank=True, verbose_name="タグ")
     lecture = models.ForeignKey("Lecture", related_name="%(class)s", on_delete=models.SET_NULL, null=True, blank=True, verbose_name="授業")
-    eyecatch = models.ForeignKey(Image, related_name="used_%(class)s", null=True, blank=True, on_delete=models.SET_NULL ,verbose_name="アイキャッチ画像")
+    eyecatch = models.ForeignKey(Image, related_name="used_%(class)s", null=True, on_delete=models.SET_NULL, verbose_name="アイキャッチ画像")
     created_at = models.DateTimeField(default=timezone.localtime, verbose_name="作成日")
     publish_at = models.DateTimeField(default=timezone.localtime, null=True, blank=True, verbose_name="公開日")
     sns_publish_text = models.TextField(default="", null=True, blank=True, verbose_name="SNS告知文")
