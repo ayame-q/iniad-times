@@ -519,7 +519,8 @@ main section#top-page #marquee-wrap #top-marquee article ul {
     display: block;
   }
   main section#top-page #main-list #top-wrap > article a p.eyecatch {
-    margin: 10px 0;
+    margin: 0;
+    margin-bottom: 10px;
     width: auto;
   }
   main section#top-page #main-list #top-wrap > article a p.eyecatch img {
