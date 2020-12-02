@@ -1,6 +1,6 @@
 <article class="article-list">
 	<a href="{% url "article" article.pk %}">
-		<p class="eyecatch"><img src="{{ article.eyecatch.url }}" alt="eyecatch"></p>
+		<p class="eyecatch" style="background-image: url('{{ article.eyecatch.url }}')"></p>
 		<div class="meta-wrap">
 			<ul class="meta">
 				<li class="category">{{ article.category }}</li>

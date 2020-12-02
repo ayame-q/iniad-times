@@ -213,7 +213,8 @@ nav.pagination ul li span.disable {
 }
 
 article.article-list {
-  margin: 10px;
+  margin: 0 10px;
+  padding: 10px 0;
   font-size: 16px;
 }
 article.article-list a {
@@ -221,13 +222,38 @@ article.article-list a {
   display: flex;
   align-items: center;
 }
+article.article-list a div.eyecatch-wrap {
+  padding: 5px 0;
+}
+article.article-list a .meta-wrap {
+  flex-shrink: 1;
+  flex-basis: 300px;
+}
 article.article-list a p.eyecatch {
   width: 200px;
+  box-sizing: border-box;
+  margin: 10px 0;
   margin-right: 15px;
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
+  flex-shrink: 1;
+  flex-basis: 200px;
+}
+article.article-list a p.eyecatch::before {
+  content: "";
+  display: block;
+  padding-top: 67%;
 }
 article.article-list a p.eyecatch img {
   max-width: 100%;
   width: 200px;
+  max-height: 100%;
+}
+@media (max-width: 480px) {
+  article.article-list:not(:last-child) {
+    border-bottom: solid 1px #dddddd;
+  }
 }
 
 .meta-wrap h3 {
@@ -260,6 +286,7 @@ article.article-list a p.eyecatch img {
   background-color: #868686;
   color: #fff;
   font-size: 0.7em;
+  flex-shrink: 0;
 }
 .meta-wrap ul.meta li.only-member {
   display: block;
@@ -268,6 +295,7 @@ article.article-list a p.eyecatch img {
   background-color: #ff7563;
   color: #fff;
   font-size: 0.7em;
+  flex-shrink: 0;
 }
 .meta-wrap ul.meta li.list-writer::before {
   content: "by ";
@@ -300,6 +328,7 @@ article.article-list a p.eyecatch img {
   color: white;
   font-size: 0.5em;
   padding: 0.3em 0.8em;
+  flex-shrink: 0;
 }
 
 header {
@@ -523,7 +552,7 @@ main section#top-page #marquee-wrap #top-marquee article ul {
     display: block;
   }
   main section#top-page #main-list #bottom-wrap article a p.eyecatch {
-    margin: 0;
+    margin: 10px 0;
     width: auto;
   }
   main section#top-page #main-list #bottom-wrap article a p.eyecatch img {
@@ -579,17 +608,16 @@ main section#list-page {
   margin: auto;
 }
 main section#list-page article a {
-  color: #333333;
   display: flex;
   align-items: center;
 }
 main section#list-page article a p.eyecatch {
-  width: 200px;
-  margin-right: 15px;
+  flex-shrink: 1;
+  flex-basis: 200px;
 }
-main section#list-page article a p.eyecatch img {
-  max-width: 100%;
-  width: 200px;
+main section#list-page article a .meta-wrap {
+  flex-shrink: 1;
+  flex-basis: 300px;
 }
 main article#article-page {
   margin: 0 20px;
