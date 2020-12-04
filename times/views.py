@@ -107,7 +107,7 @@ class GetArticleAndPreArticleObjectMixin(SingleObjectMixin):
 class BaseStaffListPageView(ListView):
     model = PreArticle
     context_object_name = "articles"
-    template_name = "times/staff/article-list.html"
+    template_name = "times/staff/list.html"
     paginate_by = 20
     default_scope = "mine"
     link_page = "edit"
