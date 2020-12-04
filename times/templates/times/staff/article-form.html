@@ -20,6 +20,11 @@
 		<form action="{% if next %}?next={{ next }}{% endif %}" @submit.prevent="submitMainForm" method="post" name="mainForm" data-is_revision_form="{% if is_revision_form %}true{% else %}false{% endif %}" data-object_uuid="{% if object.uuid %}{{ object.uuid }}{% endif %}">
 			<div id="form-main-wrap">
 				<p id="input-title">{{ form.title }}</p>
+				<p id="input-slug" v-bind:class="{'not-valid': !isSlugValid}">
+					<label for="{{ form.slug.id_for_label }}">{{ form.slug.label }}:</label>
+					<input type="text" v-on:input="checkSlug" v-bind:required="isRequireSlug" name="{{ form.slug.name }}" pattern="^[a-zA-Z0-9\-]*$" minlength="5" maxlength="50" placeholder="URLで &quot;https://iniad-wm.com/年/月/&quot; 以降の部分です。英数字と-が使用できます。" id="{{ form.slug.id_for_label }}">
+					<span class="valid-error">[[ slugErrorMessage ]]</span>
+				</p>
 				<p id="input-text">{{ form.text | add_class:"text-input" }}</p>
 			</div>
 			<div id="form-meta-wrap">
@@ -79,6 +84,10 @@
 			el: "#article-post",
 			delimiters: ['[[', ']]'],
 			data: {
+				uuid: {% if object.uuid %}{{ object.uuid }}{% else %}null{% endif %},
+				isSlugValid: true,
+				isRequireSlug: false,
+				slugErrorMessage: "",
 				images: [],
 				selectedEyeCatch: null,
 				isOpenUploadModal: false,
@@ -91,12 +100,45 @@
 				},
 			},
 			methods: {
+				async checkSlug(e) {
+					const slug = e.target.value
+					if(slug !== "") {
+						if(!slug.match(/^[a-zA-Z0-9\-]*$/)) {
+							this.isSlugValid = false
+							this.slugErrorMessage = "使用できない文字が含まれています (使用可能文字: 英数字と-)"
+						} else if(slug.match("--")) {
+							this.isSlugValid = false
+							this.slugErrorMessage = "連続して-を使用することはできません"
+						} else if(slug[0] === "-" || slug[slug.length - 1] === "-") {
+							this.isSlugValid = false
+							this.slugErrorMessage = "先頭または末尾に-を使用することはできません"
+						}
+						else if(slug.length < 5 || slug.length > 50) {
+							this.isSlugValid = false
+							this.slugErrorMessage = "5文字〜50文字で入力してください"
+						} else {
+							const parameters = {
+								slug: slug,
+							}
+							if(this.uuid) parameters.uuid = this.uuid
+							const parameter = Object.keys(parameters).map((key)=>key+"="+encodeURIComponent(parameters[key])).join("&");
+							const response = await fetch("{% url "check_prearticle_slug_is_unique" %}?" + parameter)
+							const json = await response.json()
+							if(json.is_unique) {
+								this.isSlugValid = true
+								this.slugErrorMessage = ""
+							} else {
+								this.isSlugValid = false
+								this.slugErrorMessage = "このPage URLは既に使用されています"
+							}
+						}
+					} else {
+						this.isSlugValid = true
+						this.slugErrorMessage = ""
+					}
+				},
 				async getImageList(isInitialize=false) {
-					const response = await fetch("{% url "get_image_list" %}", {
-						headers: {
-							"X-CSRFToken": Cookies.get("csrftoken"),
-						},
-					})
+					const response = await fetch("{% url "get_image_list" %}")
 					this.images = await response.json()
 					if(isInitialize) {
 						this.selectedEyeCatch = {% if object.eyecatch %}{{ object.eyecatch.id }}{% else %}null{% endif %}
@@ -156,13 +198,19 @@
 				},
 				draftSave() {
 					this.isDraft = true
+					this.isRequireSlug = false
 				},
 				finalSave() {
 					this.isDraft = false
+					this.isRequireSlug = true
 				},
 				submitMainForm() {
 					if (!this.selectedEyeCatch){
 						iziToast.error({message: "アイキャッチ画像を選択してください。", position: "topRight"})
+						return
+					}
+					if (!this.isSlugValid){
+						iziToast.error({message: "Page URL: " + this.slugErrorMessage, position: "topRight"})
 						return
 					}
 					easyMDE.clearAutosavedValue()

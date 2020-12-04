@@ -342,13 +342,45 @@ main{
 				height: 100%;
 				p{
 					margin: 0;
-					&#input-title{
+					&#input-title, &#input-slug{
 						height: fit-content;
 						flex-grow: 0;
 						input{
 							border-radius: 0;
 							border: none;
 							padding-top: 0.5em;
+						}
+					}
+					&#input-slug{
+						font-size: 0.8em;
+						display: flex;
+						position: relative;
+						flex-wrap: nowrap;
+						justify-content: space-between;
+						align-items: baseline;
+						width: 100%;
+						label{
+							margin-left: 0.8em;
+							width: fit-content;
+							flex-shrink: 0;
+						}
+						input{
+							font-size: 1em;
+						}
+						.valid-error{
+							display: none;
+						}
+						&.not-valid{
+							input{
+								color: red;
+							}
+							.valid-error{
+								display: block;
+								position: absolute;
+								right: 5px;
+								bottom: 0;
+								color: red;
+							}
 						}
 					}
 					&#input-text{

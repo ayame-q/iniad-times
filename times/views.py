@@ -13,13 +13,13 @@ from rest_framework.generics import ListAPIView
 from rest_framework.response import Response
 from django_boost.views.mixins import ViewUserKwargsMixin
 from uuid import uuid4
-from datetime import timedelta, date
+from datetime import timedelta, date, datetime
 from .models import Article, PreArticle, Image, Staff, Category
 from .markdown import markdown
 from . import forms, serializers
 from .publish import Publish
 from .get_diff import get_diff
-import os, re
+import os, re, calendar
 
 
 publish = Publish()
@@ -45,12 +45,24 @@ def index(request):
     return render(request, "times/index.html", data)
 
 
-def article(request, pk=None, uuid=None):
+def article(request, slug=None, year=None, month=None, pk=None, uuid=None):
     article = None
-    if pk:
-        article = get_object_or_404(Article, pk=pk)
-    elif uuid:
-        article = get_object_or_404(Article, uuid=uuid)
+    if slug:
+        print(year, month)
+        print(calendar.monthrange(year, month)[1])
+        article = get_object_or_404(Article, slug=slug)
+        if not (article.publish_at.year == year and article.publish_at.month == month):
+            raise Http404
+    if pk or uuid:
+        if pk:
+            article = get_object_or_404(Article, pk=pk)
+        elif uuid:
+            article = get_object_or_404(Article, uuid=uuid)
+        if article and article.slug:
+            permanent = True
+            if settings.DEBUG:
+                permanent = False
+            return redirect("article", article.publish_at.year, article.publish_at.month, article.slug, permanent=permanent)
 
     if (not article.is_publishable or article.publish_at > timezone.localtime()) and (not request.user.is_authenticated or not request.user.staff):
         raise Http404
@@ -111,6 +123,7 @@ class BaseStaffListPageView(ListView):
     paginate_by = 20
     default_scope = "mine"
     link_page = "edit"
+    link_keys = ["uuid"]
 
     def get_queryset(self):
         key_word = self.request.GET.get("q")
@@ -301,6 +314,18 @@ class ApiGetDiff(APIView):
             pass
         result = get_diff(object_text, text)
         return Response({"text": result})
+
+
+class ApiCheckPreArticleSlugIsUnique(APIView):
+    def get(self, request):
+        uuid = request.GET.get("uuid")
+        slug = request.GET.get("slug")
+        if uuid:
+            object = PreArticle.objects.get(uuid=uuid)
+            is_unique = object.is_slug_unique(slug)
+        else:
+            is_unique = PreArticle.is_slug_unique_in_class(slug)
+        return Response({"is_unique": is_unique})
 
 
 def get_remote_ip(request):

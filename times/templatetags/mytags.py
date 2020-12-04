@@ -26,3 +26,8 @@ def markdown2html(value):
             num = int(match.group(2) if match.group(2) else match.group(3))
             html = html[:match.end() - 2] + str(num + 1) + html[match.end() - 1:]
     return mark_safe(html)
+
+
+@register.simple_tag()
+def article_url(page, article, keys):
+    return article.get_url(page, keys)

@@ -572,14 +572,44 @@ main section#article-post form #form-main-wrap {
 main section#article-post form #form-main-wrap p {
   margin: 0;
 }
-main section#article-post form #form-main-wrap p#input-title {
+main section#article-post form #form-main-wrap p#input-title, main section#article-post form #form-main-wrap p#input-slug {
   height: fit-content;
   flex-grow: 0;
 }
-main section#article-post form #form-main-wrap p#input-title input {
+main section#article-post form #form-main-wrap p#input-title input, main section#article-post form #form-main-wrap p#input-slug input {
   border-radius: 0;
   border: none;
   padding-top: 0.5em;
+}
+main section#article-post form #form-main-wrap p#input-slug {
+  font-size: 0.8em;
+  display: flex;
+  position: relative;
+  flex-wrap: nowrap;
+  justify-content: space-between;
+  align-items: baseline;
+  width: 100%;
+}
+main section#article-post form #form-main-wrap p#input-slug label {
+  margin-left: 0.8em;
+  width: fit-content;
+  flex-shrink: 0;
+}
+main section#article-post form #form-main-wrap p#input-slug input {
+  font-size: 1em;
+}
+main section#article-post form #form-main-wrap p#input-slug .valid-error {
+  display: none;
+}
+main section#article-post form #form-main-wrap p#input-slug.not-valid input {
+  color: red;
+}
+main section#article-post form #form-main-wrap p#input-slug.not-valid .valid-error {
+  display: block;
+  position: absolute;
+  right: 5px;
+  bottom: 0;
+  color: red;
 }
 main section#article-post form #form-main-wrap p#input-text {
   height: 100%;

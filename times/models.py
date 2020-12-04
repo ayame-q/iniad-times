@@ -1,4 +1,5 @@
 from django.db import models
+from django.shortcuts import resolve_url
 from django.utils import timezone
 from django.contrib.auth.models import AbstractUser
 from datetime import timedelta
@@ -83,6 +84,24 @@ class Post(models.Model):
     class Meta:
         abstract = True
 
+    def type(self):
+        return "Post"
+
+    def get_url(self, page, keys):
+        for key in keys:
+            if key == "slug" and self.slug:
+                return resolve_url(page, self.publish_at.year, self.publish_at.month, self.slug)
+            if key == "uuid":
+                return resolve_url(page, self.uuid)
+            if key == "id":
+                return resolve_url(page, self.id)
+        if self.type() == "Article":
+            if self.slug:
+                return resolve_url(page, self.publish_at.year, self.publish_at.month, self.slug)
+            else:
+                return resolve_url(page, self.id)
+        return resolve_url(page, self.uuid)
+
 
 courses = [
     ("none", "なし"),
@@ -121,6 +140,9 @@ class PreArticle(Post):
     is_revision = models.BooleanField(default=False, verbose_name="校閲か")
     revise_count = models.IntegerField(default=0, verbose_name="校閲完了数")
 
+    def type(self):
+        return "PreArticle"
+
     def time(self):
         return self.created_at
 
@@ -158,6 +180,9 @@ class Article(Post):
     is_publishable = models.BooleanField(default=False, verbose_name="公開準備済")
     is_published = models.BooleanField(default=False, verbose_name="公開済み")
     parent = models.ForeignKey(PreArticle, related_name="articles", on_delete=models.SET_NULL, null=True, blank=True, verbose_name="元記事")
+
+    def type(self):
+        return "Article"
 
     def time(self):
         return max(self.created_at, self.updated_at, self.publish_at)

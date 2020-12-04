@@ -1,8 +1,11 @@
-from django.urls import path
+from django.urls import path, register_converter
 from django.contrib.sitemaps.views import sitemap
 from django.contrib.sitemaps.views import index as sitemap_index
-from . import views
+from . import views, converters
 from .sitemaps import ArticleSitemap, CategorySitemap, StaticSitemap
+
+register_converter(converters.FourDigitYearConverter, 'yyyy')
+register_converter(converters.TwoDigitMonthConverter, 'mm')
 
 sitemaps = {
     'statics': StaticSitemap,
@@ -12,6 +15,7 @@ sitemaps = {
 
 urlpatterns = [
     path('', views.index, name="index"),
+    path('<yyyy:year>/<mm:month>/<slug:slug>', views.article, name="article"),
     path('article/<int:pk>', views.article, name="article"),
     path('article/<uuid:uuid>', views.article, name="article"),
     path('list', views.ListPageView.as_view(), name="list"),
@@ -30,6 +34,8 @@ urlpatterns = [
     path('api/upload_image', views.ApiUploadImage.as_view(), name="upload_image"),
     path('api/parse_markdown', views.ApiParseMarkdown.as_view(), name="parse_markdown"),
     path('api/get_diff', views.ApiGetDiff.as_view(), name="get_diff"),
+    path('api/check_prearticle_slug_is_unique', views.ApiCheckPreArticleSlugIsUnique.as_view(), name="check_prearticle_slug_is_unique"),
+
     path('sitemap.xml', sitemap_index, {'sitemaps': sitemaps}),
     path('sitemap-<section>.xml', sitemap, {'sitemaps': sitemaps}, name="django.contrib.sitemaps.views.sitemap")
 ]

@@ -19,11 +19,12 @@ class BaseForm(forms.ModelForm):
 class PreArticleForm(BaseForm):
     class Meta:
         model = PreArticle
-        fields = ("title", "text", "eyecatch", "sns_publish_text", "category", "publish_at",
+        fields = ("title", "slug", "text", "eyecatch", "sns_publish_text", "category", "publish_at",
                   "is_public", "parent", "is_draft")
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        self.fields["slug"].widget.attrs["placeholder"] = "ページのURLで \"https://iniad-wm.com/年/月/\" 以降の部分です。英数字と-が使用できます。"
         self.fields["parent"].disabled = True
         self.fields["parent"].label = ""
         self.fields["parent"].widget = forms.HiddenInput()
@@ -33,6 +34,12 @@ class PreArticleForm(BaseForm):
         data = self.cleaned_data["sns_publish_text"]
         if 115 < len(data) + len(self.cleaned_data["title"]):
             raise forms.ValidationError("長すぎます")
+        return data
+
+    def clean(self):
+        data = super(PreArticleForm, self).clean()
+        if not data["is_draft"] and not data["slug"]:
+            raise forms.ValidationError("Page URLを指定してください")
         return data
 
 

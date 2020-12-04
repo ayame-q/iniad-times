@@ -1,5 +1,6 @@
+{% load mytags %}
 <article class="article-list">
-	<a href="{% url link_page article.uuid %}">
+	<a href="{% article_url link_page article link_keys %}">
 		<p class="eyecatch" style="background-image: url('{{ article.eyecatch.url }}')"></p>
 		<div class="meta-wrap">
 			<ul class="meta">
