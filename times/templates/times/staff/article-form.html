@@ -84,7 +84,7 @@
 			el: "#article-post",
 			delimiters: ['[[', ']]'],
 			data: {
-				uuid: {% if object.uuid %}{{ object.uuid }}{% else %}null{% endif %},
+				uuid: {% if object.uuid %}"{{ object.uuid }}"{% else %}null{% endif %},
 				isSlugValid: true,
 				isRequireSlug: false,
 				slugErrorMessage: "",
