@@ -8,11 +8,6 @@ from django_boost.forms.mixins import FormUserKwargsMixin
 from allauth.socialaccount.models import SocialAccount
 
 
-class ImageSelect(forms.RadioSelect):
-    template_name = "times/widgets/image_choice.html"
-    option_template_name = "times/widgets/image_choice_option.html"
-
-
 class BaseForm(forms.ModelForm):
     def __init__(self, label_suffix="", *args, **kwargs):
         kwargs["label_suffix"] = label_suffix
