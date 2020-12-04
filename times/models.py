@@ -65,6 +65,7 @@ class Image(models.Model):
 
 class Post(models.Model):
     uuid = models.UUIDField(default=uuid4, unique=True, db_index=True, editable=False, verbose_name="UUID")
+    slug = models.SlugField(max_length=50, db_index=True, unique=True, null=True, blank=True, verbose_name="Page URL")
     title = models.CharField(max_length=50, verbose_name="タイトル")
     text = models.TextField(verbose_name="本文")
     last_staff = models.ForeignKey(Staff, on_delete=models.SET_NULL, null=True, verbose_name="最終更新者")
@@ -113,6 +114,7 @@ class PreArticleWriterRelation(models.Model):
 
 
 class PreArticle(Post):
+    slug = models.SlugField(max_length=50, db_index=True, unique=False, null=True, blank=True, verbose_name="Page URL")
     parent = models.ForeignKey("self", related_name="children", on_delete=models.SET_NULL, null=True, blank=True, verbose_name="親記事")
     article_writers = models.ManyToManyField(Staff, related_name="wrote_%(class)s", blank=True, through=PreArticleWriterRelation, verbose_name="執筆者")
     is_draft = models.BooleanField(default=True, verbose_name="下書きか")
@@ -131,6 +133,25 @@ class PreArticle(Post):
     def get_diff_for_parent(self):
         return get_diff(self.parent.text, self.text)
 
+    def get_parents_id_list(self):
+        list = []
+        p = self.parent
+        while p:
+            list.append(p.id)
+            p = p.parent
+        return list
+
+    def is_slug_unique(self, slug):
+        parents_id = self.get_parents_id_list()
+        if PreArticle.objects.exclude(id__in=parents_id).filter(slug=slug):
+            return False
+        return True
+
+    @classmethod
+    def is_slug_unique_in_class(cls, slug):
+        if cls.objects.filter(slug=slug):
+            return False
+        return True
 
 class Article(Post):
     updated_at = models.DateTimeField(default=timezone.localtime, verbose_name="更新日")
