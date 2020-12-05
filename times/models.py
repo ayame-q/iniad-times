@@ -155,8 +155,10 @@ class PreArticle(Post):
     def get_diff_for_parent(self):
         return get_diff(self.parent.text, self.text)
 
-    def get_parents_id_list(self):
+    def get_parents_id_list(self, include_self=False):
         list = []
+        if include_self:
+            list.append(self.id)
         p = self.parent
         while p:
             list.append(p.id)
@@ -164,14 +166,21 @@ class PreArticle(Post):
         return list
 
     def is_slug_unique(self, slug):
-        parents_id = self.get_parents_id_list()
-        if PreArticle.objects.exclude(id__in=parents_id).filter(slug=slug):
+        parents_id = self.get_parents_id_list(True)
+        if PreArticle.objects.exclude(id__in=parents_id).filter(slug=slug, children=None):
+            return False
+        if Article.objects.filter(slug=slug):
             return False
         return True
 
+    def get_revision_messages(self):
+        return self.revision_messages.order_by("-created_at")
+
     @classmethod
     def is_slug_unique_in_class(cls, slug):
-        if cls.objects.filter(slug=slug):
+        if cls.objects.filter(slug=slug, children=None):
+            return False
+        if Article.objects.filter(slug=slug):
             return False
         return True
 
