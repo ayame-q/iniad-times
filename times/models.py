@@ -132,12 +132,20 @@ class PreArticleWriterRelation(models.Model):
     is_writer_checked = models.BooleanField(default=False, verbose_name="筆者確認済み")
 
 
+class RevisionMessage(models.Model):
+    uuid = models.UUIDField(default=uuid4, unique=True, db_index=True, editable=False, verbose_name="UUID")
+    staff = models.ForeignKey(Staff, related_name="revision_messages", on_delete=models.CASCADE, verbose_name="スタッフ")
+    created_at = models.DateTimeField(default=timezone.localtime, verbose_name="作成日")
+    comment = models.TextField(verbose_name="コメント")
+
+
 class PreArticle(Post):
     slug = models.SlugField(max_length=50, db_index=True, unique=False, null=True, blank=True, verbose_name="Page URL")
     parent = models.ForeignKey("self", related_name="children", on_delete=models.SET_NULL, null=True, blank=True, verbose_name="親記事")
     article_writers = models.ManyToManyField(Staff, related_name="wrote_%(class)s", blank=True, through=PreArticleWriterRelation, verbose_name="執筆者")
     is_draft = models.BooleanField(default=True, verbose_name="下書きか")
     is_revision = models.BooleanField(default=False, verbose_name="校閲か")
+    revision_messages = models.ManyToManyField(RevisionMessage, related_name="pre_articles", blank=True, verbose_name="メッセージ")
     revise_count = models.IntegerField(default=0, verbose_name="校閲完了数")
 
     def type(self):
