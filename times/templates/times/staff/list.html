@@ -7,6 +7,16 @@
 {% block main %}
 	<section id="article-list">
 		<h2>{% if edit_list %}下書き記事編集{% elif revise_list %}記事推敲・校閲{% elif check_revise_list %}推敲・校閲チェック{% elif final_check_list %}最終確認{% elif reedit_list %}公開済み記事編集{% else %}記事一覧{% endif %}</h2>
+		{% if not revise_list and not check_revise_list %}
+			<nav id="scope">
+				<h3>表示記事</h3>
+				<ul>
+					<li><a href="?scope=mine" {% if scope == "mine" %}class="active"{% endif %}>自分が最後に編集</a></li>
+					<li><a href="?scope=my-related" {% if scope == "my-related" %}class="active"{% endif %}>自分が関わった</a></li>
+					<li><a href="?scope=all" {% if scope == "all" %}class="active"{% endif %}>すべて</a></li>
+				</ul>
+			</nav>
+		{% endif %}
 		{% for article in articles %}
 			{% include "times/includes/article-list.html" with article=article link_page=link_page %}
 		{% empty %}

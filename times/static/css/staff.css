@@ -557,8 +557,39 @@ main {
 }
 main > section, main article {
   width: 1200px;
+  max-width: 100%;
+  box-sizing: border-box;
   margin: auto;
   padding: 0 20px;
+}
+main section#article-list nav#scope {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+main section#article-list nav#scope h3 {
+  font-size: 16px;
+}
+main section#article-list nav#scope h3::after {
+  content: ":";
+  margin-right: 1em;
+}
+main section#article-list nav#scope ul {
+  display: flex;
+  align-items: center;
+  list-style: none;
+  padding: 0;
+}
+main section#article-list nav#scope ul li:not(:last-child) {
+  margin-right: 1em;
+}
+main section#article-list nav#scope ul li a {
+  text-decoration: underline;
+}
+main section#article-list nav#scope ul li a.active {
+  text-decoration: none;
+  pointer-events: none;
+  cursor: default;
 }
 main section#article-list .meta-box {
   display: block;
