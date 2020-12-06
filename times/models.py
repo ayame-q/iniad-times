@@ -146,14 +146,31 @@ class RevisionMessage(models.Model):
     comment = models.TextField(verbose_name="コメント")
 
 
+class Article(Post):
+    updated_at = models.DateTimeField(default=timezone.localtime, verbose_name="更新日")
+    is_publishable = models.BooleanField(default=False, verbose_name="公開準備済")
+    is_published = models.BooleanField(default=False, verbose_name="公開済み")
+
+    def type(self):
+        return "Article"
+
+    def time(self):
+        return max(self.created_at, self.updated_at, self.publish_at)
+
+    def is_new(self):
+        return self.time() > timezone.localtime() - timedelta(weeks=1)
+
+
 class PreArticle(Post):
     slug = models.SlugField(max_length=50, db_index=True, unique=False, null=True, blank=True, verbose_name="Page URL")
     parent = models.ForeignKey("self", related_name="children", on_delete=models.SET_NULL, null=True, blank=True, verbose_name="親記事")
+    article = models.ForeignKey(Article, related_name="parents", on_delete=models.SET_NULL, null=True, blank=True, verbose_name="完成記事")
     article_writers = models.ManyToManyField(Staff, related_name="wrote_%(class)s", blank=True, through=PreArticleWriterRelation, verbose_name="執筆者")
     is_draft = models.BooleanField(default=True, verbose_name="下書きか")
     is_revision = models.BooleanField(default=False, verbose_name="校閲か")
     is_revision_checked = models.BooleanField(default=False, verbose_name="校閲チェック完了")
     is_revision_rejected = models.BooleanField(default=False, verbose_name="校閲リジェクト")
+    is_final_check = models.BooleanField(default=False, verbose_name="最終チェックか")
     revision_messages = models.ManyToManyField(RevisionMessage, related_name="pre_articles", blank=True, verbose_name="メッセージ")
     revise_count = models.IntegerField(default=0, verbose_name="校閲完了数")
 
@@ -200,21 +217,6 @@ class PreArticle(Post):
         if Article.objects.filter(slug=slug):
             return False
         return True
-
-class Article(Post):
-    updated_at = models.DateTimeField(default=timezone.localtime, verbose_name="更新日")
-    is_publishable = models.BooleanField(default=False, verbose_name="公開準備済")
-    is_published = models.BooleanField(default=False, verbose_name="公開済み")
-    parent = models.ForeignKey(PreArticle, related_name="articles", on_delete=models.SET_NULL, null=True, blank=True, verbose_name="元記事")
-
-    def type(self):
-        return "Article"
-
-    def time(self):
-        return max(self.created_at, self.updated_at, self.publish_at)
-
-    def is_new(self):
-        return self.time() > timezone.localtime() - timedelta(weeks=1)
 
 
 class BrowsingHistory(models.Model):
