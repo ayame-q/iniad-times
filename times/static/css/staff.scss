@@ -501,6 +501,17 @@ main{
 								width: 100%;
 								box-sizing: border-box;
 							}
+
+							.editor-preview-side{
+								/* プレビューのCSS */
+								p{
+									margin: 1em 0;
+								}
+								img{
+									max-width: 100%;
+								}
+							}
+
 						}
 					}
 				}

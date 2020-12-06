@@ -725,6 +725,15 @@ main section#article-post form #form-main-wrap p#input-text .text-input-wrap .ed
   width: 100%;
   box-sizing: border-box;
 }
+main section#article-post form #form-main-wrap p#input-text .text-input-wrap .editor-preview-side {
+  /* プレビューのCSS */
+}
+main section#article-post form #form-main-wrap p#input-text .text-input-wrap .editor-preview-side p {
+  margin: 1em 0;
+}
+main section#article-post form #form-main-wrap p#input-text .text-input-wrap .editor-preview-side img {
+  max-width: 100%;
+}
 main section#article-post form #form-meta-wrap {
   display: grid;
   grid-template-rows: 1fr auto;
