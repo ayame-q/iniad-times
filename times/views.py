@@ -48,8 +48,6 @@ def index(request):
 def article(request, slug=None, year=None, month=None, pk=None, uuid=None):
     article = None
     if slug:
-        print(year, month)
-        print(calendar.monthrange(year, month)[1])
         article = get_object_or_404(Article, slug=slug)
         if not (article.publish_at.year == year and article.publish_at.month == month):
             raise Http404
