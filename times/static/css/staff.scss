@@ -337,6 +337,15 @@ main{
 		padding: 0 20px;
 	}
 
+	section#staff-index{
+		ul{
+			list-style: none;
+			li{
+				margin: 2em 0;
+			}
+		}
+	}
+
 	section#article-list{
 		nav#scope{
 			display: flex;

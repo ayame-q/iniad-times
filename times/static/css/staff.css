@@ -570,6 +570,12 @@ main > section, main article {
   margin: auto;
   padding: 0 20px;
 }
+main section#staff-index ul {
+  list-style: none;
+}
+main section#staff-index ul li {
+  margin: 2em 0;
+}
 main section#article-list nav#scope {
   display: flex;
   justify-content: flex-end;
