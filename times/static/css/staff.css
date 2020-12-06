@@ -700,7 +700,7 @@ main section#article-post form #form-main-wrap p#input-text .text-input-wrap {
 }
 main section#article-post form #form-main-wrap p#input-text .text-input-wrap .EasyMDEContainer {
   height: 100%;
-  max-height: calc(100vh - 300px);
+  max-height: calc(100vh - 360px);
   display: grid;
   grid-template-rows: 50px 1fr 37px;
   grid-template-columns: 1fr 1fr;
