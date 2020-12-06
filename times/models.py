@@ -170,7 +170,7 @@ class PreArticle(Post):
     is_revision = models.BooleanField(default=False, verbose_name="校閲か")
     is_revision_checked = models.BooleanField(default=False, verbose_name="校閲チェック完了")
     is_revision_rejected = models.BooleanField(default=False, verbose_name="校閲リジェクト")
-    is_final_check = models.BooleanField(default=False, verbose_name="最終チェックか")
+    is_final = models.BooleanField(default=False, verbose_name="公開直前版か")
     revision_messages = models.ManyToManyField(RevisionMessage, related_name="pre_articles", blank=True, verbose_name="メッセージ")
     revise_count = models.IntegerField(default=0, verbose_name="校閲完了数")
 
@@ -209,6 +209,38 @@ class PreArticle(Post):
 
     def get_revision_messages(self):
         return self.revision_messages.order_by("-created_at")
+
+    def publish(self):
+        writers = self.article_writers.all()
+        editors = self.article_editors.all()
+        old_article_published = False
+        if self.article:
+            old_article_published = self.article.is_published
+        article = Article(
+            id=self.article_id,
+            slug=self.slug,
+            title=self.title,
+            text=self.text,
+            last_staff=self.last_staff,
+            category=self.category,
+            eyecatch=self.eyecatch,
+            publish_at=self.publish_at,
+            updated_at=timezone.localtime(),
+            sns_publish_text=self.sns_publish_text,
+            is_public=self.is_public,
+            is_publishable=True,
+            is_published=old_article_published
+        )
+        article.save()
+        for writer in writers:
+            article.article_writers.add(writer)
+        for editor in editors:
+            article.article_editors.add(editor)
+        self.article = article
+        self.save()
+        from .views import publish
+        publish.publish(article)
+        return article
 
     @classmethod
     def is_slug_unique_in_class(cls, slug):
