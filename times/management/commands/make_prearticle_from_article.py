@@ -26,7 +26,7 @@ class Command(BaseCommand):
                 sns_publish_text=article.sns_publish_text,
                 is_public=article.is_public,
                 is_draft=False,
-                is_final_check=True,
+                is_final=True,
                 revise_count=2,
                 article=article
             )
