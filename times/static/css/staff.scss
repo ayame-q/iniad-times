@@ -260,16 +260,24 @@ header{
 	width: 100vw;
 	h1{
 		margin: 0;
-		margin-left: 20px;
-		flex-basis: 250px;
+		margin-left: 10px;
+		flex-basis: 350px;
 		flex-shrink: 0;
 		flex-grow: 0;
+		display: flex;
+		color: white;
+		align-items: center;
 		a{
 			display: block;
+			font-size: 0.8em;
+			max-width: 100%;
+			&.title-icon{
+				padding-right: 0.2em;
+			}
 			img{
 				display: block;
 				height: 30px;
-				max-width: 90vw;
+				max-width: 100%;
 				margin: 10px 0;
 			}
 		}
@@ -410,6 +418,8 @@ main{
 					&#input-title, &#input-slug{
 						height: fit-content;
 						flex-grow: 0;
+						padding-left: 5px;
+						box-sizing: border-box;
 						input{
 							border-radius: 0;
 							border: none;
