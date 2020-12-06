@@ -36,6 +36,11 @@
 					</div>
 				</ul>
 			</div>
+			{% if preview_message %}
+				<aside id="preview">
+					{{ preview_message | safe }}
+				</aside>
+			{% endif %}
 			{{ article.text | markdown2html }}
 		</div>
 	</article>

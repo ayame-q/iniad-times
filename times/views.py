@@ -114,6 +114,20 @@ class GetArticleAndPreArticleObjectMixin(SingleObjectMixin):
         return object
 
 
+class PreviewPageView(StaffOnlyMixin, GetSingleObjectMixin, DetailView):
+    model = PreArticle
+    context_object_name = "article"
+    template_name = "times/article.html"
+    def get_context_data(self, *args, **kwargs):
+        context = super().get_context_data(*args, **kwargs)
+        if self.object.is_revision:
+            writers = [f"{ writer.name } &lt;{ writer.user.name }&gt;" for writer in self.object.article_writers.all()]
+            context["preview_message"] = f"""推敲/校閲が完了しました。<br>
+筆者 ({ ', '.join(writers) }) へ以下の確認用URLを通知してください。<br>
+<input type='text' value='https://iniad-wm.com/staff/revise/check/{self.object.uuid}' readonly onclick="this.select()">"""
+        return context
+
+
 class BaseStaffListPageView(ListView):
     model = PreArticle
     context_object_name = "articles"
@@ -276,7 +290,8 @@ class BasePreArticleMixin:
                 article = data.publish()
                 data.is_final = True
                 data.save()
-        #url = self.request.build_absolute_uri(resolve_url("article", pk=data.id))
+        if self.is_revision:
+            return redirect("preview", data.uuid)
         return redirect("staff")
 
 

@@ -634,6 +634,20 @@ main article#article-page {
     margin-left: 30px;
   }
 }
+main article#article-page #preview {
+  border: solid 1px #bbbbbb;
+  border-radius: 10px;
+  box-sizing: border-box;
+  padding: 10px;
+  margin: 10px 0;
+  margin-bottom: 15px;
+  font-size: 0.9em;
+}
+main article#article-page #preview input[type=text] {
+  width: 100%;
+  font-size: 0.9em;
+  border: solid 0.5px #dddddd;
+}
 @media (min-width: 851px) {
   main article#article-page #content-wrap {
     margin-right: 300px;

@@ -22,6 +22,7 @@ urlpatterns = [
     path('category/<int:category_pk>', views.ListPageView.as_view(), name="category"),
     path('search', views.ListPageView.as_view(), name="search"),
     path('staff/', views.staff, name="staff"),
+    path('staff/preview/<uuid:uuid>', views.PreviewPageView.as_view(), name="preview"),
     path('staff/new', views.NewPreArticleView.as_view(), name="new"),
     path('staff/edit/', views.EditPreArticleListView.as_view(), name="edit-list"),
     path('staff/edit/<int:pk>', views.EditPreArticleView.as_view(), name="edit"),
