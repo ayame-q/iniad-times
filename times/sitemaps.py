@@ -13,7 +13,7 @@ class ArticleSitemap(Sitemap):
         return Article.objects.filter(is_publishable=True, publish_at__lt=timezone.localtime()).order_by("-publish_at")
 
     def location(self, obj):
-        return resolve_url('article', pk=obj.pk)
+        return obj.get_url("article", ["slug", "id"])
 
     def lastmod(self, obj):
         return obj.time()
