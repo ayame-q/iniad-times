@@ -126,10 +126,17 @@ class Lecture(models.Model):
     school_year = models.IntegerField(verbose_name="学年")
 
 
+writer_check_choice = [
+    (0, "未確認"),
+    (1, "承認"),
+    (-1, "拒否")
+]
+
+
 class PreArticleWriterRelation(models.Model):
     staff = models.ForeignKey(Staff, related_name="wrote_prearticle_relations", on_delete=models.CASCADE)
     prearticle = models.ForeignKey("PreArticle", related_name="writer_relations", on_delete=models.CASCADE)
-    is_writer_checked = models.BooleanField(default=False, verbose_name="筆者確認済み")
+    writer_check = models.IntegerField(choices=writer_check_choice, default=0, verbose_name="筆者確認済み")
 
 
 class RevisionMessage(models.Model):
@@ -145,6 +152,8 @@ class PreArticle(Post):
     article_writers = models.ManyToManyField(Staff, related_name="wrote_%(class)s", blank=True, through=PreArticleWriterRelation, verbose_name="執筆者")
     is_draft = models.BooleanField(default=True, verbose_name="下書きか")
     is_revision = models.BooleanField(default=False, verbose_name="校閲か")
+    is_revision_checked = models.BooleanField(default=False, verbose_name="校閲チェック完了")
+    is_revision_rejected = models.BooleanField(default=False, verbose_name="校閲リジェクト")
     revision_messages = models.ManyToManyField(RevisionMessage, related_name="pre_articles", blank=True, verbose_name="メッセージ")
     revise_count = models.IntegerField(default=0, verbose_name="校閲完了数")
 
@@ -155,8 +164,8 @@ class PreArticle(Post):
         return self.created_at
 
     def is_writer_check_completed(self):
-        for writer_relation in self.writer_relations:
-            if not writer_relation.is_writer_checked:
+        for writer_relation in self.writer_relations.all():
+            if writer_relation.writer_check <= 0:
                 return False
         return True
 
