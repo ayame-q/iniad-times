@@ -132,17 +132,17 @@ class BaseStaffListPageView(ListView):
         result = self.model.objects.order_by("-created_at")
         if key_word:
             result = result.filter(
-                Q(title__icontains=key_word) | Q(text__icontains=key_word)
+                Q(title__icontains=key_word) or Q(text__icontains=key_word)
             )
 
         if scope == None:
             scope = self.default_scope
 
         if scope == "all":
-            pass
+            result = result.all()
         elif scope == "my-related":
             result = result.filter(
-                Q(article_writers=self.request.user.staff) | Q(article_editors=self.request.user.staff)
+                Q(article_writers=self.request.user.staff) or Q(article_editors=self.request.user.staff)
             )
         elif scope == "mine":
             result = result.filter(last_staff=self.request.user.staff)
@@ -155,6 +155,10 @@ class BaseStaffListPageView(ListView):
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(*args, **kwargs)
         context["link_page"] = self.link_page
+        scope = self.request.GET.get("scope")
+        if not scope:
+            scope = self.default_scope
+        context["scope"] = scope
         return context
 
 
@@ -174,9 +178,9 @@ class RevisePreArticleListView(StaffOnlyMixin, BaseStaffListPageView):
         result = super(RevisePreArticleListView, self).get_queryset()
         rejected = [object for object in result.filter(is_revision=True, is_revision_rejected=True, last_staff=self.request.user.staff)]
         my_draft = [object for object in result.filter(is_draft=True, is_revision=True, last_staff=self.request.user.staff)]
-        original = result.filter(is_draft=False, is_final_check=False).exclude(article_writers=self.request.user.staff)
+        original = result.filter(is_draft=False, is_final=False).exclude(article_writers=self.request.user.staff)
         count_0 = [object for object in original.filter(revise_count=0)]
-        count_1 = [object for object in original.filter(revise_count=1, is_revision_checked=True).exclude(parent__last_staff=self.request.user.staff, parent__revise_count=1)]
+        count_1 = [object for object in original.filter(revise_count=1, is_revision_checked=True).exclude(article_editors=self.request.user.staff)]
         return rejected + my_draft + count_0 + count_1
 
 
@@ -187,7 +191,7 @@ class CheckRevisePreArticleListView(StaffOnlyMixin, BaseStaffListPageView):
 
     def get_queryset(self):
         result = super(CheckRevisePreArticleListView, self).get_queryset()
-        result = result.filter(is_draft=False, is_revision=True, article_writers=self.request.user.staff)
+        result = result.filter(is_draft=False, is_revision=True, article_writers=self.request.user.staff, is_final=False)
         result = [object for object in result if object.writer_relations.get(staff=self.request.user.staff).writer_check == 0]
         return result
 
@@ -201,8 +205,17 @@ class FinalCheckPreArticleListView(StaffOnlyMixin, BaseStaffListPageView):
         if not self.request.user.is_superuser:
             raise PermissionError
         result = super(FinalCheckPreArticleListView, self).get_queryset()
-        result = result.filter(is_draft=False, is_revision=True, revise_count__gte=2, is_revision_checked=True, is_final_check=False)
+        result = result.filter(is_draft=False, is_revision=True, revise_count__gte=2, is_revision_checked=True, is_final=False)
         return result
+
+
+class ReeditArticleListView(StaffOnlyMixin, BaseStaffListPageView):
+    default_scope = "my-related"
+    link_page = "reedit"
+    extra_context = {"reedit_list": True}
+    def get_queryset(self):
+        result = super(ReeditArticleListView, self).get_queryset()
+        return result.exclude(article=None)
 
 
 class BasePreArticleMixin:
@@ -212,6 +225,7 @@ class BasePreArticleMixin:
     is_edit = False
     is_revision = False
     is_final_check = False
+    is_reedit = False
 
     def form_valid(self, form):
         data = form.save(commit=False)
@@ -228,7 +242,7 @@ class BasePreArticleMixin:
             data.parent_id = data.id
             data.id = None
             data.uuid = uuid4()
-        data.is_final_check = False
+        data.is_final = False
         data.last_staff = self.request.user.staff
         data.create_ip = get_remote_ip(self.request)
         data.status_ending_at = date.today() + timedelta(weeks=1)
@@ -251,34 +265,19 @@ class BasePreArticleMixin:
             message = RevisionMessage.objects.create(staff=self.request.user.staff, comment=message_comment)
             data.revision_messages.add(message)
 
-        if self.is_final_check:
+        if self.is_final_check or self.is_reedit:
             method = self.request.POST.get("method")
             if method == "recheck":
                 data.is_revision = True
                 data.is_revision_rejected = False
                 data.is_revision_checked = False
+                if self.is_reedit:
+                    data.revise_count = 1
                 data.save()
             if method == "publish":
-                article = Article.objects.create(
-                    slug=data.slug,
-                    title=data.title,
-                    text=data.text,
-                    last_staff=data.last_staff,
-                    category=data.category,
-                    eyecatch=data.eyecatch,
-                    publish_at=data.publish_at,
-                    sns_publish_text=data.sns_publish_text,
-                    is_public=data.is_public,
-                    is_publishable=True
-                )
-                data.is_final_check = True
-                data.article = article
+                article = data.publish()
+                data.is_final = True
                 data.save()
-                for writer in writers:
-                    article.article_writers.add(writer)
-                for editor in editors:
-                    article.article_editors.add(editor)
-                publish.publish(article)
         #url = self.request.build_absolute_uri(resolve_url("article", pk=data.id))
         return redirect("staff")
 
@@ -325,6 +324,13 @@ class FinalCheckPreArticleView(StaffOnlyMixin, BasePreArticleMixin, GetSingleObj
         return super(FinalCheckPreArticleView, self).get_object()
 
 
+
+class ReeditArticleView(StaffOnlyMixin, BasePreArticleMixin, GetSingleObjectMixin, UpdateView):
+    is_edit = True
+    is_reedit = True
+    extra_context = {"is_reedit_form": True}
+
+
 class EditStaffProfileView(StaffOnlyMixin, UpdateView):
     model = Staff
     form_class = forms.StaffProfileForm
@@ -349,7 +355,7 @@ class ListPageView(ListView):
             result = Article.objects.order_by("-updated_at").filter(category=category).filter(is_publishable=True)
         elif key_word:
             search_result_list = Article.objects.filter(
-                Q(title__icontains=key_word) | Q(text__icontains=key_word)
+                Q(title__icontains=key_word) or Q(text__icontains=key_word)
             )
             result = search_result_list.filter(is_publishable=True)
         else:

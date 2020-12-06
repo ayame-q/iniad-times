@@ -52,7 +52,7 @@
 					<label for="{{ form.category.id_for_label }}">{{ form.category.label }}</label>
 					<p id="input-category">{{ form.category }}</p>
 					<label for="{{ form.publish_at.id_for_label }}">{{ form.publish_at.label }}</label>
-					<p id="input-publish_at"><input type="text" name="{{ form.publish_at.name }}" v-model="publish_at" v-on:click="stopUpdateNow" value="{{ form.publish_at.value | date:"Y-m-d H:i:s" }}" placeholder="{{ form.publish_at.label }}" id="{{ form.publish_at.id_for_label }}"></p>
+					<p id="input-publish_at"><input type="text" name="{{ form.publish_at.name }}" v-model="publish_at" v-on:click="stopUpdateNow" placeholder="{{ form.publish_at.label }}" id="{{ form.publish_at.id_for_label }}"></p>
 					<p id="input-is_public" class="checkbox-wrap">
 						{{ form.is_public }}
 						<label for="{{ form.is_public.id_for_label }}">学外にも公開</label>
@@ -74,12 +74,15 @@
 					{% if object %}<p class="button"><button type="button" v-on:click="submitRevisionMessage">メッセージのみ送信</button></p>{% endif %}
 				</div>
 				<div id="form-submit-wrap">
-					{% if not is_final_check_form %}
-						{% if not is_revision_form %}<p class="draft"><input type="submit" value="下書き保存" v-on:click="draftSave"></p>{% endif %}
-						<p class="submit"><input type="submit" value="{% if not is_revision_form %}完成(校閲開始){% else %}校閲完了{% endif %}" v-on:click="finalSave"></p>
-					{% else %}
+					{% if is_final_check_form %}
 						<p class="draft"><input type="submit" value="再確認依頼" v-on:click="recheck"></p>
 						<p class="submit"><input type="submit" value="公開" v-on:click="publish"></p>
+					{% elif is_reedit_form %}
+						<p class="draft"><input type="submit" value="校閲依頼" v-on:click="recheck"></p>
+						<p class="submit"><input type="submit" value="即時公開" v-on:click="publish"></p>
+					{% else %}
+						{% if not is_revision_form %}<p class="draft"><input type="submit" value="下書き保存" v-on:click="draftSave"></p>{% endif %}
+						<p class="submit"><input type="submit" value="{% if not is_revision_form %}完成(校閲開始){% else %}校閲完了{% endif %}" v-on:click="finalSave"></p>
 					{% endif %}
 				</div>
 				<div id="form-tabs">
@@ -90,7 +93,7 @@
 				</div>
 			</div>
 			<input type="hidden" name="is_draft" v-model="isDraft">
-			{% if is_final_check_form %}
+			{% if is_final_check_form or is_reedit_form %}
 				<input type="hidden" name="method" v-model="method">
 			{% endif %}
 			{% csrf_token %}
@@ -290,7 +293,10 @@
 			created() {
 				this.getImageList(true)
 				this.getMessageList()
-				this.setUpdateNow()
+				this.publish_at = dayjs("{{ form.publish_at.value | date:"Y-m-d H:i:s" }}").format("YYYY-MM-DD HH:mm:ss")
+				{% if not is_reedit_form %}
+					this.setUpdateNow()
+				{% endif %}
 				{% if form.errors %}
 					iziToast.error({
 						message: [
