@@ -469,11 +469,27 @@ input:not([type=checkbox]), select:not([type=checkbox]), textarea:not([type=chec
 }
 input[type=submit], select[type=submit], textarea[type=submit] {
   border: 2px solid #ff8b3c;
+  cursor: pointer;
+}
+input[type=button], select[type=button], textarea[type=button] {
+  cursor: pointer;
+}
+
+button {
+  background-color: white;
+  border: solid 1px #bbbbbb;
+  border-radius: 5px;
+  padding: 0.25em 0.5em;
+  font-size: 0.9em;
+  box-sizing: border-box;
+  -webkit-appearance: none;
+  cursor: pointer;
 }
 
 select {
   padding-right: 38px;
   background: url('data:image/svg+xml;charset=UTF-8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 30"><defs><style>.cls-1{fill:none;stroke:#ff8b3c;stroke-miterlimit:10;}</style></defs><polygon class="cls-1" points="8 8 24 8 16 22 8 8"/></svg>') no-repeat right;
+  cursor: pointer;
 }
 
 header {
@@ -543,6 +559,24 @@ main > section, main article {
   width: 1200px;
   margin: auto;
   padding: 0 20px;
+}
+main section#article-list .meta-box {
+  display: block;
+  width: fit-content;
+  padding: 0.3em;
+  background-color: #868686;
+  color: #fff;
+  font-size: 0.7em;
+  flex-shrink: 0;
+}
+main section#article-list .meta-box.rejected {
+  background-color: #f93e3e;
+}
+main section#article-list .meta-box.first-revise {
+  background-color: #4cae4c;
+}
+main section#article-list .meta-box.second-revise {
+  background-color: #1e347b;
 }
 main section#article-post {
   width: 100%;
@@ -646,22 +680,70 @@ main section#article-post form #form-main-wrap p#input-text .text-input-wrap .ed
 }
 main section#article-post form #form-meta-wrap {
   display: grid;
-  grid-template-rows: auto auto;
+  grid-template-rows: 1fr auto;
   grid-template-columns: 6fr 4fr 13em;
-  grid-template-areas: "eyecatch sns_publish other_meta" "eyecatch submit submit";
   font-size: 0.8em;
   justify-content: space-between;
   border-top: 2px solid #ff8b3c;
   padding: 0.5em;
+  position: relative;
+}
+main section#article-post form #form-meta-wrap.meta {
+  grid-template-areas: "eyecatch sns_publish other_meta" "eyecatch submit submit";
+}
+main section#article-post form #form-meta-wrap.meta #form-message-log-wrap, main section#article-post form #form-meta-wrap.meta #form-message-new-wrap {
+  display: none;
+}
+main section#article-post form #form-meta-wrap.message {
+  grid-template-areas: "log new new" "log submit submit";
+}
+main section#article-post form #form-meta-wrap.message #form-eyecatch-wrap, main section#article-post form #form-meta-wrap.message #form-sns_publish-wrap, main section#article-post form #form-meta-wrap.message #form-other_meta-wrap {
+  display: none;
+}
+main section#article-post form #form-meta-wrap #form-tabs {
+  position: absolute;
+  width: 30vw;
+  bottom: 100%;
+  left: 0;
+}
+main section#article-post form #form-meta-wrap #form-tabs ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+}
+main section#article-post form #form-meta-wrap #form-tabs ul li {
+  display: block;
+  box-sizing: border-box;
+  width: 50%;
+  text-align: center;
+  border: solid 2px #ff8b3c;
+  background-color: white;
+  padding: 0.5em;
+  cursor: pointer;
+  min-width: 8em;
+  max-width: 10em;
+}
+main section#article-post form #form-meta-wrap #form-tabs ul li:not(:last-child) {
+  border-right: none;
+}
+main section#article-post form #form-meta-wrap #form-tabs ul li.active {
+  background-color: #ff8b3c;
+  color: white;
+  cursor: default;
 }
 main section#article-post form #form-meta-wrap #form-eyecatch-wrap {
   grid-area: eyecatch;
   flex-basis: 60%;
   margin-right: 5px;
+  height: 200px;
 }
 main section#article-post form #form-meta-wrap #form-eyecatch-wrap #id_eyecatch {
   height: 170px;
   overflow: scroll;
+}
+main section#article-post form #form-meta-wrap #form-eyecatch-wrap button {
+  margin-left: 0.5em;
 }
 main section#article-post form #form-meta-wrap #form-sns_publish-wrap {
   grid-area: sns_publish;
@@ -672,6 +754,41 @@ main section#article-post form #form-meta-wrap #form-other_meta-wrap {
   grid-area: other_meta;
   width: 13em;
   flex-shrink: 0;
+}
+main section#article-post form #form-meta-wrap #form-message-log-wrap {
+  grid-area: log;
+  height: 200px;
+  margin-right: 5px;
+}
+main section#article-post form #form-meta-wrap #form-message-log-wrap #message-logs {
+  height: 170px;
+  overflow: scroll;
+}
+main section#article-post form #form-meta-wrap #form-message-log-wrap #message-logs .message {
+  width: 100%;
+  box-sizing: border-box;
+  border: solid 1px #dddddd;
+  border-radius: 5px;
+  padding: 0 10px;
+  margin: 5px 0;
+}
+main section#article-post form #form-meta-wrap #form-message-log-wrap #message-logs .message .message-name {
+  font-weight: bold;
+}
+main section#article-post form #form-meta-wrap #form-message-log-wrap #message-logs .message .message-time {
+  font-size: 0.9em;
+  color: #bbbbbb;
+}
+main section#article-post form #form-meta-wrap #form-message-new-wrap {
+  grid-area: new;
+}
+main section#article-post form #form-meta-wrap #form-message-new-wrap textarea {
+  height: 6em;
+}
+main section#article-post form #form-meta-wrap #form-message-new-wrap button {
+  display: block;
+  margin-left: auto;
+  margin-right: 0;
 }
 main section#article-post form #form-meta-wrap #form-submit-wrap {
   grid-area: submit;
@@ -746,39 +863,193 @@ main section#article-check {
   margin: 0;
   padding: 0;
   display: grid;
-  grid-template-rows: 1fr auto;
-  grid-template-columns: 2fr 1fr 1fr;
-  grid-template-areas: "markdown diff diff" "message message submit";
+  grid-template-rows: auto 1fr auto;
+  grid-template-columns: 1fr 1fr;
+  grid-template-areas: "title title" "markdown diff" "meta meta";
+}
+main section#article-check #title-wrap {
+  grid-area: title;
+  border-bottom: solid 1px #dddddd;
+}
+main section#article-check #title-wrap #title, main section#article-check #title-wrap #slug {
+  padding: 6px 10px;
+  margin: 0;
+}
+main section#article-check #title-wrap #title {
+  font-size: 1.2em;
+}
+main section#article-check #title-wrap #slug {
+  font-size: 0.8em;
 }
 main section#article-check #markdown-wrap {
   grid-area: markdown;
-  height: 0;
-  padding-left: 20px;
+  height: 100%;
+  padding-left: 10px;
   padding-right: 10px;
   box-sizing: border-box;
   overflow: scroll;
 }
 main section#article-check #diff-wrap {
   grid-area: diff;
+  height: 100%;
   padding-left: 10px;
   padding-right: 20px;
   border-left: solid 1px #dddddd;
   box-sizing: border-box;
   overflow: scroll;
 }
-main section#article-check #message-wrap {
-  border-top: solid 2px #ff8b3c;
-  grid-area: message;
+main section#article-check #meta-wrap {
+  grid-area: meta;
+  display: grid;
+  grid-template-rows: 1fr auto;
+  grid-template-columns: 6fr 4fr 13em;
+  font-size: 0.8em;
+  justify-content: space-between;
+  border-top: 2px solid #ff8b3c;
+  padding: 0.5em;
+  position: relative;
 }
-main section#article-check #message-wrap textarea {
-  margin: 20px;
+main section#article-check #meta-wrap label {
+  font-size: 1.2em;
+  font-weight: bold;
+}
+main section#article-check #meta-wrap p {
+  margin: 0;
+  padding-left: 1.5em;
+}
+main section#article-check #meta-wrap input, main section#article-check #meta-wrap textarea {
+  width: 100%;
+  margin: 0;
+}
+main section#article-check #meta-wrap.meta {
+  grid-template-areas: "eyecatch sns_publish other_meta" "eyecatch submit submit";
+}
+main section#article-check #meta-wrap.meta #message-log-wrap, main section#article-check #meta-wrap.meta #message-new-wrap {
+  display: none;
+}
+main section#article-check #meta-wrap.message {
+  grid-template-areas: "log new new" "log submit submit";
+}
+main section#article-check #meta-wrap.message #eyecatch-wrap, main section#article-check #meta-wrap.message #sns_publish-wrap, main section#article-check #meta-wrap.message #other_meta-wrap {
+  display: none;
+}
+main section#article-check #meta-wrap #tabs {
+  position: absolute;
+  width: 30vw;
+  bottom: 100%;
+  left: 0;
+}
+main section#article-check #meta-wrap #tabs ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+}
+main section#article-check #meta-wrap #tabs ul li {
+  display: block;
+  box-sizing: border-box;
+  width: 50%;
+  text-align: center;
+  border: solid 2px #ff8b3c;
+  background-color: white;
+  padding: 0.5em;
+  cursor: pointer;
+  min-width: 8em;
+  max-width: 10em;
+}
+main section#article-check #meta-wrap #tabs ul li:not(:last-child) {
+  border-right: none;
+}
+main section#article-check #meta-wrap #tabs ul li.active {
+  background-color: #ff8b3c;
+  color: white;
+  cursor: default;
+}
+main section#article-check #meta-wrap #eyecatch-wrap {
+  grid-area: eyecatch;
+  margin-right: 5px;
+  height: 200px;
+}
+main section#article-check #meta-wrap #eyecatch-wrap .eyecatch-image {
+  margin-left: 1.5em;
+  width: 100%;
+  height: 170px;
+  border-radius: 5px;
+  background-size: contain;
+  background-position: left center;
+  background-repeat: no-repeat;
+}
+main section#article-check #meta-wrap #sns_publish-wrap {
+  grid-area: sns_publish;
+  flex-basis: 40%;
+  margin-right: 5px;
+}
+main section#article-check #meta-wrap #other_meta-wrap {
+  grid-area: other_meta;
+  width: 13em;
+  flex-shrink: 0;
+}
+main section#article-check #meta-wrap #message-log-wrap {
+  grid-area: log;
+  height: 200px;
+  margin-right: 5px;
+}
+main section#article-check #meta-wrap #message-log-wrap #message-logs {
+  height: 170px;
+  overflow: scroll;
+}
+main section#article-check #meta-wrap #message-log-wrap #message-logs p {
+  padding: 0;
+}
+main section#article-check #meta-wrap #message-log-wrap #message-logs .message {
   width: 100%;
   box-sizing: border-box;
-  height: 10em;
+  border: solid 1px #dddddd;
+  border-radius: 5px;
+  padding: 0 10px;
+  margin: 5px 0;
 }
-main section#article-check #submit-wrap {
-  border-top: solid 2px #ff8b3c;
+main section#article-check #meta-wrap #message-log-wrap #message-logs .message .message-name {
+  font-weight: bold;
+}
+main section#article-check #meta-wrap #message-log-wrap #message-logs .message .message-time {
+  font-size: 0.9em;
+  color: #bbbbbb;
+}
+main section#article-check #meta-wrap #message-new-wrap {
+  grid-area: new;
+}
+main section#article-check #meta-wrap #message-new-wrap textarea {
+  height: 6em;
+}
+main section#article-check #meta-wrap #message-new-wrap button {
+  display: block;
+  margin-left: auto;
+  margin-right: 0;
+}
+main section#article-check #meta-wrap #submit-wrap {
   grid-area: submit;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+main section#article-check #meta-wrap #submit-wrap p {
+  padding: 0;
+}
+main section#article-check #meta-wrap #submit-wrap p:not(:last-child) {
+  margin-right: 0.5em;
+}
+main section#article-check #meta-wrap #submit-wrap .reject {
+  flex-basis: 20%;
+}
+main section#article-check #meta-wrap #submit-wrap .reject input[type=button] {
+  border: solid 2px #f93e3e;
+}
+main section#article-check #meta-wrap #submit-wrap .accept {
+  flex-basis: 80%;
+}
+main section#article-check #meta-wrap #submit-wrap .accept input[type=button] {
+  border: solid 2px #ff8b3c;
 }
 
 /*# sourceMappingURL=staff.css.map */

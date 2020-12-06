@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
-from .models import User, Staff, Category, Tag, Image, Lecture, PreArticle, Article, BrowsingHistory
+from .models import User, Staff, Category, Tag, Image, Lecture, PreArticle, Article, BrowsingHistory, RevisionMessage, PreArticleWriterRelation
 
 # Register your models here.
 class UserAdmin(BaseUserAdmin):
@@ -23,3 +23,5 @@ admin.site.register(Lecture)
 admin.site.register(PreArticle)
 admin.site.register(Article)
 admin.site.register(BrowsingHistory)
+admin.site.register(RevisionMessage)
+admin.site.register(PreArticleWriterRelation)

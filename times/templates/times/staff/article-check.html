@@ -1,0 +1,173 @@
+{% extends "times/staff/base.html" %}
+
+{% load static %}
+{% load mytags %}
+{% load widget_tweaks %}
+
+{% block option_head %}
+	<link rel="stylesheet" href="https://unpkg.com/easymde/dist/easymde.min.css">
+	<script src="https://unpkg.com/easymde/dist/easymde.min.js"></script>
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/izitoast@1.4.0/dist/css/iziToast.min.css">
+	<script src="https://cdn.jsdelivr.net/npm/izitoast@1.4.0/dist/js/iziToast.min.js"></script>
+	<script src="{% static "js/textarea.js" %}?1"></script>
+{% endblock %}
+
+<script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+
+{% block title %}「{{ object.title }}」の校閲・推敲確認 - {{ block.super }}{% endblock title %}
+
+{% block main %}
+	<section id="article-check">
+		<div id="title-wrap">
+			<p id="title">{{ object.title }}</p>
+			<p id="slug">Page URL: {{ object.slug }}</p>
+		</div>
+		<section id="markdown-wrap">
+			<h2>推敲・校閲後本文</h2>
+			<pre>{{ object.text }}</pre>
+		</section>
+		<section id="diff-wrap">
+			<h2>差分</h2>
+			{{ object.get_diff_for_parent | safe }}
+		</section>
+		<div id="meta-wrap" v-bind:class="activeWrap">
+			<div id="eyecatch-wrap">
+				<label for="eyecatch">アイキャッチ画像</label>
+				<div id="eyecatch" class="eyecatch-image" style="background-image: url('{{ object.eyecatch.url }}'); }"></div>
+			</div>
+			<div id="sns_publish-wrap">
+				<label for="sns_publish_text">SNS告知文</label>
+				<p id="sns_publish_text">{{ object.sns_publish_text | linebreaksbr }}</p>
+			</div>
+			<div id="other_meta-wrap">
+				<label for="category">カテゴリ</label>
+				<p id="category">{{ object.category.display_name }}</p>
+				<label for="publish_at">公開予定日</label>
+				<p id="publish_at" v-text="publish_at">{{ object.publish_at | date:"Y-m-d H:i:s" }}</p>
+				<label for="is_public">公開範囲</label>
+				<p id="is_public">
+					{% if object.is_public %}
+					学外にも公開
+					{% else %}
+					学内のみに公開
+					{% endif %}
+				</p>
+			</div>
+			<div id="message-log-wrap">
+				<label for=message-logs">メッセージログ</label>
+				<div id="message-logs">
+					<article class="message" v-for="message in messages">
+						<p class="message-name">[[ message.staff ]]</p>
+						[[ message.comment ]]
+						<p class="message-time"><time>[[ dayjs(message.created_at).format("YYYY-MM-DD HH:mm:ss") ]]</time></p>
+					</article>
+				</div>
+			</div>
+			<div id="message-new-wrap">
+				<label for=id_message-comment">新規メッセージ</label>
+				<p><textarea name="message-comment" id="id_message-comment" v-model="message"></textarea></p>
+				{% if object %}<p class="button"><button type="button" v-on:click="submitRevisionMessage">メッセージのみ送信</button></p>{% endif %}
+			</div>
+			<div id="submit-wrap">
+				<p class="reject"><input type="button" value="変更依頼" v-on:click="rejectRevision"></p>
+				<p class="accept"><input type="button" value="推敲・校閲承認" v-on:click="acceptRevision"></p>
+			</div>
+			<div id="tabs">
+				<ul>
+					<li v-bind:class="{active: activeWrap==='meta'}" v-on:click="activeMetaWrap">メタ情報</li>
+					<li v-bind:class="{active: activeWrap==='message'}" v-on:click="activeCommentWrap">メッセージ</li>
+				</ul>
+			</div>
+		</div>
+	</section>
+
+	<script>
+		const app = new Vue({
+			el: "#article-check",
+			delimiters: ['[[', ']]'],
+			data: {
+				uuid: {% if object.uuid %}"{{ object.uuid }}"{% else %}null{% endif %},
+				activeWrap: "message",
+				publish_at: null,
+				changeNowIntervalId: null,
+				message: "",
+				messages: [],
+			},
+			methods: {
+				dayjs: dayjs,
+				activeMetaWrap() {
+					this.activeWrap = "meta"
+				},
+				activeCommentWrap() {
+					this.activeWrap = "message"
+				},
+				setUpdateNow() {
+					this.changeNowIntervalId = setInterval(() => {
+						if(dayjs(this.publish_at) > dayjs()) {
+							this.stopUpdateNow()
+						} else {
+							this.publish_at = dayjs().format("YYYY-MM-DD HH:mm:ss")
+						}
+					}, 1000)
+				},
+				async getMessageList() {
+					if (this.uuid){
+						const response = await fetch("{% url "get_revision_messages" %}?uuid=" + this.uuid)
+						this.messages = await response.json()
+					}
+				},
+				submitRevisionMessage() {
+					const formData = new FormData();
+					formData.append("comment", this.message)
+					formData.append("uuid", this.uuid)
+					fetch("{% url "create_revision_message" %}", {
+						method: "POST",
+						headers: {
+							"X-CSRFToken": Cookies.get("csrftoken"),
+						},
+						body: formData,
+					}).then(() => {
+						this.message = ""
+						this.getMessageList()
+					})
+				},
+				complateCheckRevision(method) {
+					if (this.message !== "") {
+						this.submitRevisionMessage()
+					}
+					const formData = new FormData();
+					formData.append("method", method)
+					formData.append("uuid", this.uuid)
+					fetch("{% url "complete_check_revise" %}", {
+						method: "POST",
+						headers: {
+							"X-CSRFToken": Cookies.get("csrftoken"),
+						},
+						body: formData,
+					}).then((response) => {
+						return response.json()
+					}).then((json) => {
+						if (json.ok === true) {
+							window.location.href = "{% url "staff" %}"
+						}
+					})
+				},
+				acceptRevision() {
+					this.complateCheckRevision("accept")
+				},
+				rejectRevision() {
+					if (this.message === ""){
+						iziToast.error({message: "メッセージを入力してください。", position: "topRight"})
+						return
+					}
+					this.complateCheckRevision("reject")
+				}
+			},
+			created() {
+				this.getMessageList()
+				this.setUpdateNow()
+			}
+		})
+	</script>
+
+{% endblock %}

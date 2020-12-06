@@ -16,7 +16,15 @@
 			<ul class="meta">
 				<li class="time">{{ article.time }}</li>
 				{% if article.is_new %}<li class="new">New!</li>{% endif %}
-				{% if revise_list %}<li>校閲回数: {{ article.revise_count }}</li>{% endif %}
+				{% if revise_list %}
+					{% if article.is_revision_rejected %}
+						<li class="meta-box rejected">変更依頼</li>
+					{% elif article.revise_count == 0 %}
+						<li class="meta-box first-revise">推敲待ち</li>
+					{% elif article.revise_count == 1 %}
+						<li class="meta-box second-revise">校閲待ち</li>
+					{% endif %}
+				{% endif %}
 			</ul>
 		</div>
 	</a>

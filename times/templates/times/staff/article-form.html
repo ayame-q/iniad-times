@@ -1,6 +1,7 @@
 {% extends "times/staff/base.html" %}
 
 {% load static %}
+{% load mytags %}
 {% load widget_tweaks %}
 
 {% block option_head %}
@@ -13,7 +14,7 @@
 
 <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
 
-{% block title %}{% if is_new_form %}新規記事執筆{% else %}「{{ object.title }}」を{% if is_revision_form %}校閲{% else %}編集{% endif %}{% endif %} - {{ block.super }}{% endblock title %}
+{% block title %}{% if is_new_form %}新規記事執筆{% else %}「{{ object.title }}」{% if is_final_check_form %}の最終確認{% else %}を{% if is_revision_form %}校閲{% else %}編集{% endif %}{% endif %}{% endif %} - {{ block.super }}{% endblock title %}
 
 {% block main %}
 	<section id="article-post">
@@ -22,17 +23,17 @@
 				<p id="input-title">{{ form.title }}</p>
 				<p id="input-slug" v-bind:class="{'not-valid': !isSlugValid}">
 					<label for="{{ form.slug.id_for_label }}">{{ form.slug.label }}:</label>
-					<input type="text" v-on:input="checkSlug" v-bind:required="isRequireSlug" name="{{ form.slug.name }}" pattern="^[a-zA-Z0-9\-]*$" minlength="5" maxlength="50" placeholder="URLで &quot;https://iniad-wm.com/年/月/&quot; 以降の部分です。英数字と-が使用できます。" id="{{ form.slug.id_for_label }}">
+					<input type="text" v-on:input="checkSlug" v-bind:required="isRequireSlug" name="{{ form.slug.name }}" value="{% if form.slug.value %}{{ form.slug.value }}{% endif %}" pattern="^[a-zA-Z0-9\-]*$" minlength="5" maxlength="50" placeholder="URLで &quot;https://iniad-wm.com/年/月/&quot; 以降の部分です。英数字と-が使用できます。" id="{{ form.slug.id_for_label }}">
 					<span class="valid-error">[[ slugErrorMessage ]]</span>
 				</p>
 				<p id="input-text">{{ form.text | add_class:"text-input" }}</p>
 			</div>
-			<div id="form-meta-wrap">
+			<div id="form-meta-wrap" v-bind:class="activeWrap">
 				<div id="form-eyecatch-wrap">
 					<label for="{{ form.eyecatch.id_for_label }}">
 						{{ form.eyecatch.label }}
-						<button type="button" style="margin-left: 1em;" v-on:click="openUploadModal">アップロード</button>
-						<button type="button" style="margin-left: 1em;" v-on:click="getImageList">更新</button>
+						<button type="button" v-on:click="openUploadModal">アップロード</button>
+						<button type="button" v-on:click="getImageList">更新</button>
 					</label>
 					<ul id="{{ form.eyecatch.id_for_label }}" class="image_choice">
 						<li v-for="image in images">
@@ -57,12 +58,41 @@
 						<label for="{{ form.is_public.id_for_label }}">学外にも公開</label>
 					</p>
 				</div>
+				<div id="form-message-log-wrap">
+					<label for=message-logs">メッセージログ</label>
+					<div id="message-logs">
+						<article class="message" v-for="message in messages">
+							<p class="message-name">[[ message.staff ]]</p>
+							[[ message.comment ]]
+							<p class="message-time"><time>[[ dayjs(message.created_at).format("YYYY-MM-DD HH:mm:ss") ]]</time></p>
+						</article>
+					</div>
+				</div>
+				<div id="form-message-new-wrap">
+					<label for=id_message-comment">新規メッセージ</label>
+					<p><textarea name="message-comment" id="id_message-comment" v-model="message"></textarea></p>
+					{% if object %}<p class="button"><button type="button" v-on:click="submitRevisionMessage">メッセージのみ送信</button></p>{% endif %}
+				</div>
 				<div id="form-submit-wrap">
-					{% if not is_revision_form %}<p class="draft"><input type="submit" value="下書き保存" v-on:click="draftSave"></p>{% endif %}
-					<p class="submit"><input type="submit" value="{% if not is_revision_form %}完成(校閲開始){% else %}校閲完了{% endif %}" v-on:click="finalSave"></p>
+					{% if not is_final_check_form %}
+						{% if not is_revision_form %}<p class="draft"><input type="submit" value="下書き保存" v-on:click="draftSave"></p>{% endif %}
+						<p class="submit"><input type="submit" value="{% if not is_revision_form %}完成(校閲開始){% else %}校閲完了{% endif %}" v-on:click="finalSave"></p>
+					{% else %}
+						<p class="draft"><input type="submit" value="再確認依頼" v-on:click="recheck"></p>
+						<p class="submit"><input type="submit" value="公開" v-on:click="publish"></p>
+					{% endif %}
+				</div>
+				<div id="form-tabs">
+					<ul>
+						<li v-bind:class="{active: activeWrap==='meta'}" v-on:click="activeMetaWrap">メタ情報</li>
+						<li v-bind:class="{active: activeWrap==='message'}" v-on:click="activeCommentWrap">メッセージ</li>
+					</ul>
 				</div>
 			</div>
 			<input type="hidden" name="is_draft" v-model="isDraft">
+			{% if is_final_check_form %}
+				<input type="hidden" name="method" v-model="method">
+			{% endif %}
 			{% csrf_token %}
 		</form>
 		<section id="modal" v-bind:class="{show: isOpenUploadModal}">
@@ -91,15 +121,26 @@
 				images: [],
 				selectedEyeCatch: null,
 				isOpenUploadModal: false,
+				activeWrap: "{% if not object.is_revision_rejected %}meta{% else %}message{% endif %}",
 				publish_at: null,
 				changeNowIntervalId: null,
 				isDraft: false,
+				method: "",
+				message: "",
+				messages: [],
 				image_upload: {
 					file: null,
 					title: "",
 				},
 			},
 			methods: {
+				dayjs: dayjs,
+				activeMetaWrap() {
+					this.activeWrap = "meta"
+				},
+				activeCommentWrap() {
+					this.activeWrap = "message"
+				},
 				async checkSlug(e) {
 					const slug = e.target.value
 					if(slug !== "") {
@@ -148,7 +189,7 @@
 					const formData = new FormData();
 					formData.append("image", this.image_upload.file)
 					formData.append("title", this.image_upload.title)
-					fetch("/api/upload_image", {
+					fetch("{% url "upload_image" %}", {
 						method: "POST",
 						headers: {
 							"X-CSRFToken": Cookies.get("csrftoken"),
@@ -196,6 +237,27 @@
 				stopUpdateNow() {
 					clearInterval(this.changeNowIntervalId)
 				},
+				async getMessageList() {
+					if (this.uuid){
+						const response = await fetch("{% url "get_revision_messages" %}?uuid=" + this.uuid)
+						this.messages = await response.json()
+					}
+				},
+				submitRevisionMessage() {
+					const formData = new FormData();
+					formData.append("comment", this.message)
+					formData.append("uuid", this.uuid)
+					fetch("{% url "create_revision_message" %}", {
+						method: "POST",
+						headers: {
+							"X-CSRFToken": Cookies.get("csrftoken"),
+						},
+						body: formData,
+					}).then(() => {
+						this.message = ""
+						this.getMessageList()
+					})
+				},
 				draftSave() {
 					this.isDraft = true
 					this.isRequireSlug = false
@@ -203,6 +265,12 @@
 				finalSave() {
 					this.isDraft = false
 					this.isRequireSlug = true
+				},
+				recheck() {
+					this.method = "recheck"
+				},
+				publish() {
+					this.method = "publish"
 				},
 				submitMainForm() {
 					if (!this.selectedEyeCatch){
@@ -221,6 +289,7 @@
 			},
 			created() {
 				this.getImageList(true)
+				this.getMessageList()
 				this.setUpdateNow()
 				{% if form.errors %}
 					iziToast.error({
