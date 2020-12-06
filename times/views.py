@@ -174,7 +174,7 @@ class RevisePreArticleListView(StaffOnlyMixin, BaseStaffListPageView):
         result = super(RevisePreArticleListView, self).get_queryset()
         rejected = [object for object in result.filter(is_revision=True, is_revision_rejected=True, last_staff=self.request.user.staff)]
         my_draft = [object for object in result.filter(is_draft=True, is_revision=True, last_staff=self.request.user.staff)]
-        original = result.filter(is_draft=False, articles=None).exclude(article_writers=self.request.user.staff)
+        original = result.filter(is_draft=False, is_final_check=False).exclude(article_writers=self.request.user.staff)
         count_0 = [object for object in original.filter(revise_count=0)]
         count_1 = [object for object in original.filter(revise_count=1, is_revision_checked=True).exclude(parent__last_staff=self.request.user.staff, parent__revise_count=1)]
         return rejected + my_draft + count_0 + count_1
@@ -201,7 +201,7 @@ class FinalCheckPreArticleListView(StaffOnlyMixin, BaseStaffListPageView):
         if not self.request.user.is_superuser:
             raise PermissionError
         result = super(FinalCheckPreArticleListView, self).get_queryset()
-        result = result.filter(is_draft=False, is_revision=True, revise_count__gte=2, is_revision_checked=True, articles=None)
+        result = result.filter(is_draft=False, is_revision=True, revise_count__gte=2, is_revision_checked=True, is_final_check=False)
         return result
 
 
@@ -218,6 +218,7 @@ class BasePreArticleMixin:
         if self.is_revision:
             data.is_revision = True
             data.is_revision_rejected = False
+            data.is_revision_checked = False
             if not data.is_draft and not data.is_revision_rejected:
                 data.revise_count += 1
         if self.is_edit:
@@ -227,6 +228,7 @@ class BasePreArticleMixin:
             data.parent_id = data.id
             data.id = None
             data.uuid = uuid4()
+        data.is_final_check = False
         data.last_staff = self.request.user.staff
         data.create_ip = get_remote_ip(self.request)
         data.status_ending_at = date.today() + timedelta(weeks=1)
@@ -239,11 +241,11 @@ class BasePreArticleMixin:
                 data.article_editors.add(editor)
             for message in revision_messages:
                 data.revision_messages.add(message)
-        if self.is_revision:
-            if not self.is_final_check:
+        if not self.is_final_check:
+            if self.is_revision:
                 data.article_editors.add(self.request.user.staff)
-        else:
-            data.article_writers.add(self.request.user.staff)
+            else:
+                data.article_writers.add(self.request.user.staff)
         message_comment = self.request.POST.get("message-comment")
         if message_comment:
             message = RevisionMessage.objects.create(staff=self.request.user.staff, comment=message_comment)
@@ -252,7 +254,10 @@ class BasePreArticleMixin:
         if self.is_final_check:
             method = self.request.POST.get("method")
             if method == "recheck":
-                pass
+                data.is_revision = True
+                data.is_revision_rejected = False
+                data.is_revision_checked = False
+                data.save()
             if method == "publish":
                 article = Article.objects.create(
                     slug=data.slug,
@@ -264,9 +269,11 @@ class BasePreArticleMixin:
                     publish_at=data.publish_at,
                     sns_publish_text=data.sns_publish_text,
                     is_public=data.is_public,
-                    is_publishable=True,
-                    parent=data
+                    is_publishable=True
                 )
+                data.is_final_check = True
+                data.article = article
+                data.save()
                 for writer in writers:
                     article.article_writers.add(writer)
                 for editor in editors:
@@ -309,7 +316,6 @@ class CheckReviseView(StaffOnlyMixin, GetSingleObjectMixin, DetailView):
 
 class FinalCheckPreArticleView(StaffOnlyMixin, BasePreArticleMixin, GetSingleObjectMixin, UpdateView):
     is_edit = True
-    is_revision = True
     is_final_check = True
     extra_context = {"is_final_check_form": True}
     
