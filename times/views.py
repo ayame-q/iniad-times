@@ -444,7 +444,7 @@ class ApiUploadImage(APIView):
 class ApiParseMarkdown(APIView):
     def post(self, request):
         text = request.POST.get("text")
-        result = markdown(text, with_toc=True)
+        result = markdown(text)
         return Response({"text": result})
 
 
