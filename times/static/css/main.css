@@ -658,8 +658,122 @@ main article#article-page #preview input[type=text] {
     margin-right: 20vw;
   }
 }
+main article#article-page #content-wrap p {
+  margin: 1em 0;
+}
+main article#article-page #content-wrap img {
+  max-width: 100%;
+}
 @media (min-width: 851px) {
-  main article#article-page .toc {
+  main article#article-page #content-wrap .character-title-wrap {
+    display: flex;
+    align-items: center;
+  }
+  main article#article-page #content-wrap .character-title-wrap > *:nth-child(1) {
+    flex-basis: 240px;
+  }
+  main article#article-page #content-wrap .character-title-wrap > *:nth-child(2) {
+    flex-basis: calc(100% - 240px);
+  }
+}
+@media (min-width: 481px) and (max-width: 850px) {
+  main article#article-page #content-wrap .character-title-wrap {
+    display: flex;
+    align-items: center;
+  }
+  main article#article-page #content-wrap .character-title-wrap > *:nth-child(1) {
+    flex-basis: 240px;
+  }
+  main article#article-page #content-wrap .character-title-wrap > *:nth-child(2) {
+    flex-basis: calc(100% - 240px);
+  }
+}
+main article#article-page #content-wrap .interview-lefticon-wrap {
+  display: flex;
+  align-items: center;
+}
+main article#article-page #content-wrap .interview-lefticon-wrap > *:nth-child(1) {
+  flex-basis: 120px;
+  text-align: center;
+}
+main article#article-page #content-wrap .interview-lefticon-wrap > *:nth-child(1) img {
+  border-radius: 50%;
+  width: 100px;
+}
+main article#article-page #content-wrap .interview-lefticon-wrap > *:nth-child(2) {
+  flex-basis: calc(100% - 120px);
+}
+main article#article-page #content-wrap .interview-righticon-wrap {
+  display: flex;
+  align-items: center;
+}
+main article#article-page #content-wrap .interview-righticon-wrap > *:nth-child(1) {
+  flex-basis: 120px;
+  order: 2;
+  text-align: center;
+}
+main article#article-page #content-wrap .interview-righticon-wrap > *:nth-child(1) img {
+  border-radius: 50%;
+  width: 100px;
+}
+main article#article-page #content-wrap .interview-righticon-wrap > *:nth-child(2) {
+  flex-basis: calc(100% - 120px);
+  order: 1;
+}
+main article#article-page #content-wrap .fukidashi-orange-left {
+  display: flex;
+}
+main article#article-page #content-wrap .fukidashi-orange-left > *:nth-child(2) {
+  position: relative;
+  flex-basis: calc(100% - 120px);
+  background-color: #ff8b3c;
+  color: white;
+  border-radius: 10px;
+  padding: 15px;
+  margin-left: 10px;
+}
+main article#article-page #content-wrap .fukidashi-orange-left > *:nth-child(2)::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: -30px;
+  margin-top: -15px;
+  border: 15px solid transparent;
+  border-right: 15px solid #ff8b3c;
+}
+main article#article-page #content-wrap .fukidashi-border-orange-right {
+  display: flex;
+}
+main article#article-page #content-wrap .fukidashi-border-orange-right > *:nth-child(2) {
+  position: relative;
+  flex-basis: calc(100% - 120px);
+  background-color: white;
+  border: solid 2px #ff8b3c;
+  box-sizing: border-box;
+  border-radius: 10px;
+  padding: 15px;
+  margin-right: 20px;
+}
+main article#article-page #content-wrap .fukidashi-border-orange-right > *:nth-child(2)::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  right: -35px;
+  margin-top: -17px;
+  border: 17px solid transparent;
+  border-left: 17px solid #ff8b3c;
+}
+main article#article-page #content-wrap .fukidashi-border-orange-right > *:nth-child(2)::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  right: -30px;
+  margin-top: -15px;
+  border: 15px solid transparent;
+  border-left: 15px solid white;
+}
+@media (min-width: 851px) {
+  main article#article-page #content-wrap .toc {
     text-align: right;
     position: fixed;
     top: 110px;
@@ -667,7 +781,7 @@ main article#article-page #preview input[type=text] {
   }
 }
 @media (min-width: 481px) and (max-width: 850px) {
-  main article#article-page .toc {
+  main article#article-page #content-wrap .toc {
     text-align: right;
     position: fixed;
     top: 110px;
@@ -675,38 +789,35 @@ main article#article-page #preview input[type=text] {
   }
 }
 @media (max-width: 480px) {
-  main article#article-page .toc::before {
+  main article#article-page #content-wrap .toc::before {
     content: "目次";
     display: block;
     margin: 10px 0;
   }
 }
 @media (min-width: 851px) {
-  main article#article-page .toc {
+  main article#article-page #content-wrap .toc {
     max-width: 300px;
   }
 }
 @media (min-width: 481px) and (max-width: 850px) {
-  main article#article-page .toc {
+  main article#article-page #content-wrap .toc {
     max-width: 20vw;
   }
 }
-main article#article-page .toc ul {
+main article#article-page #content-wrap .toc ul {
   padding: 0;
   list-style: none;
   font-size: 16px;
 }
-main article#article-page .toc ul:first-child {
+main article#article-page #content-wrap .toc ul:first-child {
   font-size: 18px;
 }
-main article#article-page .toc ul li {
+main article#article-page #content-wrap .toc ul li {
   font-size: 0.8em;
 }
-main article#article-page .toc a {
+main article#article-page #content-wrap .toc a {
   color: #999999;
-}
-main article#article-page img {
-  max-width: 100%;
 }
 
 footer {

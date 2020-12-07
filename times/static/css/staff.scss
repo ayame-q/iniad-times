@@ -509,12 +509,7 @@ main{
 
 							.editor-preview-side{
 								/* プレビューのCSS */
-								p{
-									margin: 1em 0;
-								}
-								img{
-									max-width: 100%;
-								}
+								@import "import/article-content";
 							}
 
 						}

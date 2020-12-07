@@ -441,44 +441,44 @@ main{
 			@include media(medium){
 				margin-right: 20vw;
 			}
-		}
-		.toc{
-			@include media(large, medium){
-				text-align: right;
-				position: fixed;
-				top: 110px;
-				right: 10px;
-			}
-			@include media(small){
-				&::before{
-					content: "目次";
-					display: block;
-					margin: 10px 0;
+
+			@import "import/article-content";
+
+			.toc{
+				@include media(large, medium){
+					text-align: right;
+					position: fixed;
+					top: 110px;
+					right: 10px;
+				}
+				@include media(small){
+					&::before{
+						content: "目次";
+						display: block;
+						margin: 10px 0;
+					}
+				}
+				@include media(large){
+					max-width: 300px;
+				}
+				@include media(medium){
+					max-width: 20vw;
+				}
+				ul{
+					padding: 0;
+					list-style: none;
+					font-size: 16px;
+					&:first-child{
+						font-size: 18px;
+					}
+					li{
+						font-size: 0.8em;
+					}
+				}
+				a{
+					color: #999999;
 				}
 			}
-			@include media(large){
-				max-width: 300px;
-			}
-			@include media(medium){
-				max-width: 20vw;
-			}
-			ul{
-				padding: 0;
-				list-style: none;
-				font-size: 16px;
-				&:first-child{
-					font-size: 18px;
-				}
-				li{
-					font-size: 0.8em;
-				}
-			}
-			a{
-				color: #999999;
-			}
-		}
-		img{
-			max-width: 100%;
 		}
 	}
 }
