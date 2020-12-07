@@ -1,9 +1,14 @@
+import io
+import sys
+
+from django.core.files.uploadedfile import InMemoryUploadedFile
 from django.db import models
 from django.shortcuts import resolve_url
 from django.utils import timezone
 from django.contrib.auth.models import AbstractUser
 from datetime import timedelta
 from uuid import uuid4
+from stdimage import StdImageField
 from .get_diff import get_diff
 
 # Create your models here.
@@ -53,15 +58,14 @@ class Tag(models.Model):
 
 class Image(models.Model):
     staff = models.ForeignKey(Staff, related_name="images", on_delete=models.SET_NULL, null=True, verbose_name="アップロードスタッフ")
-    image = models.ImageField(upload_to="upload_images")
+    image = StdImageField(upload_to="upload_images", variations={'large': {'width': 2048, 'height': 1536}, 'medium': {'width': 1024, 'height': 768}, 'small': {'width': 512, 'height': 384}})
     title = models.CharField(max_length=50, null=True, blank=True, verbose_name="タイトル")
     is_default = models.BooleanField(default=False, verbose_name="デフォルト表示画像")
 
     def url(self):
-        return self.image.url
+        return self.image.medium.url
 
     def __str__(self):
-
         return self.title if self.title else "Image(No." + str(self.pk) + " uploaded by " + self.staff.name + ")"
 
 class Post(models.Model):
