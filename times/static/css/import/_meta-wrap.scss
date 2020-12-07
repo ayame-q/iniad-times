@@ -46,7 +46,7 @@
 			}
 
 			&.list-writer{
-				&::before{
+				&:first-child::before{
 					content: "by ";
 				}
 				&:not(:last-child){
@@ -57,7 +57,7 @@
 			}
 
 			&.writer{
-				&::before{
+				&:first-child::before{
 					content: "執筆者:";
 					margin-right: 0.3em;
 				}

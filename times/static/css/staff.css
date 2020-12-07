@@ -178,13 +178,13 @@ nav.pagination ul li span.disable {
   font-size: 0.7em;
   flex-shrink: 0;
 }
-.meta-wrap ul.meta li.list-writer::before {
+.meta-wrap ul.meta li.list-writer:first-child::before {
   content: "by ";
 }
 .meta-wrap ul.meta li.list-writer:not(:last-child)::after {
   content: ", ";
 }
-.meta-wrap ul.meta li.writer::before {
+.meta-wrap ul.meta li.writer:first-child::before {
   content: "執筆者:";
   margin-right: 0.3em;
 }
