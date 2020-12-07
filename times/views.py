@@ -12,6 +12,7 @@ from rest_framework.views import APIView
 from rest_framework.generics import ListAPIView, CreateAPIView
 from rest_framework.response import Response
 from django_boost.views.mixins import ViewUserKwargsMixin
+from PIL import Image as PILImage
 from uuid import uuid4
 from datetime import timedelta, date, datetime
 from .models import Article, PreArticle, RevisionMessage, Image, Staff, Category
@@ -430,14 +431,14 @@ class ApiUploadImage(APIView):
         image_file = request.FILES["image"]
         title = request.POST.get("title")
         _, ext = os.path.splitext(image_file.name)
-        if not re.fullmatch("\.(jpe?g|png)", ext):
+        if not re.fullmatch("\.(jpe?g|png)", ext.lower()):
             return Response({"error": "jpgかpngファイルをアップロードしてください"})
         if not request.user.staff:
             return Response({"error": "権限がありません"})
-        image_file.name = str(uuid4()) + ext
+        image_file.name = str(uuid4()) + ext.lower()
         image = Image(image=image_file, staff=request.user.staff, title=title)
         image.save()
-        return Response({"data": {"id": image.id, "filePath": image.image.url}})
+        return Response({"data": {"id": image.id, "filePath": image.image.large.url}})
 
 
 class ApiParseMarkdown(APIView):

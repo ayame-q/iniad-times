@@ -50,6 +50,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'django_boost',
     'widget_tweaks',
+    'stdimage',
 ]
 
 MIDDLEWARE = [
