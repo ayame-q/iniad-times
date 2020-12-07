@@ -151,6 +151,7 @@ nav.pagination ul li span.disable {
 }
 .meta-wrap ul.meta > div {
   display: flex;
+  flex-wrap: wrap;
 }
 .meta-wrap ul.meta li {
   display: block;
