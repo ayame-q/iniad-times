@@ -45,7 +45,7 @@ class Publish:
 
 「{article.title}」を公開しました
 
-https://iniad-wm.com{resolve_url("article", pk=article.id)}"""
+https://iniad-wm.com{article.get_url("article", ["slug", "id"])}"""
         self.tweet(tweet_text)
         article.is_published = True
         article.save()
