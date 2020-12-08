@@ -846,6 +846,16 @@ main section#article-post form #form-main-wrap p#input-text .text-input-wrap .ed
   border: 15px solid transparent;
   border-left: 15px solid white;
 }
+main section#article-post form #form-main-wrap p#input-text .text-input-wrap .editor-preview-side .pr {
+  margin-top: 3em;
+  font-size: 0.8em;
+  border: solid 1px #dddddd;
+  background-color: #eeeeee;
+  padding: 0 15px;
+}
+main section#article-post form #form-main-wrap p#input-text .text-input-wrap .editor-preview-side .pr h1, main section#article-post form #form-main-wrap p#input-text .text-input-wrap .editor-preview-side .pr h2, main section#article-post form #form-main-wrap p#input-text .text-input-wrap .editor-preview-side .pr h3, main section#article-post form #form-main-wrap p#input-text .text-input-wrap .editor-preview-side .pr h4, main section#article-post form #form-main-wrap p#input-text .text-input-wrap .editor-preview-side .pr h5, main section#article-post form #form-main-wrap p#input-text .text-input-wrap .editor-preview-side .pr h6 {
+  font-size: 1.2em;
+}
 main section#article-post form #form-meta-wrap {
   display: grid;
   grid-template-rows: 1fr auto;

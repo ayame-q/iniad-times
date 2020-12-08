@@ -773,6 +773,16 @@ main article#article-page #content-wrap .fukidashi-border-orange-right > *:nth-c
   border: 15px solid transparent;
   border-left: 15px solid white;
 }
+main article#article-page #content-wrap .pr {
+  margin-top: 3em;
+  font-size: 0.8em;
+  border: solid 1px #dddddd;
+  background-color: #eeeeee;
+  padding: 0 15px;
+}
+main article#article-page #content-wrap .pr h1, main article#article-page #content-wrap .pr h2, main article#article-page #content-wrap .pr h3, main article#article-page #content-wrap .pr h4, main article#article-page #content-wrap .pr h5, main article#article-page #content-wrap .pr h6 {
+  font-size: 1.2em;
+}
 @media (min-width: 851px) {
   main article#article-page #content-wrap .toc {
     text-align: right;
