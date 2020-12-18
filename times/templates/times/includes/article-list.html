@@ -14,7 +14,7 @@
 			</ul>
 			<h3>{{ article.title }}</h3>
 			<ul class="meta">
-				<li class="time">{{ article.time }}</li>
+				<li class="time"><time>{{ article.publish_at | relativetime }}</time></li>
 				{% if article.is_new %}<li class="new">New!</li>{% endif %}
 				{% if revise_list %}
 					{% if article.is_revision_rejected %}

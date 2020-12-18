@@ -2,7 +2,9 @@ from django import template
 from django.template.defaultfilters import stringfilter
 from django.utils.safestring import mark_safe
 from ..markdown import markdown
-import re
+from datetime import timedelta
+from django.utils import timezone
+import re, math
 
 register = template.Library()
 
@@ -31,3 +33,28 @@ def markdown2html(value):
 @register.simple_tag()
 def article_url(page, article, keys):
     return article.get_url(page, keys)
+
+
+@register.filter()
+def relativetime(time):
+    time = timezone.localtime(time)
+    day = time.date()
+    now = timezone.localtime()
+    today = now.date()
+    if time > now - timedelta(minutes=10):
+        return str(int((now - time).total_seconds()) // 60) + "分前"
+    if time > now - timedelta(minutes=30):
+        return str(int(math.floor((now - time).total_seconds() // 60 * 0.2) / 0.2)) + "分前"
+    if time > now - timedelta(minutes=60):
+        return str(math.floor((now - time).total_seconds() // 60 / 10) * 10) + "分前"
+    if time > now - timedelta(hours=7):
+        return str(int((now - time).total_seconds()) // 60 // 60) + "時間前"
+    if day == today:
+        return "きょう"
+    if day == today - timedelta(days=1):
+        return "きのう"
+    if day > today - timedelta(days=14):
+        return str((today - day).days) + "日前"
+    if day.year == today.year:
+        return time.strftime("%m月%d日")
+    return time.strftime("%Y年%m月%d日")

@@ -161,6 +161,15 @@ nav.pagination ul li span.disable {
 .meta-wrap ul.meta li:not(:last-child) {
   margin-right: 0.5em;
 }
+.meta-wrap ul.meta li.time.updated {
+  font-size: 0.8em;
+}
+.meta-wrap ul.meta li.time.updated::before {
+  content: "(";
+}
+.meta-wrap ul.meta li.time.updated::after {
+  content: ")";
+}
 .meta-wrap ul.meta li.category {
   display: block;
   width: fit-content;

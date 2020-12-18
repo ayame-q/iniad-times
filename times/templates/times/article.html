@@ -22,7 +22,8 @@
 				</ul>
 				<h2>{{ article.title }}</h2>
 				<ul class="meta">
-					<li class="time">{{ article.time }}</li>
+					<li class="time">{{ article.publish_at | date:"Y年m月d日 H時i分" }}</li>
+					{% if article.publish_at < article.updated_at %}<li class="time updated">最終更新: {{ article.time | date:"Y年m月d日 H時i分" }}</li>{% endif %}
 					{% if article.is_new %}<li class="new">New!</li>{% endif %}
 					<div>
 						{% for writer in article.article_writers.all %}

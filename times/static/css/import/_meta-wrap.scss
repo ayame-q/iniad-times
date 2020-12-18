@@ -26,6 +26,16 @@
 				margin-right: 0.5em;
 			}
 
+			&.time.updated{
+				font-size: 0.8em;
+				&::before{
+					content: "(";
+				}
+				&::after{
+					content: ")";
+				}
+			}
+
 			&.category{
 				display: block;
 				width: fit-content;
