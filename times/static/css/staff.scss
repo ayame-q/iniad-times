@@ -510,6 +510,12 @@ main{
 							.editor-preview-side{
 								/* プレビューのCSS */
 								@import "import/article-content";
+								p{
+									display: block;
+								}
+								ul li{
+									display: list-item;
+								}
 							}
 
 						}

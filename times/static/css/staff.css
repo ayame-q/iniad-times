@@ -865,6 +865,12 @@ main section#article-post form #form-main-wrap p#input-text .text-input-wrap .ed
 main section#article-post form #form-main-wrap p#input-text .text-input-wrap .editor-preview-side .pr h1, main section#article-post form #form-main-wrap p#input-text .text-input-wrap .editor-preview-side .pr h2, main section#article-post form #form-main-wrap p#input-text .text-input-wrap .editor-preview-side .pr h3, main section#article-post form #form-main-wrap p#input-text .text-input-wrap .editor-preview-side .pr h4, main section#article-post form #form-main-wrap p#input-text .text-input-wrap .editor-preview-side .pr h5, main section#article-post form #form-main-wrap p#input-text .text-input-wrap .editor-preview-side .pr h6 {
   font-size: 1.2em;
 }
+main section#article-post form #form-main-wrap p#input-text .text-input-wrap .editor-preview-side p {
+  display: block;
+}
+main section#article-post form #form-main-wrap p#input-text .text-input-wrap .editor-preview-side ul li {
+  display: list-item;
+}
 main section#article-post form #form-meta-wrap {
   display: grid;
   grid-template-rows: 1fr auto;
