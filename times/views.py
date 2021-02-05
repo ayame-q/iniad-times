@@ -366,14 +366,14 @@ class ListPageView(ListView):
         key_word = self.request.GET.get("q")
         if category_pk:
             category = Category.objects.get(pk=category_pk)
-            result = Article.objects.order_by("-updated_at").filter(category=category).filter(is_publishable=True)
+            result = Article.objects.order_by("-publish_at").filter(category=category).filter(is_publishable=True)
         elif key_word:
             search_result_list = Article.objects.filter(
                 Q(title__icontains=key_word) or Q(text__icontains=key_word)
             )
             result = search_result_list.filter(is_publishable=True)
         else:
-            result = Article.objects.order_by("-updated_at").filter(is_publishable=True)
+            result = Article.objects.order_by("-publish_at").filter(is_publishable=True)
         return result
 
     def get_context_data(self, *args, **kwargs):
