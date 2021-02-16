@@ -17,6 +17,15 @@
 				</ul>
 			</nav>
 		{% endif %}
+		{% if revise_list %}
+			<nav id="scope">
+				<h3>表示記事</h3>
+				<ul>
+					<li><a href="?{% if with_waiting_rivision_check %}with_waiting_rivision_check&{% endif %}{% if not with_mine %}with_mine{% endif %}">自分の投稿を{% if with_mine %}非{% endif %}表示</a></li>
+					<li><a href="?{% if with_mine %}with_mine&{% endif %}{% if not with_waiting_rivision_check %}with_waiting_rivision_check{% endif %}">筆者承認待ち記事を{% if with_waiting_rivision_check %}非{% endif %}表示</a></li>
+				</ul>
+			</nav>
+		{% endif %}
 		{% for article in articles %}
 			{% include "times/includes/article-list.html" with article=article link_page=link_page %}
 		{% empty %}

@@ -167,6 +167,7 @@ class BaseStaffListPageView(ListView):
 
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(*args, **kwargs)
+        context |= dict(self.request.GET)
         context["link_page"] = self.link_page
         scope = self.request.GET.get("scope")
         if not scope:
@@ -188,12 +189,24 @@ class RevisePreArticleListView(StaffOnlyMixin, BaseStaffListPageView):
     extra_context = {"revise_list": True}
 
     def get_queryset(self):
+        with_mine = self.request.GET.get("with_mine") != None
+        with_waiting_rivision_check = self.request.GET.get("with_waiting_rivision_check") != None
         result = super(RevisePreArticleListView, self).get_queryset()
         rejected = [object for object in result.filter(is_revision=True, is_revision_rejected=True, last_staff=self.request.user.staff)]
         my_draft = [object for object in result.filter(is_draft=True, is_revision=True, last_staff=self.request.user.staff)]
-        original = result.filter(is_draft=False, is_final=False).exclude(article_writers=self.request.user.staff)
+        original = result.filter(is_draft=False, is_final=False)
+        if not with_mine:
+            original = original.exclude(article_writers=self.request.user.staff)
         count_0 = [object for object in original.filter(revise_count=0)]
-        count_1 = [object for object in original.filter(revise_count=1, is_revision_checked=True).exclude(article_editors=self.request.user.staff)]
+        count_1_query = {
+            "revise_count": 1
+        }
+        if not with_waiting_rivision_check:
+            count_1_query["is_revision_checked"] = True
+        if with_mine:
+            count_1 = [object for object in original.filter(**count_1_query)]
+        else:
+            count_1 = [object for object in original.filter(**count_1_query).exclude(article_editors=self.request.user.staff)]
         return rejected + my_draft + count_0 + count_1
 
 
