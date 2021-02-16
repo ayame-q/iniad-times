@@ -167,7 +167,7 @@ class BaseStaffListPageView(ListView):
 
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(*args, **kwargs)
-        context |= dict(self.request.GET)
+        context.update(dict(self.request.GET))
         context["link_page"] = self.link_page
         scope = self.request.GET.get("scope")
         if not scope:
