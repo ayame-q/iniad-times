@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404, resolve_url
+from django.urls import reverse_lazy
 from django.views.generic import UpdateView, DetailView, CreateView, ListView, TemplateView
 from django.views.generic.detail import SingleObjectMixin
 from django.contrib.auth.views import SuccessURLAllowedHostsMixin
@@ -362,6 +363,7 @@ class EditStaffProfileView(StaffOnlyMixin, UpdateView):
     model = Staff
     form_class = forms.StaffProfileForm
     template_name = "times/staff/profile.html"
+    success_url = reverse_lazy("staff")
 
     def get_object(self, queryset=None):
         self.form_class = forms.StaffProfileForm
