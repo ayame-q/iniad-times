@@ -65,12 +65,12 @@ class AdminArticleForm(BaseForm):
 class StaffProfileForm(BaseForm):
     class Meta:
         model = Staff
-        fields = ("name", "screen_name", "comment")
+        fields = ("name", "slug", "comment")
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields["name"].widget.attrs["placeholder"] = "ペンネーム(公開されます)"
-        self.fields["screen_name"].label = "esa.ioスクリーンネーム"
+        self.fields["slug"].widget.attrs["placeholder"] = "スクリーンネーム(プロフィールページのURLになります)"
         self.fields["comment"].widget.attrs["class"] = "text-input"
         self.fields["comment"].widget.attrs["placeholder"] = "自己紹介など(公開されます)"
         self.fields["comment"].label = "コメント"

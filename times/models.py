@@ -16,7 +16,7 @@ from .get_diff import get_diff
 
 class Staff(models.Model):
     email = models.EmailField(verbose_name="メールアドレス", unique=True, db_index=True)
-    screen_name = models.CharField(max_length=20, default="", null=True, blank=True, db_index=True, verbose_name="スクリーンネーム")
+    slug = models.SlugField(max_length=20, default="", null=True, blank=True, db_index=True, verbose_name="スクリーンネーム")
     name = models.CharField(max_length=20, default="", null=True, blank=True, verbose_name="ペンネーム")
     comment = models.TextField(null=True, blank=True, verbose_name="コメント")
 
