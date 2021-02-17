@@ -84,6 +84,8 @@ def staff(request):
 
 
 class StaffOnlyMixin(LoginRequiredMixin):
+    login_url = '/auth/google/login'
+
     def dispatch(self, request, *args, **kwargs):
         result = super().dispatch(request, *args, **kwargs)
         if not request.user.staff:
