@@ -6,22 +6,24 @@
 	<section id="staff-index">
 		<h2>スタッフメニュー</h2>
 		<nav>
-			<h3>投稿者メニュー</h3>
-			<ul>
-				<li><a href="{% url "new" %}">新規記事作成</a></li>
-				<li><a href="{% url "edit-list" %}">下書き記事編集</a></li>
-				<li><a href="{% url "check-revise-list" %}">推敲・校閲 確認</a></li>
-				<li><a href="{% url "reedit-list" %}">公開済み記事編集</a></li>
-			</ul>
-			<h3>編集者メニュー</h3>
-			<ul>
-				<li><a href="{% url "revise-list" %}">推敲・校閲</a></li>
-			</ul>
-			{% if user.is_superuser %}
-				<h3>管理者メニュー</h3>
+			{% if user.staff.name and user.staff.slug %}
+				<h3>投稿者メニュー</h3>
 				<ul>
-					<li><a href="{% url "admin-final-check-list" %}">最終確認</a></li>
+					<li><a href="{% url "new" %}">新規記事作成</a></li>
+					<li><a href="{% url "edit-list" %}">下書き記事編集</a></li>
+					<li><a href="{% url "check-revise-list" %}">推敲・校閲 確認</a></li>
+					<li><a href="{% url "reedit-list" %}">公開済み記事編集</a></li>
 				</ul>
+				<h3>編集者メニュー</h3>
+				<ul>
+					<li><a href="{% url "revise-list" %}">推敲・校閲</a></li>
+				</ul>
+				{% if user.is_superuser %}
+					<h3>管理者メニュー</h3>
+					<ul>
+						<li><a href="{% url "admin-final-check-list" %}">最終確認</a></li>
+					</ul>
+				{% endif %}
 			{% endif %}
 			<h3>設定</h3>
 			<ul>
