@@ -119,8 +119,12 @@ window.addEventListener("load", function() {
 				{
 					name: "fullscreen",
 					action: (editor) => {
-						editor.toggleFullScreen()
-						editor.toggleSideBySide()
+						editor.togglePreview()
+						setTimeout(() => {
+							editor.toggleFullScreen()
+							editor.toggleSideBySide()
+						})
+
 					},
 					className: "fa fa-arrows-alt",
 					title: "FullScreen"
