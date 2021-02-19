@@ -308,7 +308,6 @@ class BasePreArticleMixin:
                 data.save()
             if method == "publish":
                 article = data.publish()
-                data.is_final = True
                 data.save()
         if self.is_revision:
             return redirect("preview", data.uuid)

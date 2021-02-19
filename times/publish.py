@@ -6,6 +6,7 @@ from twitter import Twitter
 from twitter import OAuth as TwitterOAuth
 from apscheduler.schedulers.background import BackgroundScheduler
 from apscheduler.triggers.date import DateTrigger
+from apscheduler.jobstores.base import JobLookupError
 from .models import Article
 
 
@@ -58,15 +59,18 @@ https://iniad-wm.com{article.get_url("article", ["slug", "id"])}"""
         self.scheduler.remove_job(job_id=str(article.id))
         print(f"Remove publish job: Article {article.id}({article.title})")
 
-    def update_publish_job(self, article):
+    def add_or_update_publish_job(self, article):
+        try:
+            self.remove_publish_job(article)
+        except JobLookupError:
+            pass
         self.add_publish_job(article)
-        self.remove_publish_job(article)
 
     def publish(self, article):
         if article.is_publishable:
             if not article.is_published:
                 if article.publish_at > timezone.localtime():
-                    self.add_publish_job(article)
+                    self.add_or_update_publish_job(article)
                 else:
                     self.do_publish(article.id)
             else:

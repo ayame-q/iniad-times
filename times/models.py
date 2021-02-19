@@ -241,6 +241,7 @@ class PreArticle(Post):
         for editor in editors:
             article.article_editors.add(editor)
         self.article = article
+        self.is_final = True
         self.save()
         from .views import publish
         publish.publish(article)
