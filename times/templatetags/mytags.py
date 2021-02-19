@@ -41,6 +41,14 @@ def relativetime(time):
     day = time.date()
     now = timezone.localtime()
     today = now.date()
+    if time > now:
+        if day == today:
+            return time.strftime("きょう %H時%M分 公開予定")
+        if day.year != today.year:
+            return time.strftime("%Y年%m月%d日 %H時%M分 公開予定")
+        return time.strftime("%m月%d日 %H時%M分 公開予定")
+    if time > now:
+        return time.strftime("%m月%d日 %H時%M分")
     if time > now - timedelta(minutes=10):
         return str(int((now - time).total_seconds()) // 60) + "分前"
     if time > now - timedelta(minutes=30):
