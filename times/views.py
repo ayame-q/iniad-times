@@ -233,8 +233,11 @@ class FinalCheckPreArticleListView(StaffOnlyMixin, BaseStaffListPageView):
     def get_queryset(self):
         if not self.request.user.is_superuser:
             raise PermissionError
+        with_all = self.request.GET.get("with_all") != None
         result = super(FinalCheckPreArticleListView, self).get_queryset()
-        result = result.filter(is_draft=False, is_revision=True, revise_count__gte=2, is_revision_checked=True, is_final=False)
+        result = result.filter(is_draft=False, is_final=False)
+        if not with_all:
+            result = result.filter(is_revision=True, revise_count__gte=2, is_revision_checked=True)
         return result
 
 

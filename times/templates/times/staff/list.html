@@ -7,7 +7,7 @@
 {% block main %}
 	<section id="article-list">
 		<h2>{% if edit_list %}下書き記事編集{% elif revise_list %}記事推敲・校閲{% elif check_revise_list %}推敲・校閲チェック{% elif final_check_list %}最終確認{% elif reedit_list %}公開済み記事編集{% else %}記事一覧{% endif %}</h2>
-		{% if not revise_list and not check_revise_list %}
+		{% if not revise_list and not check_revise_list and not final_check_list %}
 			<nav id="scope">
 				<h3>表示記事</h3>
 				<ul>
@@ -23,6 +23,15 @@
 				<ul>
 					<li><a href="?{% if with_waiting_rivision_check %}with_waiting_rivision_check&{% endif %}{% if not with_mine %}with_mine{% endif %}">自分の投稿を{% if with_mine %}非{% endif %}表示</a></li>
 					<li><a href="?{% if with_mine %}with_mine&{% endif %}{% if not with_waiting_rivision_check %}with_waiting_rivision_check{% endif %}">筆者承認待ち記事を{% if with_waiting_rivision_check %}非{% endif %}表示</a></li>
+				</ul>
+			</nav>
+		{% endif %}
+		{% if final_check_list %}
+			<nav id="scope">
+				<h3>表示記事</h3>
+				<ul>
+					<li><a href="?" {% if not with_all %}class="active"{% endif %}>校閲済みのみ</a></li>
+					<li><a href="?with_all" {% if with_all %}class="active"{% endif %}>すべて</a></li>
 				</ul>
 			</nav>
 		{% endif %}
