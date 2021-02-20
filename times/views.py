@@ -19,12 +19,8 @@ from datetime import timedelta, date, datetime
 from .models import Article, PreArticle, RevisionMessage, Image, Staff, Category
 from .markdown import markdown
 from . import forms, serializers
-from .publish import Publish
 from .get_diff import get_diff
 import os, re, calendar
-
-
-publish = Publish()
 
 
 def is_crawler(request):

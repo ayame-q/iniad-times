@@ -14,6 +14,9 @@ from .get_diff import get_diff
 # Create your models here.
 
 
+publish = None
+
+
 class Staff(models.Model):
     email = models.EmailField(verbose_name="メールアドレス", unique=True, db_index=True)
     slug = models.SlugField(max_length=20, default="", null=True, blank=True, db_index=True, verbose_name="スクリーンネーム")
@@ -243,7 +246,6 @@ class PreArticle(Post):
         self.article = article
         self.is_final = True
         self.save()
-        from .views import publish
         publish.publish(article)
         return article
 
