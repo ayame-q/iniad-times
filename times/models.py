@@ -261,4 +261,7 @@ class PreArticle(Post):
 class BrowsingHistory(models.Model):
     article = models.ForeignKey(Article, related_name="browsed_histories", on_delete=models.SET_NULL, null=True, blank=True, verbose_name="閲覧履歴")
     user = models.ForeignKey(User, related_name="browsed_histories", on_delete=models.SET_NULL, null=True, blank=True, verbose_name="ユーザー")
+    ip = models.GenericIPAddressField(null=True, verbose_name="IPアドレス")
+    user_agent = models.CharField(max_length=512, null=True, verbose_name="UserAgent")
+    referer = models.TextField(null=True, blank=True, verbose_name="リファラ")
     time = models.DateTimeField(default=timezone.localtime, verbose_name="時刻")

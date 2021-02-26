@@ -66,8 +66,12 @@ def article(request, slug=None, year=None, month=None, pk=None, uuid=None):
     if (not article.is_public and not request.user.is_authenticated) and not is_crawler(request):
         return redirect("/auth/google/login?next=" + request.path)
 
-    if request.user.is_authenticated:
-        request.user.browsed_histories.create(article=article)
+    article.browsed_histories.create(
+        user=request.user if request.user.is_authenticated else None,
+        ip=get_remote_ip(request),
+        user_agent=request.META.get("HTTP_USER_AGENT"),
+        referer=request.META.get("HTTP_REFERER")
+    )
 
     data = {
         "article": article,
