@@ -421,5 +421,5 @@ gen
 
 
 # Project Original files
-config/settings_secret.py
+settings_secret.py
 upload_images/
