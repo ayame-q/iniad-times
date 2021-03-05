@@ -6,5 +6,3 @@ class TimesConfig(AppConfig):
 
     def ready(self):
         from . import signals, models
-        from .publish import Publish
-        models.publish = Publish()

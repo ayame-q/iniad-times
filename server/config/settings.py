@@ -24,9 +24,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'rw5c7!j48w6e1r+pkb&hf4)8xy_#uyzdg4xk*1zufyp#tmi5*!'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = True if os.environ.get("DEBUG") == "true" or os.environ.get("DEBUG") == "True" else False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["*"]
 
 
 # Application definition
@@ -91,8 +91,12 @@ WSGI_APPLICATION = 'config.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': ('django.db.backends.postgresql' if os.environ.get("DATABASE_ENGINE") else 'django.db.backends.sqlite3'),
+        'NAME': (os.environ["DATABASE_NAME"] if os.environ.get("DATABASE_NAME") else BASE_DIR / 'db.sqlite3'),
+        'USER': os.environ.get("DATABASE_USER"),
+        'PASSWORD': os.environ.get("DATABASE_PASSWORD"),
+        'HOST': os.environ.get("DATABASE_HOST"),
+        'PORT': os.environ.get("DATABASE_PORT"),
     }
 }
 
@@ -134,7 +138,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
 STATIC_URL = '/static/'
-
+STATIC_ROOT = os.environ.get("STATIC_ROOT")
 
 AUTH_USER_MODEL = 'times.User'
 
@@ -170,9 +174,9 @@ INTERNAL_IPS = [
     "127.0.0.1"
 ]
 
-TWITTER_CONSUMER_KEY = ""
-TWITTER_CONSUMER_SECRET = ""
-TWITTER_ACCOUNT_TOKEN = ""
-TWITTER_ACCOUNT_TOKEN_SECRET = ""
+TWITTER_CONSUMER_KEY = os.environ.get("TWITTER_CONSUMER_KEY")
+TWITTER_CONSUMER_SECRET = os.environ.get("TWITTER_CONSUMER_SECRET")
+TWITTER_ACCOUNT_TOKEN = os.environ.get("TWITTER_ACCOUNT_TOKEN")
+TWITTER_ACCOUNT_TOKEN_SECRET = os.environ.get("TWITTER_ACCOUNT_TOKEN_SECRET")
 
-from .settings_secret import *
+ACCOUNT_DEFAULT_HTTP_PROTOCOL = os.environ.get("ACCOUNT_DEFAULT_HTTP_PROTOCOL")
