@@ -5,7 +5,7 @@ from .models import Image, RevisionMessage, PreArticle, Staff
 class ImageSerializer(serializers.ModelSerializer):
     class Meta:
         model = Image
-        fields = ('id', 'title', 'image')
+        fields = ('id', 'title', 'image', 'url')
 
 
 class RevisionMessageSerializer(serializers.ModelSerializer):

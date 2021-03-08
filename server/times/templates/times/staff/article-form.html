@@ -39,7 +39,7 @@
 						<li v-for="image in images">
 							<input type="radio" name="{{ form.eyecatch.name }}" v-bind:value="image.id" v-model="selectedEyeCatch" v-bind:id="'id_image_' + image.id">
 							<label v-bind:for="'id_image_' + image.id" v-bind:title="image.title">
-								<div class="eyecatch-image" v-bind:style="{ backgroundImage: 'url(' + image.image + ')' }"></div>
+								<div class="eyecatch-image" v-bind:style="{ backgroundImage: 'url(' + image.url + ')' }"></div>
 							</label>
 						</li>
 					</ul>
