@@ -18,6 +18,7 @@ class Publish:
     def __init__(self):
         self.scheduler = BackgroundScheduler()
         self.scheduler.start()
+        print("BackgroundScheduler started.")
         future_articles = Article.objects.filter(publish_at__gt=timezone.localtime(), is_publishable=True)
         for article in future_articles:
             self.add_publish_job(article)

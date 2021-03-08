@@ -18,6 +18,14 @@ services:
       - ".env"
     volumes:
       - database:/var/lib/postgresql/data
+  nginx:
+    image: nginx:alpine
+    volumes:
+      - "./nginx/nginx.conf:/etc/nginx/nginx.conf"
+    links:
+      - "django"
+    ports:
+      - "8008:80"
 
 volumes:
   database:
