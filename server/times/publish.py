@@ -53,8 +53,8 @@ https://iniad-wm.com{article.get_url("article", ["slug", "id"])}"""
         article.save()
 
     def add_publish_job(self, article):
-        self.scheduler.add_job(self.do_publish, trigger=DateTrigger(run_date=article.publish_at, timezone=timezone.get_default_timezone()), id=str(article.id), kwargs={"article_id": article.id})
-        print(f"Added publish job: Article {article.id}({article.title})")
+        job = self.scheduler.add_job(self.do_publish, trigger=DateTrigger(run_date=article.publish_at, timezone=timezone.get_default_timezone()), id=str(article.id), kwargs={"article_id": article.id})
+        print(f"Added publish job: Article {article.id}({article.title}) [{job.next_run_time}]")
 
     def remove_publish_job(self, article):
         self.scheduler.remove_job(job_id=str(article.id))
