@@ -6,15 +6,11 @@ services:
       - "postgres"
     env_file:
       - ".env"
-    ports:
-      - "127.0.0.1:8000:8000"
     volumes:
       - "./server:/usr/src/app"
       - "./server/upload_images:/usr/src/app/upload_images"
   postgres:
     image: postgres:12-alpine
-    ports:
-      - "127.0.0.1:5432:5432"
     env_file:
       - ".env"
     volumes:
@@ -26,7 +22,7 @@ services:
     links:
       - "django"
     ports:
-      - "8008:80"
+      - "8080:80"
 
 volumes:
   database:

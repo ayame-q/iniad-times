@@ -17,7 +17,7 @@ services:
       - "django_static:/usr/src/app/django_static"
       - "./server/upload_images:/usr/src/app/upload_images"
     ports:
-      - "8008:80"
+      - "8001:80"
     restart: always
 
 volumes:
