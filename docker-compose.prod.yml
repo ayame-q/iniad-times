@@ -7,6 +7,9 @@ services:
       - "./server:/usr/src/app"
       - "django_static:/var/lib/static"
       - "./server/upload_images:/usr/src/app/upload_images"
+    restart: always
+  postgres:
+    restart: always
   nginx:
     image: nginx:alpine
     volumes:
@@ -15,6 +18,7 @@ services:
       - "./server/upload_images:/usr/src/app/upload_images"
     ports:
       - "8008:80"
+    restart: always
 
 volumes:
   database:
