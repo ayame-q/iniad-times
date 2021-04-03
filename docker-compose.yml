@@ -17,10 +17,25 @@ services:
       - database:/var/lib/postgresql/data
   nginx:
     image: nginx:alpine
+    env_file:
+      - ".env"
     volumes:
-      - "./nginx/nginx.conf:/etc/nginx/nginx.conf"
+      - "./nginx/nginx.conf:/etc/nginx/templates/default.conf.template"
     links:
       - "django"
+      - "circle_site"
+    ports:
+      - "$PORT:80"
+      - "$CIRCLE_SITE_PORT:81"
+  circle_site:
+    build: client/circle-site
+    env_file:
+      - ".env"
+    environment:
+      - "PORT=3000"
+    volumes:
+      - "./client/circle-site:/usr/src/app"
+      - "/usr/src/app/node_modules"
 
 volumes:
   database:
