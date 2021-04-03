@@ -24,13 +24,14 @@ class Staff(models.Model):
     comment = models.TextField(null=True, blank=True, verbose_name="コメント")
 
     def __str__(self):
-        if not self.user:
-            return self.name
-        if not self.name:
-            if not self.user:
+        try:
+            if not self.name:
+                return f"ペンネームなし ({self.user.name})"
+            return f"{self.name} ({self.user.name})"
+        except User.DoesNotExist:
+            if not self.name:
                 return self.email
-            return f"ペンネームなし ({self.user.name})"
-        return f"{self.name} ({self.user.name})"
+            return f"{self.name} [{self.email}]"
 
 
 class User(AbstractUser):
