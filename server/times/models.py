@@ -24,8 +24,13 @@ class Staff(models.Model):
     comment = models.TextField(null=True, blank=True, verbose_name="コメント")
 
     def __str__(self):
-        return self.name
-
+        if not self.user:
+            return self.name
+        if not self.name:
+            if not self.user:
+                return self.email
+            return f"ペンネームなし ({self.user.name})"
+        return f"{self.name} ({self.user.name})"
 
 
 class User(AbstractUser):
@@ -38,6 +43,9 @@ class User(AbstractUser):
     staff = models.OneToOneField(Staff, related_name="user", on_delete=models.SET_NULL, null=True, blank=True, verbose_name="スタッフID")
     created_at = models.DateTimeField(default=timezone.localtime, verbose_name="作成日")
     is_student = models.BooleanField(default=False, verbose_name="学生か")
+
+    def __str__(self):
+        return f"{self.username} ({self.name})"
 
     def get_class(self):
         if self.is_student:
@@ -90,6 +98,11 @@ class Post(models.Model):
 
     class Meta:
         abstract = True
+
+    def __str__(self):
+        if not self.title:
+            return super(Post, self).__str__()
+        return self.title
 
     def type(self):
         return "Post"
