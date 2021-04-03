@@ -80,7 +80,7 @@ export default {
 	// Vue.js Configration
 	vue: {
 		config: {
-			devTools: Boolean(process.env.DEBUG),
+			devTools: process.env.NODE_ENV === "development",
 		}
 	},
 
