@@ -3,7 +3,7 @@ Webメディア研究会のINIAD Times(https://iniad-wm.com/ )用プログラム
 ## 環境構築
 * 必要環境: [Docker Desktop (macOS or Windows) または Docker Engine + Docker Compose(Linux)](https://docs.docker.com/get-docker/)
 
-1. cloneしたあとのフォルダに.envファイルを以下のように作る
+1. cloneしたあと直下に.envファイルを以下のように作る
 ```dotenv
 PORT=8080
 CIRCLE_SITE_PORT=8081
