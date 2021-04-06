@@ -10,6 +10,9 @@
 					<time>2021.04.21</time>
 					<span class="text">INIAD meets web開催予定</span></li>
 				<li>
+					<time>2021.04.01</time>
+					<span class="text">第9回定例会開催</span></li>
+				<li>
 					<time>2021.03.29</time>
 					<span class="text">公式サイトリニューアル</span></li>
 				<li>
@@ -18,9 +21,6 @@
 				<li>
 					<time>2021.03.18</time>
 					<span class="text">第8回定例会開催</span></li>
-				<li>
-					<time>2021.03.09</time>
-					<span class="text">臨時会開催</span></li>
 			</ul>
 			<!--<p class="more-link"><nuxt-link to="news">もっと見る</nuxt-link></p>-->
 		</div>
