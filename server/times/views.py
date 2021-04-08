@@ -393,6 +393,7 @@ class ListPageView(ListView):
             result = search_result_list.filter(is_publishable=True)
         else:
             result = Article.objects.order_by("-publish_at").filter(is_publishable=True)
+        result = result.filter(publish_at__lt=timezone.localtime())
         return result
 
     def get_context_data(self, *args, **kwargs):
