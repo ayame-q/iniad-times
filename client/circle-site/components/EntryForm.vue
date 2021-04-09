@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<form @submit.prevent="submit" v-if="!isSubmited">
+		<form @submit.prevent="submit" v-if="!isSubmiting && !isSubmited">
 			<section class="profile-wrap">
 				<h3>Profile</h3>
 				<div class="form-section">
@@ -87,16 +87,19 @@
 			<p class="submit-wrap"><input type="submit" value="入会"></p>
 		</form>
 		<entried-message v-if="isSubmited"></entried-message>
+		<simple-spinner v-if="isSubmiting && !isSubmited"></simple-spinner>
 	</div>
 </template>
 
 <script>
 import EntriedMessage from "@/components/EntriedMessage";
+import SimpleSpinner from "~/components/SimpleSpinner";
 
 export default {
 	name: "EntryForm",
 	components: {
-		EntriedMessage
+		EntriedMessage,
+		SimpleSpinner
 	},
 	props: {
 		isAuthenticated: Boolean
@@ -112,7 +115,8 @@ export default {
 			grade: null,
 			course: null,
 			interested_in: [],
-			isSubmited: false
+			isSubmited: false,
+			isSubmiting: false,
 		}
 	},
 	methods: {
@@ -120,6 +124,7 @@ export default {
 			if (this.course == null) {
 				this.course = "none"
 			}
+			this.isSubmiting = true
 			fetch("/api/entry", {
 				credentials: 'same-origin',
 				method: 'POST',

@@ -32,8 +32,10 @@ def entry(email):
 
 def add_google_drive(email):
     url = os.environ.get('GOOGLE_DRIVE_GAS_URL')
+    password = os.environ.get('GOOGLE_DRIVE_GAS_PASSWORD')
     data = {
-        "email": email
+        "email": email,
+        "password": password
     }
     headers = {
         'Accept': "application/json",
