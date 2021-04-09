@@ -5,6 +5,7 @@ from django.core.files.uploadedfile import InMemoryUploadedFile
 from django.db import models
 from django.shortcuts import resolve_url
 from django.utils import timezone
+from django.contrib.auth import get_user_model
 from django.contrib.auth.models import AbstractUser
 from datetime import timedelta
 from uuid import uuid4
@@ -15,6 +16,15 @@ from .get_diff import get_diff
 
 
 publish = None
+
+
+courses = [
+    ("none", "なし"),
+    ("engineering", "エンジニアリングコース"),
+    ("design", "デザインコース"),
+    ("business", "ビジネスコース"),
+    ("civil-system", "シビルシステムコース"),
+]
 
 
 class Staff(models.Model):
@@ -32,6 +42,17 @@ class Staff(models.Model):
             if not self.name:
                 return self.email
             return f"{self.name} [{self.email}]"
+
+    def save(self, *args, **kwargs):
+        result = super(Staff, self).save(*args, **kwargs)
+        if self.email:
+            try:
+                user = User.objects.get(email=self.email)
+                user.staff = self
+                user.save()
+            except User.DoesNotExist:
+                pass
+        return result
 
 
 class User(AbstractUser):
@@ -80,6 +101,7 @@ class Image(models.Model):
     def __str__(self):
         return self.title if self.title else "Image(No." + str(self.pk) + " uploaded by " + self.staff.name + ")"
 
+
 class Post(models.Model):
     uuid = models.UUIDField(default=uuid4, unique=True, db_index=True, editable=False, verbose_name="UUID")
     slug = models.SlugField(max_length=50, db_index=True, unique=True, null=True, blank=True, verbose_name="Page URL")
@@ -122,23 +144,6 @@ class Post(models.Model):
             else:
                 return resolve_url(page, self.id)
         return resolve_url(page, self.uuid)
-
-
-courses = [
-    ("none", "なし"),
-    ("engineering", "エンジニアリングコース"),
-    ("design", "デザインコース"),
-    ("business", "ビジネスコース"),
-    ("civil-system", "シビルシステムコース"),
-]
-
-lecture_types = [
-    ("engineering", "エンジニアリングコース"),
-    ("design", "デザインコース"),
-    ("business", "ビジネスコース"),
-    ("civil-system", "シビルシステムコース"),
-    ("none", "なし"),
-]
 
 
 class Lecture(models.Model):

@@ -21,6 +21,7 @@ from . import settings
 urlpatterns = [
     path('', include("times.urls")),
     path('auth/', include('config.urls_auth')),
+    path('api/circle/', include("circle.urls")),
     path('admin/', admin.site.urls),
 ]
 

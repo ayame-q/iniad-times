@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django.contrib.sitemaps',
     'times.apps.TimesConfig',
+    'circle.apps.CircleConfig',
 
     'django.contrib.sites',
     'allauth',
@@ -180,3 +181,23 @@ TWITTER_ACCOUNT_TOKEN = os.environ.get("TWITTER_ACCOUNT_TOKEN")
 TWITTER_ACCOUNT_TOKEN_SECRET = os.environ.get("TWITTER_ACCOUNT_TOKEN_SECRET")
 
 ACCOUNT_DEFAULT_HTTP_PROTOCOL = os.environ.get("ACCOUNT_DEFAULT_HTTP_PROTOCOL")
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.SessionAuthentication',
+    ),
+    'DEFAULT_THROTTLE_CLASSES': (
+        'rest_framework.throttling.AnonRateThrottle',
+        'rest_framework.throttling.UserRateThrottle',
+    ),
+    'DEFAULT_THROTTLE_RATES': {
+        'anon': '10/minute',
+        'user': '1000/hour',
+    }
+}
+
+EMAIL_HOST = os.environ.get("EMAIL_HOST")
+EMAIL_PORT = int(os.environ.get("EMAIL_PORT")) if os.environ.get("EMAIL_PORT") else 587
+EMAIL_HOST_USER = os.environ.get("EMAIL_HOST_USER")
+EMAIL_HOST_PASSWORD = os.environ.get("EMAIL_HOST_PASSWORD")
+EMAIL_USE_TLS = True if os.environ.get("EMAIL_USE_TLS") == "true" or os.environ.get("EMAIL_USE_TLS") == "True" else False

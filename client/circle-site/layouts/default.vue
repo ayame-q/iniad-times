@@ -13,8 +13,7 @@
 						<nuxt-link to="works">works</nuxt-link>
 					</li>-->
 					<li>
-						<!--<nuxt-link to="entry">entry</nuxt-link>-->
-						<a href="https://forms.gle/DnCk411WJ8YCt8ABA">entry</a>
+						<nuxt-link to="entry">entry</nuxt-link>
 					</li>
 					<li class="contact-link">
 						<!--<nuxt-link to="contact"><img src="~/assets/img/mail.svg" alt="mail"></nuxt-link>-->

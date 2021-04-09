@@ -9,17 +9,32 @@
 				あなたのご参加を心からお待ちしております。
 			</p>
 		</div>
-		<entry-form></entry-form>
+		<entry-form v-if="isAuthenticated" is-authenticated="is-authenticated"></entry-form>
+		<login-button v-if="!isAuthenticated">INIADアカウントでログインして入会</login-button>
 	</article>
 </template>
 
 <script>
 import EntryForm from "@/components/EntryForm";
+import LoginButton from "@/components/LoginButton";
 
 export default {
 	name: "Entry",
+	data() {
+		return {
+			isAuthenticated: false,
+		}
+	},
 	components: {
-		EntryForm
+		EntryForm,
+		LoginButton
+	},
+	mounted() {
+		fetch("/api/is_authenticated")
+			.then(response => response.json())
+			.then(result => {
+				this.isAuthenticated = result.authenticated
+			})
 	}
 };
 </script>

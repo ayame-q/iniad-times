@@ -67,6 +67,7 @@ export default {
 		"@nuxtjs/axios",
 		// https://github.com/nuxt-community/google-gtag-module
 		"@nuxtjs/google-gtag",
+		'cookie-universal-nuxt',
 	],
 
 	// Axios module configuration: https://go.nuxtjs.dev/config-axios

@@ -1,105 +1,154 @@
 <template>
-	<form>
-		<section class="profile-wrap">
-			<h3>Profile</h3>
-			<div class="form-section">
-				<div class="line name-line">
+	<div>
+		<form @submit.prevent="submit" v-if="!isSubmited">
+			<section class="profile-wrap">
+				<h3>Profile</h3>
+				<div class="form-section">
+					<div class="line name-line">
+						<p>
+							<label for="form-family-name">姓</label>
+							<input type="text" id="form-family-name" v-model="family_name" placeholder="東洋" required>
+						</p>
+						<p>
+							<label for="form-given-name">名</label>
+							<input type="text" id="form-given-name" v-model="given_name" placeholder="太郎" required>
+						</p>
+					</div>
+					<div class="line name-line">
+						<p>
+							<label for="form-family-name-ruby">フリガナ(姓)</label>
+							<input type="text" id="form-family-name-ruby" v-model="family_name_ruby" placeholder="トウヨウ" required>
+						</p>
+						<p>
+							<label for="form-given-name-ruby">フリガナ(名)</label>
+							<input type="text" id="form-given-name-ruby" v-model="given_name_ruby" placeholder="タロウ" required>
+						</p>
+					</div>
 					<p>
-						<label for="form-family-name">姓</label>
-						<input type="text" id="form-family-name" v-model="name" placeholder="東洋">
+						<label for="form-mail">学内メールアドレス</label>
+						<input type="email" id="form-mail" v-model="email" placeholder="s1f100009999@toyo.jp" v-bind:disabled="isAuthenticated" required>
 					</p>
-					<p>
-						<label for="form-given-name">名</label>
-						<input type="text" id="form-given-name" v-model="name" placeholder="太郎">
-					</p>
+					<div class="line">
+						<p class="student-id">
+							<label for="form-student-id">学籍番号</label>
+							<input type="email" id="form-student-id" v-model="student_id" placeholder="1F10000999" v-bind:disabled="isAuthenticated" required>
+						</p>
+						<p class="grade">
+							<label for="form-grade">学年</label>
+							<input type="number" id="form-grade" v-model="grade" placeholder="1" required>
+						</p>
+					</div>
+					<div class="line">
+						<p>
+							<label for="form-cource">コース</label>
+							<select id="form-cource" v-model="course">
+								<option value="none">なし</option>
+								<option value="engineering">エンジニアリング</option>
+								<option value="design">デザイン</option>
+								<option value="business">ビジネス</option>
+								<option value="civil-system">シビルシステム</option>
+							</select>
+						</p>
+						<p class="cource-detail">1年生・未所属の方は希望するコースが<br>もし決まっていれば選択してください。</p>
+					</div>
 				</div>
-				<div class="line name-line">
-					<p>
-						<label for="form-family-name-ruby">フリガナ(姓)</label>
-						<input type="text" id="form-family-name-ruby" v-model="ruby" placeholder="トウヨウ">
-					</p>
-					<p>
-						<label for="form-given-name-ruby">フリガナ(名)</label>
-						<input type="text" id="form-given-name-ruby" v-model="ruby" placeholder="タロウ">
-					</p>
+			</section>
+			<section class="questionnaire-wrap">
+				<h3>Questionnaire</h3>
+				<div class="form-section">
+					<div>
+						<p>
+							<label for="form-interested-in">
+								このサークルで興味がある、またはやってみたい内容を選んでください<br>
+								<span style="font-size: 0.9em">※複数選択◎</span>
+							</label>
+						</p>
+						<ul id="form-interested-in">
+							<li class="checkbox-wrap">
+								<input type="checkbox" id="form-interested-in-article" v-model="interested_in" value="writing">
+								<label for="form-interested-in-article">記事作成</label>
+							</li>
+							<li class="checkbox-wrap">
+								<input type="checkbox" id="form-interested-in-movie" v-model="interested_in" value="movie">
+								<label for="form-interested-in-movie">動画編集</label>
+							</li>
+							<li class="checkbox-wrap">
+								<input type="checkbox" id="form-interested-in-system" v-model="interested_in" value="system">
+								<label for="form-interested-in-system">システム</label>
+							</li>
+							<li class="checkbox-wrap">
+								<input type="checkbox" id="form-interested-in-design" v-model="interested_in" value="design">
+								<label for="form-interested-in-design">デザイン</label>
+							</li>
+						</ul>
+					</div>
 				</div>
-				<p>
-					<label for="form-mail">学内メールアドレス</label>
-					<input type="email" id="form-mail" v-model="mail" placeholder="s1f100009999@iniad.org">
-				</p>
-				<div class="line">
-					<p class="student-id">
-						<label for="form-student-id">学籍番号</label>
-						<input type="email" id="form-student-id" v-model="studentId" placeholder="1F10000999">
-					</p>
-					<p class="grade">
-						<label for="form-grade">学年</label>
-						<input type="number" id="form-grade" v-model="grade" placeholder="1">
-					</p>
-				</div>
-				<div class="line">
-					<p>
-						<label for="form-cource">コース</label>
-						<select id="form-cource" v-model="course">
-							<option v-bind:value="null" selected>なし</option>
-							<option value="engineering">エンジニアリング</option>
-							<option value="design">デザイン</option>
-							<option value="business">ビジネス</option>
-							<option value="civil-system">シビルシステム</option>
-						</select>
-					</p>
-					<p class="cource-detail">1年生・未所属の方は希望するコースがもしあれば<br>選択してください。</p>
-				</div>
-			</div>
-		</section>
-		<section class="questionnaire-wrap">
-			<h3>Questionnaire</h3>
-			<div class="form-section">
-				<div>
-					<p>
-						<label for="form-interested-in">
-							このサークルで興味がある、またはやってみたい内容を選んでください<br>
-							<span style="font-size: 0.9em">※複数選択◎</span>
-						</label>
-					</p>
-					<ul id="form-interested-in">
-						<li class="checkbox-wrap">
-							<input type="checkbox" id="form-interested-in-article" v-model="interestedIn" value="writing">
-							<label for="form-interested-in-article">記事作成</label>
-						</li>
-						<li class="checkbox-wrap">
-							<input type="checkbox" id="form-interested-in-movie" v-model="interestedIn" value="movie">
-							<label for="form-interested-in-movie">動画編集</label>
-						</li>
-						<li class="checkbox-wrap">
-							<input type="checkbox" id="form-interested-in-system" v-model="interestedIn" value="system">
-							<label for="form-interested-in-system">システム</label>
-						</li>
-						<li class="checkbox-wrap">
-							<input type="checkbox" id="form-interested-in-design" v-model="interestedIn" value="design">
-							<label for="form-interested-in-design">デザイン</label>
-						</li>
-					</ul>
-				</div>
-			</div>
-		</section>
-		<p class="submit-wrap"><input type="submit" value="入会"></p>
-	</form>
+			</section>
+			<p class="submit-wrap"><input type="submit" value="入会"></p>
+		</form>
+		<entried-message v-if="isSubmited"></entried-message>
+	</div>
 </template>
 
 <script>
+import EntriedMessage from "@/components/EntriedMessage";
+
 export default {
 	name: "EntryForm",
+	components: {
+		EntriedMessage
+	},
+	props: {
+		isAuthenticated: Boolean
+	},
 	data() {
 		return {
-			name: null,
-			ruby: null,
-			mail: null,
-			studentId: null,
+			family_name: null,
+			given_name: null,
+			family_name_ruby: null,
+			given_name_ruby: null,
+			email: null,
+			student_id: null,
 			grade: null,
 			course: null,
-			interestedIn: [],
+			interested_in: [],
+			isSubmited: false
 		}
+	},
+	methods: {
+		submit() {
+			if (this.course == null) {
+				this.course = "none"
+			}
+			fetch("/api/entry", {
+				credentials: 'same-origin',
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json',
+					"X-CSRFToken": this.$cookies.get("csrftoken"),
+				},
+				body: JSON.stringify(this.$data),
+			})
+				.then(response => response.json())
+				.catch(() => {
+					this.isSubmited = true
+				})
+				.then(result => {
+					this.mail = result.email
+					this.studentId = result.student_id
+					this.grade = result.get_class
+					this.isSubmited = true
+				})
+		}
+	},
+	mounted() {
+		fetch("/api/user/mine")
+			.then(response => response.json())
+			.then(result => {
+				this.email = result.email
+				this.student_id = result.student_id
+				this.grade = result.get_class
+			})
 	}
 };
 </script>
