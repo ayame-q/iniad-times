@@ -9,7 +9,7 @@
 				<section class="join-link-wrap">
 					<h3>入会フォームはこちら</h3>
 					<p class="join-link">
-						<nuxt-link to="entry">入会する</nuxt-link>
+						<nuxt-link to="/entry">入会する</nuxt-link>
 					</p>
 				</section>
 				<section class="ask-wrap">
