@@ -16,7 +16,8 @@ def signed_up(user, **kwargs):
             if match:
                 try:
                     profile = Profile.objects.get(email=social_info.extra_data["email"])
-                    user.profile = profile
+                    profile.user = user
+                    profile.save()
                 except Profile.DoesNotExist:
                     user.profile = None
     print(user)
@@ -34,7 +35,8 @@ def account_added(request, sociallogin, **kwargs):
             if match:
                 try:
                     profile = Profile.objects.get(email=social_info.extra_data["email"])
-                    user.profile = profile
+                    profile.user = user
+                    profile.save()
                 except Profile.DoesNotExist:
                     user.profile = None
             print(user)
