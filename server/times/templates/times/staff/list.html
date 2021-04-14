@@ -40,5 +40,7 @@
 		{% empty %}
 			{% if revise_list %}推敲・校閲待ちの{% elif check_revise_list %}推敲・校閲チェック待ちの{% endif %}記事はありません
 		{% endfor %}
+
+		{% include "times/includes/pagination.html" %}
 	</section>
 {% endblock %}
