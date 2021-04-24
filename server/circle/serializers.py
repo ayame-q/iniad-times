@@ -9,6 +9,12 @@ class EntrySerializer(serializers.ModelSerializer):
         fields = ("email", "family_name", "given_name", "family_name_ruby", "given_name_ruby", "course", "interested_in")
 
 
+class EntryWebhookSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Profile
+        fields = ("email", "family_name", "given_name", "family_name_ruby", "given_name_ruby")
+
+
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = get_user_model()

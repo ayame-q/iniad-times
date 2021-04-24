@@ -3,10 +3,12 @@ from django.contrib.auth import get_user_model
 from rest_framework.views import APIView
 from rest_framework.generics import CreateAPIView, RetrieveUpdateAPIView, RetrieveAPIView
 from rest_framework.response import Response
+from rest_framework.permissions import AllowAny
+from rest_framework.exceptions import ValidationError
 from . import serializers
 from times.models import Staff
 from .sendmail import send_initial_mail
-import requests, os
+import requests, os, hashlib, json, re
 
 
 # Create your views here.
@@ -18,6 +20,26 @@ class EntryAPIView(CreateAPIView):
             return super(EntryAPIView, self).perform_create(serializer)
         serializer.save(user=self.request.user, email=self.request.user.email)
         entry(self.request.user.email)
+
+
+class EntryWebhookAPIView(CreateAPIView):
+    serializer_class = serializers.EntryWebhookSerializer
+    permission_classes = (AllowAny,)
+
+    def post(self, request, *args, **kwargs):
+        if not request.META.get("HTTP_AUTHENTICATION"):
+            raise PermissionError("No Authentication")
+        created_at = json.loads(request.body).get("created_at")
+        dat = created_at + os.environ.get("ENTRY_WEBHOOK_PASSWORD")
+        token_correct = hashlib.sha256(dat.encode()).hexdigest()
+        token_get = re.fullmatch(r"Token (.+)", request.META.get("HTTP_AUTHENTICATION")).group(1)
+        if token_correct != token_get:
+            raise PermissionError("Token is invalid")
+        super(EntryWebhookAPIView, self).post(request=request, *args, **kwargs)
+
+    def perform_create(self, serializer):
+        instance = serializer.save()
+        entry(instance.email)
 
 
 def entry(email):
