@@ -27,5 +27,9 @@ export default {
 	&:hover{
 		background-color: #FFFFFF;
 	}
+	&:active{
+		margin-top: calc(3em + 5px);
+		border-bottom-width: 3px;
+	}
 }
 </style>

@@ -270,6 +270,10 @@ input, select, textarea{
 		&:hover{
 			background-color: #FFFFFF;
 		}
+		&:active{
+			margin-top: 10px;
+			border-bottom-width: 3px;
+		}
 	}
 	&:disabled{
 		background-color: lightgray;
