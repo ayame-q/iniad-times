@@ -25,6 +25,7 @@ class Profile(models.Model):
     interested_in = models.JSONField(null=True, blank=True, verbose_name="興味")
     questionnaire = models.JSONField(null=True, blank=True, verbose_name="アンケート")
     created_at = models.DateTimeField(default=timezone.localtime, verbose_name="登録日")
+    is_ob_og = models.BooleanField(default=False, verbose_name="OB・OG")
 
     def get_full_name(self):
         return self.family_name + " " + self.given_name
