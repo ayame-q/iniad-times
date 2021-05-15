@@ -3,7 +3,7 @@ from .models import Profile, News
 
 
 class ProfileAdmin(admin.ModelAdmin):
-    list_display = ("family_name", "given_name", "family_name_ruby", "given_name_ruby", "email", "user", "course", "interested_in", "created_at")
+    list_display = ("family_name", "given_name", "family_name_ruby", "given_name_ruby", "email", "user", "course", "interested_in", "created_at", "is_ob_og")
     list_display_links = ("family_name", "given_name")
 
 
