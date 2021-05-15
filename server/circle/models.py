@@ -51,3 +51,6 @@ class News(models.Model):
 
     class Meta:
         ordering = ["-date"]
+
+    def __str__(self):
+        return f"{self.title} ({self.date:%Y.%m.%d})"
