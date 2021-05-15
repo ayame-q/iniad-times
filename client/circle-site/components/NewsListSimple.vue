@@ -6,21 +6,10 @@
 		</h2>
 		<div class="news-list">
 			<ul>
-				<li>
-					<time>2021.04.21</time>
-					<span class="text">INIAD meets web開催予定</span></li>
-				<li>
-					<time>2021.04.01</time>
-					<span class="text">第9回定例会開催</span></li>
-				<li>
-					<time>2021.03.29</time>
-					<span class="text">公式サイトリニューアル</span></li>
-				<li>
-					<time>2021.03.23</time>
-					<span class="text">臨時会開催</span></li>
-				<li>
-					<time>2021.03.18</time>
-					<span class="text">第8回定例会開催</span></li>
+				<li v-for="news of newsList">
+					<time>{{ news.date.format("YYYY.MM.DD") }}</time>
+					<span class="text">{{ news.title }}</span>
+				</li>
 			</ul>
 			<!--<p class="more-link"><nuxt-link to="news">もっと見る</nuxt-link></p>-->
 		</div>
@@ -29,8 +18,33 @@
 </template>
 
 <script>
+
 export default {
 	name: "NewsListSimple",
+	data() {
+		return {
+			newsList: [],
+		}
+	},
+	mounted() {
+		const jsonReviver = (key, val) => {
+			if (typeof(val) == "string" &&
+				val.match(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(\.\d{6})?\+\d{2}:\d{2}$/)){
+				return this.$dayjs(val);
+			}
+			if (typeof(val) == "string" &&
+				val.match(/^\d{4}-\d{2}-\d{2}$/)){
+				return this.$dayjs(val);
+			}
+			return val;
+		}
+		fetch("/api/news/")
+			.then((response) => response.text())
+			.then((responseData) => {
+				const result = JSON.parse(responseData, jsonReviver)
+				this.newsList = result.slice(0, 5)
+			})
+	}
 };
 </script>
 
