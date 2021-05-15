@@ -42,3 +42,12 @@ class Profile(models.Model):
             except User.DoesNotExist:
                 pass
         return super(Profile, self).save(*args, **kwargs)
+
+
+class News(models.Model):
+    title = models.CharField(max_length=30, verbose_name="タイトル")
+    date = models.DateField(default=timezone.localdate, verbose_name="日付")
+    created_at = models.DateTimeField(default=timezone.localtime, verbose_name="登録日")
+
+    class Meta:
+        ordering = ["-date"]

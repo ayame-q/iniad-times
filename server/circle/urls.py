@@ -2,6 +2,7 @@ from django.urls import path, register_converter
 from . import views
 
 urlpatterns = [
+    path('news/', views.NewsListAPIView.as_view(), name="api_news"),
     path('entry', views.EntryAPIView.as_view(), name="api_entry"),
     path('webhook/entry', views.EntryWebhookAPIView.as_view(), name="api_webhook_entry"),
     path('is_authenticated', views.IsAuthenticatedAPIView.as_view(), name="api_is_authenticated"),

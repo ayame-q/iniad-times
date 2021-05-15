@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from django.contrib.auth import get_user_model
-from .models import Profile
+from .models import Profile, News
 
 
 class EntrySerializer(serializers.ModelSerializer):
@@ -19,3 +19,9 @@ class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = get_user_model()
         fields = ("email", "student_id", "get_class")
+
+
+class NewsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = News
+        fields = ("title", "date")

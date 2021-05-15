@@ -1,11 +1,12 @@
 from django.shortcuts import render
 from django.contrib.auth import get_user_model
 from rest_framework.views import APIView
-from rest_framework.generics import CreateAPIView, RetrieveUpdateAPIView, RetrieveAPIView
+from rest_framework.generics import CreateAPIView, RetrieveUpdateAPIView, RetrieveAPIView, ListAPIView
 from rest_framework.response import Response
 from rest_framework.permissions import AllowAny
 from rest_framework.exceptions import ValidationError
 from . import serializers
+from .models import News
 from times.models import Staff
 from .sendmail import send_initial_mail
 import requests, os, hashlib, json, re
@@ -103,3 +104,8 @@ class CircleTutorialAPIView(APIView):
             "questionnaire_url": os.environ.get("CIRCLE_TUTORIAL_QUESTIONNAIRE_URL")
         }
         return Response(data)
+
+
+class NewsListAPIView(ListAPIView):
+    serializer_class = serializers.NewsSerializer
+    queryset = News.objects.all()
