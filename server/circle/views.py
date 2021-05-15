@@ -6,7 +6,7 @@ from rest_framework.response import Response
 from rest_framework.permissions import AllowAny
 from rest_framework.exceptions import ValidationError
 from . import serializers
-from .models import News
+from .models import News, Profile
 from times.models import Staff
 from .sendmail import send_initial_mail
 import requests, os, hashlib, json, re
@@ -109,3 +109,9 @@ class CircleTutorialAPIView(APIView):
 class NewsListAPIView(ListAPIView):
     serializer_class = serializers.NewsSerializer
     queryset = News.objects.all()
+
+
+class MemberCountAPIView(APIView):
+    def get(self, request):
+        member_count = Profile.objects.filter(is_ob_og=False).count()
+        return Response({"count": member_count})
