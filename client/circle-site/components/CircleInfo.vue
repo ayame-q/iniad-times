@@ -14,8 +14,8 @@
 				<dd>立松 あやめ</dd>
 				<dt>顧問</dt>
 				<dd>淺野 智之 先生</dd>
-				<dt>部員数</dt>
-				<dd>22名</dd>
+				<dt v-if="memberCount">部員数</dt>
+				<dd v-if="memberCount">{{ memberCount }}名</dd>
 				<dt>メールアドレス</dt>
 				<dd>info@iniad-wm.com</dd>
 			</dl>
@@ -29,6 +29,18 @@
 <script>
 export default {
 	name: "CircleInfo",
+	data() {
+		return {
+			memberCount: null,
+		}
+	},
+	mounted() {
+		fetch("/api/member_count")
+			.then(response => response.json())
+			.then((result) => {
+				this.memberCount = result.count
+			})
+	}
 };
 </script>
 
