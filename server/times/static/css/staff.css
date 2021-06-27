@@ -724,12 +724,12 @@ main section#article-post form #form-main-wrap p#input-text .text-input-wrap .ed
   width: 100%;
   box-sizing: border-box;
 }
-main section#article-post form #form-main-wrap p#input-text .text-input-wrap .CodeMirror.sided--no-fullscreen {
+main section#article-post form #form-main-wrap p#input-text .text-input-wrap .sided--no-fullscreen .CodeMirror.CodeMirror-sided {
   grid-area: code;
   width: 100% !important;
   max-height: none;
 }
-main section#article-post form #form-main-wrap p#input-text .text-input-wrap .editor-preview-side.sided--no-fullscreen {
+main section#article-post form #form-main-wrap p#input-text .text-input-wrap .sided--no-fullscreen .editor-preview-side {
   grid-area: preview;
   width: 100% !important;
 }

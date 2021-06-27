@@ -486,20 +486,25 @@ main{
 									"header header"
 									"code preview"
 									"footer footer";
+
+
+
 							}
 							.editor-toolbar{
 								grid-area: header;
 								width: 100%;
 								box-sizing: border-box;
 							}
-							.CodeMirror.sided--no-fullscreen{
-								grid-area: code;
-								width: 100% !important;
-								max-height: none;
-							}
-							.editor-preview-side.sided--no-fullscreen{
-								grid-area: preview;
-								width: 100% !important;
+							.sided--no-fullscreen{
+								.CodeMirror.CodeMirror-sided{
+									grid-area: code;
+									width: 100% !important;
+									max-height: none;
+								}
+								.editor-preview-side{
+									grid-area: preview;
+									width: 100% !important;
+								}
 							}
 							.editor-statusbar{
 								grid-area: footer;
