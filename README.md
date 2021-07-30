@@ -23,3 +23,6 @@ ACCOUNT_DEFAULT_HTTP_PROTOCOL=http
 2. docker-compose up --build で起動
 
 3. 127.0.0.1:8080 でINIAD Times, 127.0.0.1:8081でサークルサイトにアクセスできる
+
+## License
+[All rights reserved](LICENSE)
